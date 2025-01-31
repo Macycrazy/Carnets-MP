@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\procesos;
+
+/*Route::get('/', function () {
+    return view('index');
+});*/
+
+
+
+Route::get('/', [procesos::class, 'index'])->name('index');
+
+Route::post('/', [procesos::class, 'login'])->name('login');
+
+Route::post('/registrar', [procesos::class, 'registrar'])->name('registrar');
+
+Route::post('/logout', [procesos::class, 'logout'])->name('logout');
+
+Route::get('/descargar', [procesos::class, 'descargar'])->name('descargar');
+
+
+Route::get('/excel', [procesos::class, 'export'])->name('excel');
+
+Route::get('/editar_{id}', [procesos::class, 'editar'])->name('editar');
+
+Route::put('/actualizar_{id}', [procesos::class, 'actualizar'])->name('actualizar');
