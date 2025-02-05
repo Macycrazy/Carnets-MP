@@ -11,5 +11,5 @@ use Illuminate\Notifications\Notifiable;
 class users extends Authenticatable 
 {
      use HasFactory;
-     protected $table = 'users';
+     protected $table = 'userEntity';
 }

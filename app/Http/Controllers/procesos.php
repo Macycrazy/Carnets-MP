@@ -29,7 +29,7 @@ use App\Models\charge;
 use App\Models\department;
 use App\Models\access_levels;
 use App\Models\states;
-use App\Models\users;
+use App\Models\User;
 
 
 class procesos extends Controller 
@@ -71,14 +71,14 @@ class procesos extends Controller
         
 
            $request->validate([
-        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
     ]);
   
     if($request->hasFile('archivo')){
 
        
         // Store the uploaded file
-        $avatarName =request()->code.'.'.request()->archivo->getClientOriginalExtension();
+        $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
         $request->archivo->move('imgs/usuarios', $avatarName);
          //dd( $request->archivo->storeAs('public/imgs/usuarios', $avatarName));
@@ -93,15 +93,15 @@ class procesos extends Controller
 
 
     $valores->name=strtoupper($request->name);
-    $carnet->update(['name' => $valores->name]);
+   
 
     $valores->lastname=strtoupper($request->surname);
-    $carnet->update(['lastname' => $valores->lastname]);
+
 
     $valores->address=strtoupper($request->adress);
     $carnet->update(['address' => $valores->address]);
 
-    $valores->expiration=Carbon::parse($request->date)->format('d/m/Y');
+    $valores->expiration=$request->date;
     $carnet->update(['expiration' => $valores->expiration]);
 
     $valores->cedule=$request->document;
@@ -137,11 +137,13 @@ class procesos extends Controller
 
         $partesNombre = explode(' ', $name);
 
-if (count($partesNombre) >= 2) {
-    $partesNombre[1] = Str::substr($partesNombre[1], 0, 1) . '.';
-}
 
-$nombreFormateado = implode(' ', $partesNombre);
+$nombreFormateado = $partesNombre[0] . ' '; // Primera parte
+
+$ultimaParte = end($partesNombre); // Obtiene la última parte
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; // Inicial y punto
+
+//dd($nombreFormateado); 
 
 $partesApellido = explode(' ', $lastname);
 
@@ -152,6 +154,7 @@ if (count($partesApellido) >= 2) {
 $apellidoFormateado = implode(' ', $partesApellido);
 
  $valores->name=$nombreFormateado ;
+
  $carnet->update(['name' => $valores->name]);
 
     $valores->lastname=$apellidoFormateado;
@@ -206,8 +209,10 @@ public function datos(){
             'Carnets.note as note',
             'Department.name as department',
             'Charge.name as charge',
-            'Access_levels.name as access'
-        )->get();
+            'Access_levels.name as access',
+            'Carnets.created_at'
+        )->orderBy('Carnets.created_at','asc')
+            ->get();
           //  $existe = File::exists('imgs/usuarios/'.$a[1]->card_code.'.png');
           //  dd($existe);
       $carnets=carnets::all();
@@ -224,6 +229,14 @@ public function datos(){
     'estados' => $estados,
 ];
 }
+public function prueba()
+{
+    $in=db::table('Carnets')
+    ->select('card_code')
+      ->orderBy('card_code','asc')
+            ->get();
+dd($in);
+}
      public function index()
     {
         $data=$this->datos();
@@ -235,6 +248,10 @@ public function datos(){
     $niveles = $data->niveles;
     $estados = $data->estados;
 
+    $in=db::table('Carnets')
+      ->orderBy('card_code','asc')
+            ->first();
+
      // dd(Auth::user()); 
     return view('index', [
         'carnets' => $carnets,
@@ -243,6 +260,7 @@ public function datos(){
         'niveles' => $niveles,
         'estados' => $estados,
         'a' => $a,
+         'in' => $in,
     ]);
     }
 
@@ -251,7 +269,7 @@ public function datos(){
       public function descargar()
     {
       $source = public_path('imgs/usuarios');
-    $destination = public_path('descargas/descarga.zip');
+    $destination = public_path('descargas/Imagenes.zip');
 
     if (!is_dir(public_path('descargas'))) {
         mkdir(public_path('descargas'), 0755, true);
@@ -306,14 +324,14 @@ public function datos(){
 
      
        $request->validate([
-        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
     ]);
   
     if($request->hasFile('archivo')){
 
        
         // Store the uploaded file
-        $avatarName =request()->code.'.'.request()->archivo->getClientOriginalExtension();
+        $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
         $request->archivo->move('imgs/usuarios', $avatarName);
          //dd( $request->archivo->storeAs('public/imgs/usuarios', $avatarName));
@@ -375,12 +393,18 @@ $apellidoFormateado = implode(' ', $partesApellido);
     {
 
       $emailIngresado = $request->email; // Email ingresado por el usuario
-$usuario = Users::where('email', $emailIngresado)->first(); // Busca el usuario por email
 
+$usuario = User::where('email', $emailIngresado)->first(); // Busca el usuario por email
+//  dd($usuario);
 if ($usuario) { // Verifica si el usuario existe
     $contrasenaIngresada = $request->password; // Contraseña ingresada por el usuario
-    $contrasenaAlmacenada = $usuario->password; // Contraseña hasheada de la base de datos
 
+    $a = Hash::make($contrasenaIngresada, ['rounds' => 10]);
+
+
+
+    $contrasenaAlmacenada = $usuario->password; // Contraseña hasheada de la base de datos
+ //dd($contrasenaAlmacenada);
     if (Hash::check($contrasenaIngresada, $contrasenaAlmacenada)) {
         Auth::login($usuario);
        // 

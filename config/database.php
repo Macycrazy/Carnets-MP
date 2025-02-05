@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,12 +84,12 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'url' => env('postgresql://postgres:1qazxsw2@172.17.1.23:5432/carnet2?schema=public'),
+            'host' => env('DB_HOST', '172.17.1.23'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'carnetizacion'),
-            'username' => env('DB_USERNAME', 'ciip'),
-            'password' => env('DB_PASSWORD', 'ciip'),
+            'database' => env('DB_DATABASE', 'carnet2'),
+            'username' => env('DB_USERNAME', 'postgres'),
+            'password' => env('DB_PASSWORD', '1qazxsw2'),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,

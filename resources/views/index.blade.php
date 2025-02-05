@@ -106,7 +106,7 @@
 
                      <div class="right_bottun" style="vertical-align: middle;">
                         @auth
-                        <h2  style="vertical-align: middle;margin: 0;padding: 0;color:white;">Bienvenido: {{ ucfirst(Auth::user()->first_name) }} {{ ucfirst(Auth::user()->last_name) }} </h2>
+                        <h2  style="vertical-align: middle;margin: 0;padding: 0;color:white;">Bienvenido: {{ ucfirst(Auth::user()->name) }} </h2>
                          @endauth
                       
                         <button class="openbtn" onclick="openNav()">
@@ -168,14 +168,14 @@
 
 
    <div class="mb-3 input-group">
-
+<span class="input-group-text" id="name">Nombres</span>
       <input class="form-control" type="text" id="name" name="name" placeholder="ej. NOMBRES COMPLETOS" required>
 
-      <span class="input-group-text" id="name">Nombres</span>
-
+      
+      <span class="input-group-text" id="name">Apellidos</span>
       <input class="form-control" type="text" id="surname" name="surname" placeholder="ej. APELLIDOS COMPLETOS" required>
 
-      <span class="input-group-text" id="name">Apellidos</span>
+
 
    </div>
 
@@ -184,14 +184,16 @@
 <!-- ////////////// CEDULA Y DIRECCION ////////////////-->
    <div class="mb-3 input-group">
 
+      <span class="input-group-text" id="document">Cedula</span>
+
       <input class="form-control col-md-3" type="text" id="document" name="document" placeholder="ej. 12345678" required>
 
-      <span class="input-group-text" id="document">Cedula</span>
+
+     <span class="input-group-text" id="adress">Direccion</span>
 
       <input class="form-control" type="text" id="adress" name="adress" placeholder="ej. CIIP" value="CIIP" required>
 
-      <span class="input-group-text" id="adress">Direccion</span>
-
+ 
    </div>
 
 <!-- ////////////// CEDULA Y DIRECCION ////////////////-->
@@ -200,13 +202,14 @@
 
    <div class="mb-3 input-group">
 
+      <span class="input-group-text" id="phone">Telefono</span>
       <input class="form-control col-md-3" type="text" id="phone" name="phone" placeholder="ej. 02122743742" value="02122743742" required>
 
-      <span class="input-group-text" id="phone">Telefono</span>
+      <span class="input-group-text" id="code">Codigo</span>
 
       <input class="form-control" type="text" id="code" name="code" placeholder="ej. 100046 en adelante" required>
 
-      <span class="input-group-text" id="code">Codigo</span>
+
 
    </div>
 
@@ -215,6 +218,7 @@
 <!-- ////////////// DEPARTAMENTO Y CARGO ////////////////-->
 
    <div class="mb-3 input-group">
+  <span class="input-group-text" id="department">Departamento</span>
 
       <select class="form-control" id="department" name="department" required>
 
@@ -225,7 +229,7 @@
 
       </select>
 
-      <span class="input-group-text" id="department">Departamento</span>
+          <span class="input-group-text" id="charge">Cargo</span>
 
       <select class="form-control col-md-3" id="charge" name="charge" required>
          <option disabled selected>Seleccione un Cargo</option>
@@ -234,7 +238,7 @@
       @endforeach
       </select>
 
-      <span class="input-group-text" id="charge">Cargo</span>
+
 
    </div>
 
@@ -244,7 +248,7 @@
 <!-- ////////////// NIVEL DE ACCESO Y ESTADO ////////////////-->
 
    <div class="mb-3 input-group">
-
+     <span class="input-group-text" id="access">Nivel de Acceso</span>
       <select class="form-control col-md-3" id="access" name="access" required>
 
          <option disabled selected>Seleccione el Nivel de acceso</option>
@@ -253,7 +257,7 @@
       @endforeach
       </select>
 
-      <span class="input-group-text" id="access">Nivel de Acceso</span>
+       <span class="input-group-text" id="statesment">Estado</span>
 
       <select class="form-control" id="statesment" name="statesment" required>
 
@@ -263,7 +267,7 @@
       @endforeach
       </select>
 
-      <span class="input-group-text" id="statesment">Estado</span>
+
 
    </div>
 
@@ -273,15 +277,19 @@
 
    <div class="mb-3 input-group">
 
+         
+
       <input type="file" id="croppedImg" name="archivo" class="form-control" hidden>
 
+
       <input class="form-control" type="file" id="file" name="image" accept="image/*" >
+            <span class="input-group-text" id="file">Fotografia</span>
 
-      <span class="input-group-text" id="file">Fotografia</span>
-
-      <input class="form-control col-md-3" type="date" id="date" name="date" min="<?php echo date('Y-m-d'); ?>" max="{{ now()->addYear()->format('Y-m-d') }}" value="{{ now()->addYear()->format('Y-m-d') }}" required >
 
       <span class="input-group-text" id="date">Vencimiento</span>
+      <input class="form-control col-md-3" type="date" id="date" name="date" min="<?php echo date('Y-m-d'); ?>" max="{{ now()->addYear()->format('Y-m-d') }}" value="{{ now()->addYear()->format('Y-m-d') }}" required >
+
+
 
    </div>
 
@@ -335,7 +343,7 @@
 <!--////////////////////////// Descargar archivos ////////////////////////-->
 
 
-@if(Auth::user()->role == 'admin')
+@if(Auth::user()->rol == 'admin')
 <section class=" w-100 " style="display: inline-flex;margin: 0 auto;">
 
   <a class="btn btn-primary m-auto" href="{{ route('descargar') }}" style="aspect-ratio: 1;vertical-align: baseline;" > 
@@ -420,18 +428,20 @@
       <!-- BANNER -->
       <br>
       @auth
-      <div class="" style="width: 95%;background-color:white;margin: 0 auto;padding: 5%;border-radius: 2rem;">
-<table id="example" class="table table-striped  m-auto" style="width:90%;text-align:center;vertical-align: middle;">
+      <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 5%;border-radius: 2rem;">
+<table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;">
         <thead>
             <tr>
                 <th>Cedula</th>
+                <th>Codigo de Carnet</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Departamento</th>
                 <th>Cargo</th>
-                <th>Codigo de tarjeta</th>
+                
                 <th data-dt-order="disable">Nota</th>
                 <th data-dt-order="disable">Foto de perfil</th>
+                <th data-dt-order="disable">Creado El:</th>
                 <th data-dt-order="disable">Editar</th>
                
                 
@@ -441,22 +451,24 @@
          @foreach($a as $b)
             <tr>
                 <td>{{$b->cedule}}</td>
+                <td>{{$b->card_code}}</td>
                 <td>{{ mb_ucfirst($b->name, 'UTF-8') }}</td>
                 <td>{{ mb_ucfirst($b->lastname, 'UTF-8') }}</td>
                 <td>{{$b->department}}</td>
                  <td>{{ mb_ucfirst($b->charge, 'UTF-8') }}</td>
-                <td>{{$b->card_code}}</td>
+                
                 <td >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
                 <td >
-                  @if(File::exists('imgs/usuarios/'.$b->card_code.'.png'))
+                  @if(File::exists('imgs/usuarios/'.$b->cedule.'.jpg'))
 
                   
 
-                  <img src="imgs/usuarios/{{ $b->card_code}}.png" style="max-height:100px">
+                  <img src="imgs/usuarios/{{ $b->cedule}}.jpg" style="max-height:100px">
                   @else
                   No tiene
                   @endif
                 </td>
+                <td>{{ \Carbon\Carbon::parse($b->created_at)->format('d/m/Y') }}</td>
                 <td  ><a href="{{route('editar',$b->card_code)}}" > <button class="btn btn-warning">Editar</button> </a></td>
 
                 
@@ -524,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 image.src = imgResult;
                 cropper = new Cropper(image, {
                   viewMode:2,
-                  scalable:false,
+                  scalable: true,
                     aspectRatio: 3/4,
                     initialAspectRatio:3/4,
                     autoCropArea:1,
@@ -557,7 +569,7 @@ $("#downloadButton").click(function () {
 
     canvas.toBlob(function (blob) {
        
-        const file = new File([blob], 'croppedImage.png', { type: blob.type });
+        const file = new File([blob], 'croppedImage.jpg', { type: blob.type });
 
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
@@ -683,7 +695,10 @@ function validateForm() {
       </script>
       <script type="text/javascript" src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
       <script type="text/javascript">
-      new DataTable('#example');
+    
+      $('#example').DataTable({
+    "order": [[ 9, "desc" ]] // Ordena por la tercera columna (índice 2) en orden descendente
+});
    </script>
    </body>
 </html>

@@ -82,14 +82,14 @@
 
 
    <div class="mb-3 input-group">
-
+      <span class="input-group-text" id="name">Nombres</span>
       <input class="form-control" type="text" id="name" name="name" placeholder="ej. NOMBRES COMPLETOS" value="{{$editar->name}}" required>
 
-      <span class="input-group-text" id="name">Nombres</span>
 
+   <span class="input-group-text" id="name">Apellidos</span>
       <input class="form-control" type="text" id="surname" name="surname" placeholder="ej. APELLIDOS COMPLETOS" value="{{$editar->lastname}}" required>
 
-      <span class="input-group-text" id="name">Apellidos</span>
+   
 
    </div>
 
@@ -97,14 +97,14 @@
 
 <!-- ////////////// CEDULA Y DIRECCION ////////////////-->
    <div class="mb-3 input-group">
-
+ <span class="input-group-text" id="document">Cedula</span>
       <input class="form-control col-md-3" type="text" id="document" name="document" placeholder="ej. 12345678" value="{{$editar->cedule}}"required>
 
-      <span class="input-group-text" id="document">Cedula</span>
-
+     
+<span class="input-group-text" id="adress">Direccion</span>
       <input class="form-control" type="text" id="adress" name="adress" placeholder="ej. CIIP" value="{{$editar->address}}" required>
 
-      <span class="input-group-text" id="adress">Direccion</span>
+      
 
    </div>
 
@@ -113,14 +113,14 @@
 <!-- ////////////// TELEFONO Y CODIGO ////////////////-->
 
    <div class="mb-3 input-group">
-
+ <span class="input-group-text" id="phone">Telefono</span>
       <input class="form-control col-md-3" type="text" id="phone" name="phone" placeholder="ej. 02122743742" value="{{$editar->cellpone}}" required>
 
-      <span class="input-group-text" id="phone">Telefono</span>
+      <span class="input-group-text" id="code">Codigo</span>
 
       <input class="form-control" type="text" id="code" name="code" placeholder="ej. 100046 en adelante" value="{{$editar->card_code}}" required>
 
-      <span class="input-group-text" id="code">Codigo</span>
+     
 
    </div>
 
@@ -129,7 +129,7 @@
 <!-- ////////////// DEPARTAMENTO Y CARGO ////////////////-->
 
    <div class="mb-3 input-group">
-
+      <span class="input-group-text" id="department">Departamento</span>
       <select class="form-control" id="department" name="department" required>
 
     
@@ -139,7 +139,7 @@
 
       </select>
 
-      <span class="input-group-text" id="department">Departamento</span>
+      <span class="input-group-text" id="charge">Cargo</span>
 
       <select class="form-control col-md-3" id="charge" name="charge" required>
          
@@ -148,7 +148,7 @@
       @endforeach
       </select>
 
-      <span class="input-group-text" id="charge">Cargo</span>
+
 
    </div>
 
@@ -158,7 +158,7 @@
 <!-- ////////////// NIVEL DE ACCESO Y ESTADO ////////////////-->
 
    <div class="mb-3 input-group">
-
+      <span class="input-group-text" id="access">Nivel de Acceso</span>
       <select class="form-control col-md-3" id="access" name="access" required>
 
  
@@ -167,7 +167,7 @@
       @endforeach
       </select>
 
-      <span class="input-group-text" id="access">Nivel de Acceso</span>
+      <span class="input-group-text" id="statesment">Estado</span>
 
       <select class="form-control" id="statesment" name="statesment" required>
 
@@ -177,7 +177,7 @@
       @endforeach
       </select>
 
-      <span class="input-group-text" id="statesment">Estado</span>
+
 
    </div>
 
@@ -186,16 +186,17 @@
 <!-- ////////////// FOTO DEL TRABAJADOR Y FECHA DE VENCIMIENTO ////////////////-->
 
    <div class="mb-3 input-group">
-
+     
       <input type="file" id="croppedImg" name="archivo" class="form-control" hidden>
 
       <input class="form-control" type="file" id="file" name="image" accept="image/*" value="" >
-
-      <span class="input-group-text" id="file">Fotografia</span>
-
-      <input class="form-control col-md-3" type="date" id="date" name="date" min="<?php echo date('Y-m-d'); ?>" max="{{ now()->addYear()->format('Y-m-d') }}" value="{{$editar->expiration}}" required >
+       <span class="input-group-text" id="file">Fotografia</span>
 
       <span class="input-group-text" id="date">Vencimiento</span>
+
+      <input class="form-control col-md-3" type="date" id="date" name="date" value="{{$editar->expiration}}" required >
+
+
 
    </div>
 
@@ -290,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const imageInput = document.getElementById('file');
     const image = document.getElementById('image');
-     image.src='imgs/usuarios/{{$editar->card_code}}.png';
+     image.src='imgs/usuarios/{{$editar->cedule}}.jpg';
     cropper = new Cropper(image, {
                   viewMode:2,
                   scalable:false,
@@ -328,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 image.src = imgResult;
                 cropper = new Cropper(image, {
                   viewMode:2,
-                  scalable:false,
+                  scalable: true,
                     aspectRatio: 3/4,
                     initialAspectRatio:3/4,
                     autoCropArea:1,
@@ -361,7 +362,7 @@ $("#downloadButton").click(function () {
 
     canvas.toBlob(function (blob) {
        
-        const file = new File([blob], 'croppedImage.png', { type: blob.type });
+        const file = new File([blob], 'croppedImage.jpg', { type: blob.type });
 
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);

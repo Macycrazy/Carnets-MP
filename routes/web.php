@@ -11,6 +11,8 @@ use App\Http\Controllers\procesos;
 
 Route::get('/', [procesos::class, 'index'])->name('index');
 
+Route::get('/prueba', [procesos::class, 'prueba'])->name('prueba');
+
 Route::post('/', [procesos::class, 'login'])->name('login');
 
 Route::post('/registrar', [procesos::class, 'registrar'])->name('registrar');

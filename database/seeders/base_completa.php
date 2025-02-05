@@ -48,60 +48,7 @@ class base_completa extends Seeder
             [ 'name' => 'VISITANTE' ]
         ]);
 
-        // Usuarios
-        DB::table('users')->insert([
-            [
-                'first_name' => 'Miguel', // Separar nombre y apellido
-                'last_name' => 'Cardenas',
-                'email' => 'miguelangelcardenasyepez@gmail.com',
-                'password' => Hash::make('M@cY2002__2002'), // Usar Hash::make()
-                'role' => 'admin', // Usar string en lugar de la constante
-            ],
-            [
-                'first_name' => 'Ellis', // Separar nombre y apellido
-                'last_name' => 'Martinez',
-                'email' => 'e.martinez@ciip.com.ve',
-                'password' => Hash::make('Ciip2024.'), // Usar Hash::make()
-                'role' => 'admin', // Usar string en lugar de la constante
-            ],
-            [
-                'first_name' => 'daniel', // Separar nombre y apellido
-                'last_name' => 'quintero',
-                'email' => 'danielquinteroac32@gmail.com',
-                'password' => Hash::make('123456'), // Usar Hash::make()
-                'role' => 'admin', // Usar string en lugar de la constante
-            ],
-            [
-                'first_name' => 'SUPER', // Separar nombre y apellido
-                'last_name' => 'USUARIO CIIP',
-                'email' => 'ciip2024@gmail.com',
-                'password' => Hash::make('Ciip2024.'), // Usar Hash::make()
-                'role' => 'admin', // Usar string en lugar de la constante
-            ],
-            
-             [
-                'first_name' => 'Tony',
-                'last_name' => 'Leon', // Apellido opcional
-                'email' => 't.leon@ciip.com.ve',
-                'password' => Hash::make('T.l30n00'),
-                'role' => 'user',
-            ],
-             [
-                'first_name' => 'LOISBETH',
-                'last_name' => 'CORVOS', // Apellido opcional
-                'email' => 'l.corvos@ciip.com.ve',
-                'password' => Hash::make('L.c0rv0s51'),
-                'role' => 'user',
-            ],
-            [
-                'first_name' => 'ALFREDO',
-                'last_name' => 'CARRERA', // Apellido opcional
-                'email' => 'a.carrera@ciip.com.ve',
-                'password' => Hash::make('4.C4rr3r418'),
-                'role' => 'user',
-            ],
-        ]);
-
+      
         // Niveles de acceso
         DB::table('Access_levels')->insert([
             ['name' => 'Acceso Total'],

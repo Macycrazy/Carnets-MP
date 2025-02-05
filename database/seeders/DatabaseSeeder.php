@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             base_completa::class,
+             usuarios::class,
         ]);
 
 
