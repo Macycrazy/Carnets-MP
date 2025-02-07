@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\FromCollection; 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 
 use Intervention\Image\Laravel\Facades\Image;
@@ -29,31 +30,48 @@ use App\Models\charge;
 use App\Models\department;
 use App\Models\access_levels;
 use App\Models\states;
+use App\Models\status;
 use App\Models\User;
-
+use App\Models\logs;
 
 class procesos extends Controller 
 {
+
+//////////////////////////////// VISTA DE EDICION /////////////////////////////////
+
     public function editar($id)
     {
         $editar= db::table('Carnets')
          ->select('*', DB::raw('DATE(expiration) as expiration'))
        
-            ->where('card_code','=',$id)->first();
+        ->where('card_code','=',$id)->first();
 
-             $data=$this->datos();
+  
+ 
 
-           $a = $data->a;
+    $data=$this->datos();
+
+    $a = $data->a;
+    
     $carnets = $data->carnets;
+    
     $cargos = $data->cargos;
+    
     $departamentos = $data->departamentos;
+    
     $niveles = $data->niveles;
+    
     $estados = $data->estados;
 
-           
+    $status = $data->status;
+
+  
+
+         $this->logs('Vista de edicion de carnet_'.$id,'Editar');    
     
         return view('editar',[
         'carnets' => $carnets,
+        'status'=>$status,
         'cargos' => $cargos,
         'departamentos' => $departamentos,
         'niveles' => $niveles,
@@ -63,6 +81,10 @@ class procesos extends Controller
             ]);
         
     }
+
+//////////////////////////////// VISTA DE EDICION /////////////////////////////////
+
+//////////////////////////////// ACTUALIZACION DEL CARNET /////////////////////////////////
 
     public function actualizar(request $request,$id)
     {
@@ -77,11 +99,11 @@ class procesos extends Controller
     if($request->hasFile('archivo')){
 
        
-        // Store the uploaded file
+      
         $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
         $request->archivo->move('imgs/usuarios', $avatarName);
-         //dd( $request->archivo->storeAs('public/imgs/usuarios', $avatarName));
+       
         $avatarPath = $avatarName;
        
     }
@@ -99,56 +121,76 @@ class procesos extends Controller
 
 
     $valores->address=strtoupper($request->adress);
+
     $carnet->update(['address' => $valores->address]);
 
     $valores->expiration=$request->date;
+
     $carnet->update(['expiration' => $valores->expiration]);
 
     $valores->cedule=$request->document;
+
     $carnet->update(['cedule' => $valores->cedule]);
 
     $valores->cellpone=$request->phone;
+
     $carnet->update(['cellpone' => $valores->cellpone]);
 
     $valores->card_code=$request->code;
+
     $carnet->update(['card_code' => $valores->card_code]);
 
     $valores->note=strtoupper($request->comment);
+
     $carnet->update(['note' => $valores->note]);
 
     $valores->id_department=$request->department;
+
     $carnet->update(['id_department' => $valores->id_department]);
 
-     $valores->id_status=1;
+    $valores->id_status=1;
 
     $valores->id_charge=$request->charge;
+
     $carnet->update(['id_charge' => $valores->id_charge]);
 
     $valores->id_access_levels=$request->access;
+
     $carnet->update(['id_access_levels' => $valores->id_access_levels]);
 
     $valores->id_state=$request->statesment;
+
     $carnet->update(['id_state' => $valores->id_state]);
+
+    $valores->id_status=$request->status;
+
+    $carnet->update(['id_status' => $valores->id_status]);
+
+
 
 
 
         $name=$valores->name;
+
         $lastname=$valores->lastname;
 
         $partesNombre = explode(' ', $name);
 
 
-$nombreFormateado = $partesNombre[0] . ' '; // Primera parte
+$nombreFormateado = $partesNombre[0] . ' '; 
 
-$ultimaParte = end($partesNombre); // Obtiene la última parte
-$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; // Inicial y punto
+$ultimaParte = end($partesNombre); 
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
 
-//dd($nombreFormateado); 
+
 
 $partesApellido = explode(' ', $lastname);
 
-if (count($partesApellido) >= 2) {
+if (count($partesApellido) >= 2) 
+{
+
     $partesApellido[1] = Str::substr($partesApellido[1], 0, 1) . '.';
+
 }
 
 $apellidoFormateado = implode(' ', $partesApellido);
@@ -158,21 +200,32 @@ $apellidoFormateado = implode(' ', $partesApellido);
  $carnet->update(['name' => $valores->name]);
 
     $valores->lastname=$apellidoFormateado;
+
 $carnet->update(['lastname' => $valores->lastname]);
 
 
-        
+       $this->logs('Actualizar Carnet '.$id,'Actualizar');
+
   return redirect()->route('index')->with('success', 'Usuario Editado');
+
     }
+
+//////////////////////////////// ACTUALIZACION DEL CARNET /////////////////////////////////
   
+//////////////////////////////// CODIGO DE EL ARCHIVO EXCEL /////////////////////////////////
 
     public function export() 
 {
 
 $excel=Excel::download(new UserExport, 'Carnets a fecha de '.today()->format('d-m-Y').'.xlsx');
+   $this->logs('Descarga de excel','Export');
 
     return $excel;
 }
+
+//////////////////////////////// CODIGO DE EL ARCHIVO EXCEL /////////////////////////////////
+
+//////////////////////////////// LLAMADO DE DATOS DEL REGISTRO / ACTUALIZACION /////////////////////////////////
 
 public function datos(){
 
@@ -198,6 +251,13 @@ public function datos(){
             '=',
             'Carnets.id_access_levels'
         )
+        ->join(
+
+            'Status',
+            'Status.id',
+            '=',
+            'Carnets.id_status'
+        )
             ->select(
             'Carnets.name',
             'Carnets.lastname',
@@ -207,117 +267,146 @@ public function datos(){
             'Carnets.cellpone',
             'Carnets.expiration',
             'Carnets.note as note',
+            'Status.name as id_status',
             'Department.name as department',
             'Charge.name as charge',
             'Access_levels.name as access',
             'Carnets.created_at'
-        )->orderBy('Carnets.created_at','asc')
+        )
+           
             ->get();
-          //  $existe = File::exists('imgs/usuarios/'.$a[1]->card_code.'.png');
-          //  dd($existe);
+       
+      
       $carnets=carnets::all();
+      
       $cargos=charge::orderBy('name', 'asc')->get();
+      
       $departamentos=department::orderBy('name', 'asc')->get();
+      
       $niveles=access_levels::orderBy('name', 'asc')->get();
+      
       $estados=states::orderBy('name', 'asc')->get();
-      return (object) [
+
+      $status=status::orderBy('name', 'asc')->get();
+
+    return (object) 
+    [
     'a' => $a,
+
     'carnets' => $carnets,
+
     'cargos' => $cargos,
+
     'departamentos' => $departamentos,
+
     'niveles' => $niveles,
+
     'estados' => $estados,
-];
+
+    'status' => $status,
+
+    ];
 }
-public function prueba()
-{
-    $in=db::table('Carnets')
-    ->select('card_code')
-      ->orderBy('card_code','asc')
-            ->get();
-dd($in);
-}
-     public function index()
-    {
-        $data=$this->datos();
 
-           $a = $data->a;
-    $carnets = $data->carnets;
-    $cargos = $data->cargos;
-    $departamentos = $data->departamentos;
-    $niveles = $data->niveles;
-    $estados = $data->estados;
+//////////////////////////////// LLAMADO DE DATOS DEL REGISTRO / ACTUALIZACION /////////////////////////////////
 
-    $in=db::table('Carnets')
-      ->orderBy('card_code','asc')
-            ->first();
 
-     // dd(Auth::user()); 
-    return view('index', [
-        'carnets' => $carnets,
-        'cargos' => $cargos,
-        'departamentos' => $departamentos,
-        'niveles' => $niveles,
-        'estados' => $estados,
-        'a' => $a,
-         'in' => $in,
-    ]);
-    }
 
-   
+
+    //////////////////////////////// CODIGO PARA DESCARGAR EN ZIP /////////////////////////////////
 
       public function descargar()
     {
-      $source = public_path('imgs/usuarios');
+
+    $source = public_path('imgs/usuarios');
+
     $destination = public_path('descargas/Imagenes.zip');
 
-    if (!is_dir(public_path('descargas'))) {
+    if (!is_dir(public_path('descargas'))) 
+    {
+
         mkdir(public_path('descargas'), 0755, true);
+
     }
 
-    if ($this->createZip($source, $destination)) {
+    if ($this->createZip($source, $destination)) 
+    {
+           $this->logs('Descarga Exitosa','Descargar');
         return response()->download($destination);
-    } else {
+
+    } 
+    else 
+    {
+          $this->logs('Eror al descargar ZIP','Descarga');
+
         return response()->json(['error' => 'Error al comprimir los archivos']);
+
     }
         
     }
 
+    //////////////////////////////// CODIGO PARA DESCARGAR EN ZIP /////////////////////////////////
+
+
+//////////////////////////////// CODIGO DE EL ARCHIVO ZIP /////////////////////////////////
+
    function createZip($source, $destination) {
-      if (!file_exists($source)) {
+
+      if (!file_exists($source)) 
+    {
+
         return false;
+
     }
 
     $zip = new ZipArchive();
-    if ($zip->open($destination, ZipArchive::CREATE) !== true) {
+
+    if ($zip->open($destination, ZipArchive::CREATE) !== true)
+    {
+
         return false;
+
     }
 
     $source = realpath($source);
 
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
 
-    foreach ($iterator as $file) {
-        if ($iterator->isDot()) {
-            continue; // Saltar archivos y directorios ocultos
+    foreach ($iterator as $file) 
+    {
+
+        if ($iterator->isDot()) 
+        {
+
+            continue; 
+
         }
 
-        // Verificar si es una imagen (puedes agregar más extensiones si es necesario)
+       
         $extension = pathinfo($file, PATHINFO_EXTENSION);
-        if (!in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif'])) {
+
+        if (!in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif'])) 
+        {
+
             continue;
+
         }
 
-        // Calcular la ruta relativa dentro del ZIP
+    
         $relativePath = substr($file, strlen($source) + 1);
 
         $zip->addFile($file, $relativePath);
+
     }
+
+       $this->logs('Creacion del zip','CreateZIP');
 
     return $zip->close();
 }
 
-    
+    //////////////////////////////// CODIGO DE EL ARCHIVO ZIP /////////////////////////////////
+
+    //////////////////////////////// REGISTRO DE CARNETS /////////////////////////////////
 
     public function registrar(request $request)
     {
@@ -327,106 +416,270 @@ dd($in);
         'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
     ]);
   
-    if($request->hasFile('archivo')){
+    if($request->hasFile('archivo'))
+    {
 
-       
-        // Store the uploaded file
         $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
         $request->archivo->move('imgs/usuarios', $avatarName);
-         //dd( $request->archivo->storeAs('public/imgs/usuarios', $avatarName));
+        
         $avatarPath = $avatarName;
        
     }
   
-     
-    
-    
         $valores = new carnets;
 
-    $valores->name=strtoupper($request->name);
-    $valores->lastname=strtoupper($request->surname);
-    $valores->address=strtoupper($request->adress);
-    $valores->expiration=Carbon::parse($request->date)->format('d/m/Y');
-    $valores->cedule=$request->document;
-    $valores->cellpone=$request->phone;
-    $valores->card_code=$request->code;
-    $valores->note=strtoupper($request->comment);
-    $valores->id_department=$request->department;
-     $valores->id_status=1;
-    $valores->id_charge=$request->charge;
-    $valores->id_access_levels=$request->access;
-    $valores->id_state=$request->statesment;
-   // $valores->image=$request->image;
-    //$valores->date=$request->date;
+        
+        $valores->name=strtoupper($request->name);
+        
+        $valores->lastname=strtoupper($request->surname);
+        
+        $valores->address=strtoupper($request->adress);
+        
+        $valores->expiration=Carbon::parse($request->date)->format('d/m/Y');
+        
+        $valores->cedule=$request->document;
+        
+        $valores->cellpone=$request->phone;
+        
+        $valores->card_code=$request->code;
+        
+        $valores->note=strtoupper($request->comment);
+        
+        $valores->id_department=$request->department;
+        
+        $valores->id_status=1;
+        
+        $valores->id_charge=$request->charge;
+        
+        $valores->id_access_levels=$request->access;
+        
+        $valores->id_state=$request->statesment;
+
 
         $name=$valores->name;
+
         $lastname=$valores->lastname;
 
         $partesNombre = explode(' ', $name);
 
-if (count($partesNombre) >= 2) {
+if (count($partesNombre) >= 2) 
+{
+
     $partesNombre[1] = Str::substr($partesNombre[1], 0, 1) . '.';
+
 }
 
 $nombreFormateado = implode(' ', $partesNombre);
 
 $partesApellido = explode(' ', $lastname);
 
-if (count($partesApellido) >= 2) {
+if (count($partesApellido) >= 2) 
+{
+
     $partesApellido[1] = Str::substr($partesApellido[1], 0, 1) . '.';
+
 }
 
-$apellidoFormateado = implode(' ', $partesApellido);
+    $apellidoFormateado = implode(' ', $partesApellido);
 
- $valores->name=$nombreFormateado ;
+    $valores->name=$nombreFormateado ;
+
     $valores->lastname=$apellidoFormateado;
 
-     //dd($imagePath);
-// dd($valores);
  $valores->save();
- return back()->with('status','Carnet Creado');
+
+  $this->logs('Registro del Carnet','Registrar');
+
+ return back()
+ ->with('success','Carnet Creado');
         
     }
+
+
+//////////////////////////////// REGISTRO DE CARNETS /////////////////////////////////
+
+
+
+//////////////////////////////// INDEX /////////////////////////////////
+     public function index()
+    {
+
+    $data=$this->datos();
+
+    $a = $data->a;
+    
+    $carnets = $data->carnets;
+    
+    $cargos = $data->cargos;
+    
+    $departamentos = $data->departamentos;
+    
+    $niveles = $data->niveles;
+    
+    $estados = $data->estados;
+
+    $status = $data->status;
+
+
+
+    $in=db::table('Carnets')
+    ->orderBy('card_code','asc')
+    ->first();
+
+       $this->logs('Redirecion a la Vista index','Index');
+    return view('index', 
+    [
+        'carnets' => $carnets,
+
+        'cargos' => $cargos,
+
+        'departamentos' => $departamentos,
+
+        'niveles' => $niveles,
+
+        'estados' => $estados,
+
+        'status' => $status,
+
+        'a' => $a,
+
+        'in' => $in,
+    ]
+    );
+    }
+
+//////////////////////////////// INDEX /////////////////////////////////
+
+
+//////////////////////////////// LOGIN  /////////////////////////////////
 
      public function Login(Request $request)
     {
 
-      $emailIngresado = $request->email; // Email ingresado por el usuario
+        $emailIngresado = $request->email; 
 
-$usuario = User::where('email', $emailIngresado)->first(); // Busca el usuario por email
-//  dd($usuario);
-if ($usuario) { // Verifica si el usuario existe
-    $contrasenaIngresada = $request->password; // Contraseña ingresada por el usuario
+        $usuario = User::where('email', $emailIngresado)->first();
 
-    $a = Hash::make($contrasenaIngresada, ['rounds' => 10]);
+    if ($usuario) 
+{ 
+    $contrasenaIngresada = $request->password; 
 
+    $contrasenaAlmacenada = $usuario->password;
 
+    if (Hash::check($contrasenaIngresada, $contrasenaAlmacenada)) 
+    {
 
-    $contrasenaAlmacenada = $usuario->password; // Contraseña hasheada de la base de datos
- //dd($contrasenaAlmacenada);
-    if (Hash::check($contrasenaIngresada, $contrasenaAlmacenada)) {
         Auth::login($usuario);
-       // 
+       
+         $this->logs('Inicio de sesion Exitoso','Login');
+
         return back();
-    } else {
-        // La contraseña es incorrecta
-        return back(); // Mensaje de error más descriptivo
+
+    } 
+    else 
+    {
+      
+
+       $this->logs('Inicio de sesion Fallido','Login');
+        return back(); 
     }
-} else {
-     return back(); // Mensaje si el usuario no existe
+} 
+else 
+{
+   $this->logs('Usuario No Encontrado','Login');
+     return back(); 
 }
 
-      /*  session()->put('usuario', $request->email);
-        return back();*/
        
     }
+
+
+//////////////////////////////// LOGIN  /////////////////////////////////
+
+//////////////////////////////// LOG OUT  /////////////////////////////////
       public function logout()
-    {
-     Auth::logout();
+{
+       $this->logs('Cerrar Sesion','Logout');
+
+        Auth::logout();
+
         return redirect()->route('index');
         
-    }
+}
 
-     
+
+//////////////////////////////// LOG OUT  /////////////////////////////////
+
+
+//////////////////////////////// LOGS  /////////////////////////////////
+
+    public function logs($accion, $controlador)
+{
+
+        $log = new logs;
+
+        $log->ip = request()->ip();
+
+    
+            if (Auth::check()) 
+
+                {
+
+                    $user = Auth::user();
+
+                    $log->usuario = $user->id; 
+                } 
+            else 
+
+                {
+
+                    $log->usuario = 'Invitado'; 
+
+                }
+
+        
+        $log->accion = $accion;
+        
+        $log->controlador = $controlador;
+        
+        $log->save();
+
+}
+
+
+//////////////////////////////// LOGS  /////////////////////////////////
+
+////////////////////////////////ACTIVIDADES TABLA /////////////////////
+
+public function actividades()
+{
+
+    $actividades = DB::table('logs')
+        ->join(
+            'userEntity as users', 
+            'users.id', '=', 'logs.usuario'
+              )
+        ->select(
+            'logs.accion',
+            'logs.controlador',
+            'logs.ip',
+            'users.name AS usuario',
+            DB::raw('max(logs.created_at) as created_at')
+                )
+        ->orderBy('created_at', 'DESC')
+        ->groupBy('logs.accion', 'logs.controlador', 'logs.ip', 'users.name')
+        ->get();
+
+       
+
+    return DataTables::of($actividades) 
+    
+    ->toJson();
+
+}
+
+////////////////////////////////ACTIVIDADES TABLA /////////////////////
+
+
 }

@@ -48,6 +48,17 @@
          
 
 <!-- /////////////////// REGISTRO DE CARNETS //////////////////-->
+<a class="ml-5"><button type="button" 
+class="btn btn-outline-secondary mt-3 mb-3 p-0" href="" onclick="window.history.go(-1);" 
+
+ style="border-radius: 1rem; display: inline-flex; align-items: center; justify-content: center;width: 3vw;height: 3vw;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-fill-add" align="center" viewBox="0 0 16 16" style="width: 2vw;height:2vw">
+    
+      <path d="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+
+    </svg>
+</button></a>
+
 
 <section class="w-75 m-auto mt-5" style="text-align: center; background-color: white;padding: 1%;border: dotted 1px grey;border-radius: 3rem;">
 
@@ -145,6 +156,15 @@
          
       @foreach($cargos as $cargo)
          <option value="{{$cargo->id}}" @if ($cargo->id == $editar->id_charge) selected @endif>{{$cargo->name}}</option>
+      @endforeach
+      </select>
+
+        <span class="input-group-text" id="status">Estado Laboral</span>
+
+      <select class="form-control col-md-3" id="status" name="status" required>
+         
+      @foreach($status as $status)
+         <option value="{{$status->id}}" @if ($status->id == $editar->id_status) selected @endif>{{$status->name}}</option>
       @endforeach
       </select>
 

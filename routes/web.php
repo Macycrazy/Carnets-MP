@@ -27,3 +27,5 @@ Route::get('/excel', [procesos::class, 'export'])->name('excel');
 Route::get('/editar_{id}', [procesos::class, 'editar'])->name('editar');
 
 Route::put('/actualizar_{id}', [procesos::class, 'actualizar'])->name('actualizar');
+
+Route::get('actividades', [procesos::class, 'actividades'])->name('actividades');

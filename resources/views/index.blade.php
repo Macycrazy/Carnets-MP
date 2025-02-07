@@ -352,7 +352,7 @@
   <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1h-2v1h-1v1h1v1h-1v1h1v1H6V5H5V4h1V3H5V2h1V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
 </svg>
 
-
+@endif
    </a>
 
    <a class=" btn btn-success m-auto"  href="{{ route('excel') }}" style="aspect-ratio: 1;vertical-align: baseline;" >
@@ -363,7 +363,7 @@
 </svg>
 
    </a>
-   @endif
+   
 
 <!--////////////////////////// Descargar archivos ////////////////////////-->
 </section>
@@ -428,6 +428,38 @@
       <!-- BANNER -->
       <br>
       @auth
+
+      @if(Auth::user()->rol == 'admin')
+
+       <div class="card m-auto" style="width: 95%;">
+                <div class="card-body"> 
+            <table id="ActividDad" class="table table-striped nowrap" style="width:100%">
+                <thead >
+                    <tr >
+                       
+                        <th>Usuario</th>
+                        <th>Ip</th>
+
+                        <th>Accion</th>
+                        <th>Controlador</th>
+                        <th>Fecha</th>
+                       
+                    </tr>
+                </thead>
+                <tbody >
+                   
+ 
+                        
+
+         
+                </tbody>
+            </table>
+        </div>
+        </div>
+        <br>
+        @endif
+
+
       <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 5%;border-radius: 2rem;">
 <table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;">
         <thead>
@@ -438,10 +470,10 @@
                 <th>Apellido</th>
                 <th>Departamento</th>
                 <th>Cargo</th>
-                
+                <th>Estado</th>
                 <th data-dt-order="disable">Nota</th>
                 <th data-dt-order="disable">Foto de perfil</th>
-                <th data-dt-order="disable">Creado El:</th>
+                <th >Creado El:</th>
                 <th data-dt-order="disable">Editar</th>
                
                 
@@ -456,6 +488,7 @@
                 <td>{{ mb_ucfirst($b->lastname, 'UTF-8') }}</td>
                 <td>{{$b->department}}</td>
                  <td>{{ mb_ucfirst($b->charge, 'UTF-8') }}</td>
+                  <td>{{$b->id_status}}</td>
                 
                 <td >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
                 <td >
@@ -675,7 +708,6 @@ function validateForm() {
 
 
 </script>
-    
 
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>
@@ -697,9 +729,31 @@ function validateForm() {
       <script type="text/javascript">
     
       $('#example').DataTable({
-    "order": [[ 9, "desc" ]] // Ordena por la tercera columna (índice 2) en orden descendente
+    "order": [[ 10, "desc" ]] // Ordena por la tercera columna (índice 2) en orden descendente
 });
    </script>
+   <script type="text/javascript">
+   
+
+new DataTable('#ActividDad', {
+     ajax: "{{route('actividades')}}",
+     columns:[
+        {data:'usuario'},
+        {data:'ip'},
+
+        {data:'accion'},
+        {data:'controlador'},
+        {data:'created_at'}
+        ],
+        "order": [[ 5, "desc" ]]
+
+          
+});
+
+
+</script>
+    
+
    </body>
 </html>
 
