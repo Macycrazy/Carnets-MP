@@ -137,6 +137,14 @@
 <!-- /////////////////// REGISTRO DE CARNETS //////////////////-->
 
 <section class="w-75 m-auto mt-5" style="text-align: center; background-color: white;padding: 1%;border: dotted 1px grey;border-radius: 3rem;">
+  @if (session('success'))
+    <div class="alert alert-success" role="alert">
+  {{session('success')}}
+</div>
+@endif
+ @if (session('alert') )
+    <div class="alert alert-success" role="alert">{{session('alert')}}</div>
+@endif
 
 
 <form style="font-family: arial;" method="POST" action="{{route('registrar')}}" id="Registro" enctype="multipart/form-data" autocomplete="off">

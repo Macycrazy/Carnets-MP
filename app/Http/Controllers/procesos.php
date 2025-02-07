@@ -492,7 +492,7 @@ if (count($partesApellido) >= 2)
   $this->logs('Registro del Carnet','Registrar');
 
  return back()
- ->with('success','Carnet Creado');
+ ->with('success','Carnet Creado')->with('success','Carnet Creado');
         
     }
 
@@ -574,7 +574,7 @@ if (count($partesApellido) >= 2)
        
          $this->logs('Inicio de sesion Exitoso','Login');
 
-        return back();
+        return back()->with('success','Bienvenido');
 
     } 
     else 
@@ -582,13 +582,13 @@ if (count($partesApellido) >= 2)
       
 
        $this->logs('Inicio de sesion Fallido','Login');
-        return back(); 
+        return back()->with('alert','Contraseña incorrecta'); 
     }
 } 
 else 
 {
    $this->logs('Usuario No Encontrado','Login');
-     return back(); 
+     return back()->with('alert','Usuario No Encontrado'); 
 }
 
        
@@ -604,7 +604,7 @@ else
 
         Auth::logout();
 
-        return redirect()->route('index');
+        return redirect()->route('index')->with('alert','Vuelva Pronto');
         
 }
 
@@ -634,7 +634,7 @@ else
 
                 {
 
-                    $log->usuario = 'Invitado'; 
+                    $log->usuario = 0; 
 
                 }
 
