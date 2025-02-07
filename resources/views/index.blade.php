@@ -47,7 +47,11 @@
 
          <a href="#main">Crear</a>
 
-         <a href="#consultas">Consultar</a>
+         <a href="#example">Consultar</a>
+
+         @if(Auth::user()->rol == 'admin')
+         <a href="#ActividDad">actividades</a>
+         @endif
 
          <form method="POST" action="{{route('logout')}}">
 
@@ -81,7 +85,7 @@
       <!-- header -->
       <header>
          <!-- header inner -->
-         <div class="header">
+         <div class="header" style="vertical-align:middle">
 
             <div class="container-fluid">
 
@@ -91,11 +95,11 @@
 
                      <div class="logo">
 
-                        <a href="index.html">
+                        <!-- <a href="https://www.ciip.com.ve"> -->
 
                            <img src="images/logo-ciip.png" alt="#" />
 
-                        </a>
+                        <!--</a>-->
 
                      </div>
 
@@ -348,33 +352,7 @@
 
 <!-- ////////////// EDITAR IMAGEN ////////////////-->
 
-<!--////////////////////////// Descargar archivos ////////////////////////-->
 
-
-@if(Auth::user()->rol == 'admin')
-<section class=" w-100 " style="display: inline-flex;margin: 0 auto;">
-
-  <a class="btn btn-primary m-auto" href="{{ route('descargar') }}" style="aspect-ratio: 1;vertical-align: baseline;" > 
-     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-zip" viewBox="0 0 16 16">
-  <path d="M5 7.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v.938l.4 1.599a1 1 0 0 1-.416 1.074l-.93.62a1 1 0 0 1-1.11 0l-.929-.62a1 1 0 0 1-.415-1.074L5 8.438zm2 0H6v.938a1 1 0 0 1-.03.243l-.4 1.598.93.62.929-.62-.4-1.598A1 1 0 0 1 7 8.438z"/>
-  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1h-2v1h-1v1h1v1h-1v1h1v1H6V5H5V4h1V3H5V2h1V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
-</svg>
-
-@endif
-   </a>
-
-   <a class=" btn btn-success m-auto"  href="{{ route('excel') }}" style="aspect-ratio: 1;vertical-align: baseline;" >
- 
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
-  <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
-  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-</svg>
-
-   </a>
-   
-
-<!--////////////////////////// Descargar archivos ////////////////////////-->
-</section>
 @endauth
 
 <!-- /////////////////// REGISTRO DE CARNETS //////////////////-->
@@ -468,7 +446,10 @@
         @endif
 
 
+
       <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 5%;border-radius: 2rem;">
+
+
 <table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;">
         <thead>
             <tr>
@@ -518,8 +499,40 @@
       @endforeach
               </tbody>
     </table>
+      @auth
+
+        <!--////////////////////////// Descargar archivos ////////////////////////-->
+
+
+
+<section class=" w-100 " style="display: inline-flex;margin: 0 auto;">
+@if(Auth::user()->rol == 'admin')
+  <a class="btn btn-primary m-auto" href="{{ route('descargar') }}" style="aspect-ratio: 1;vertical-align: baseline;" > 
+     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-zip" viewBox="0 0 16 16">
+  <path d="M5 7.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v.938l.4 1.599a1 1 0 0 1-.416 1.074l-.93.62a1 1 0 0 1-1.11 0l-.929-.62a1 1 0 0 1-.415-1.074L5 8.438zm2 0H6v.938a1 1 0 0 1-.03.243l-.4 1.598.93.62.929-.62-.4-1.598A1 1 0 0 1 7 8.438z"/>
+  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1h-2v1h-1v1h1v1h-1v1h1v1H6V5H5V4h1V3H5V2h1V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+</svg>
+
+@endif
+   </a>
+
+   <a class=" btn btn-success m-auto"  href="{{ route('excel') }}" style="aspect-ratio: 1;vertical-align: baseline;" >
+ 
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+  <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
+  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+</svg>
+
+   </a>
+   
+
+<!--////////////////////////// Descargar archivos ////////////////////////-->
+</section>
+
+        @endguest
     </div>
     @endauth
+
 
      <!-- /////////////////// VISTA DE CARNETS //////////////////-->
 

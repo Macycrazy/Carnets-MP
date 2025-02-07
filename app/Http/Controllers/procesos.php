@@ -489,7 +489,7 @@ if (count($partesApellido) >= 2)
 
  $valores->save();
 
-  $this->logs('Registro del Carnet','Registrar');
+  $this->logs('Registro del Carnet '.$valores->cedule,'Registrar');
 
  return back()
  ->with('success','Carnet Creado')->with('success','Carnet Creado');
