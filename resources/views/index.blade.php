@@ -376,7 +376,7 @@
 
       <input type="email" class="form-control" id="floatingInput" placeholder="correo@gmail.com" name="email">
 
-      <label for="floatingInput">Corre electronico</label>
+      <label for="floatingInput">Correo electronico</label>
 
     </div>
 
