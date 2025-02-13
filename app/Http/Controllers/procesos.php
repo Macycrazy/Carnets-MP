@@ -436,7 +436,7 @@ public function datos(){
         
         $valores->address=strtoupper($request->adress);
         
-        $valores->expiration=Carbon::parse($request->date)->format('d/m/Y');
+        $valores->expiration=$request->date;
         
         $valores->cedule=$request->document;
         
