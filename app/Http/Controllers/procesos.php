@@ -347,6 +347,24 @@ public function datos(){
 
     //////////////////////////////// CODIGO PARA DESCARGAR EN ZIP /////////////////////////////////
 
+    ///////////////////////////////// CODIGO PARA DESCARGAR IMAGENES //////////////////////
+
+    public function descargar_imagen($nombreImagen)
+{
+    $rutaImagen = public_path('imgs/usuarios/' . $nombreImagen);
+
+
+    if (file_exists($rutaImagen)) {
+        $this->logs('Descarga Exitosa', 'Descargar');
+        return response()->download($rutaImagen);
+    } else {
+        $this->logs('Error al descargar imagen', 'Descarga');
+        return back()->with('alert','No Tiene Foto');
+    }
+}
+
+   ///////////////////////////////// CODIGO PARA DESCARGAR IMAGENES //////////////////////
+
 
 //////////////////////////////// CODIGO DE EL ARCHIVO ZIP /////////////////////////////////
 
@@ -539,11 +557,17 @@ if (count($partesApellido) >= 2)
 
 
 
-    $in=db::table('Carnets')
-    ->orderBy('card_code','asc')
+    $in=DB::table('Carnets')
+    ->select('*')
+    
+    ->orderBy('id', 'desc')
+    ->orderBy('card_code', 'desc')
     ->first();
+    $in->card_code=$in->card_code;
 
        $this->logs('Redirecion a la Vista index','Index');
+
+      //dd($in);
     return view('index', 
     [
         'carnets' => $carnets,

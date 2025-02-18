@@ -21,6 +21,8 @@ Route::post('/logout', [procesos::class, 'logout'])->name('logout');
 
 Route::get('/descargar', [procesos::class, 'descargar'])->name('descargar');
 
+Route::get('/descargar_imagen_{id}', [procesos::class, 'descargar_imagen'])->name('descargar_imagen');
+
 
 Route::get('/excel', [procesos::class, 'export'])->name('excel');
 

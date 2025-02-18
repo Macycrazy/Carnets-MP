@@ -219,7 +219,7 @@
 
       <span class="input-group-text" id="code">Codigo</span>
 
-      <input class="form-control" type="text" id="code" name="code" placeholder="ej. 100046 en adelante" required>
+      <input class="form-control" type="text" id="code" name="code" placeholder="ej. 100046 en adelante" value="{{$in->card_code}}" required>
 
 
 
@@ -447,10 +447,10 @@
 
 
 
-      <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 5%;border-radius: 2rem;">
+      <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 1%;border-radius: 2rem;">
 
 
-<table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;">
+<table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;size: auto;">
         <thead>
             <tr>
                 <th>Cedula</th>
@@ -464,12 +464,16 @@
                 <th data-dt-order="disable">Foto de perfil</th>
                 <th >Creado El:</th>
                 <th data-dt-order="disable">Editar</th>
+                @if(Auth::user()->rol == 'admin')
+                <th>Descargar Imagen</th>
+                @endif
                
                 
             </tr>
         </thead>
         <tbody>
          @foreach($a as $b)
+
             <tr>
                 <td>{{$b->cedule}}</td>
                 <td>{{$b->card_code}}</td>
@@ -481,18 +485,28 @@
                 
                 <td >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
                 <td >
+
                   @if(File::exists('imgs/usuarios/'.$b->cedule.'.jpg'))
 
                   
 
-                  <img src="imgs/usuarios/{{ $b->cedule}}.jpg" style="max-height:100px">
+                 <a href="imgs/usuarios/{{ $b->cedule}}.jpg" > <img src="imgs/usuarios/{{ $b->cedule}}.jpg" style="max-height:100px" >
+                 </a>
+
+                 
+
                   @else
                   No tiene
                   @endif
                 </td>
-                <td>{{ \Carbon\Carbon::parse($b->created_at)->format('d/m/Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($b->created_at)->format('d-m-Y') }}</td>
                 <td  ><a href="{{route('editar',$b->card_code)}}" > <button class="btn btn-warning">Editar</button> </a></td>
-
+                 @if(Auth::user()->rol == 'admin')
+                 <td  ><a href="{{ route('descargar_imagen',$b->cedule.'.jpg') }}" > <button class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+</svg></button> </a></td>
+                @endif
                 
             </tr>
           
@@ -500,6 +514,8 @@
               </tbody>
     </table>
       @auth
+
+
 
         <!--////////////////////////// Descargar archivos ////////////////////////-->
 
@@ -766,7 +782,7 @@ new DataTable('#ActividDad', {
         {data:'controlador'},
         {data:'created_at'}
         ],
-        "order": [[ 5, "desc" ]]
+        "order": [[ 4, "desc" ]]
 
           
 });
