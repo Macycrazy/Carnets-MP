@@ -29,14 +29,7 @@ class usuarios extends Seeder
                 'rol' => 'admin', // Usar string en lugar de la constante            
                 'password' => Hash::make('Ciip2024.'), // Usar Hash::make()
             ],
-            [
-                'name' => 'daniel quintero', // Separar nombre y apellido
-                'email' => 'danielquinteroac33@gmail.com',
-                'isActive' => true,
-                'rol' => 'admin', // Usar string en lugar de la constante
-                'password' => Hash::make('123456'), // Usar Hash::make()
-            ],
-            [
+                       [
                 'name' => 'SUPER USUARIO CIIP', // Separar nombre y apellido
                 'email' => 'ciip2024@gmail.com',
                 'isActive' => true,
@@ -45,11 +38,11 @@ class usuarios extends Seeder
             ],
             
              [
-                'name' => 'Tony Leon',
-                'email' => 't.leon@ciip.com.ve',
+                'name' => 'Kristina Sulcas',
+                'email' => 'k.sulcas@ciip.com.ve',
                 'isActive' => true,
                 'rol' => 'user',
-                'password' => Hash::make('T.l30n00'),
+                'password' => Hash::make('K.sulc4s54'),
             ],
              [
                 'name' => 'LOISBETH CORVOS',

@@ -138,7 +138,7 @@ class procesos extends Controller
 
     $valores->card_code=$request->code;
 
-    $carnet->update(['card_code' => $valores->card_code]);
+   // $carnet->update(['card_code' => $valores->card_code]);
 
     $valores->note=strtoupper($request->comment);
 
@@ -412,6 +412,22 @@ public function datos(){
     {
 
      
+
+      $carnet = carnets::select('*')->where('card_code','=',$request->code)->first();
+
+      $cedula = carnets::select('*')->where('cedule','=',$request->document)->first();
+      if($carnet)
+      {
+        return back()
+ ->with('alert','Codigo de Carnet Ya Existente');
+      }
+      else if($cedula)
+      {
+        return back()
+ ->with('alert','Este usuario Ya esta Registrado, Cedula: '.$cedula->cedule);
+      }
+  else
+      {
        $request->validate([
         'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
     ]);
@@ -427,8 +443,8 @@ public function datos(){
        
     }
   
-        $valores = new carnets;
-
+       
+         $valores = new carnets;
         
         $valores->name=strtoupper($request->name);
         
@@ -492,8 +508,8 @@ if (count($partesApellido) >= 2)
   $this->logs('Registro del Carnet '.$valores->cedule,'Registrar');
 
  return back()
- ->with('success','Carnet Creado')->with('success','Carnet Creado');
-        
+ ->with('success','Carnet Creado');
+        }
     }
 
 

@@ -265,7 +265,7 @@
 
          <option disabled selected>Seleccione el Nivel de acceso</option>
    @foreach($niveles as $nivel)
-         <option value="{{$nivel->id}}">{{$nivel->name}}</option>
+         <option value="{{$nivel->id}}" @if ($nivel->id == 1) selected @endif>{{$nivel->name}}</option>
       @endforeach
       </select>
 
@@ -275,7 +275,7 @@
 
          <option disabled selected>Seleccione el Estado</option>
    @foreach($estados as $estado)
-         <option value="{{$estado->id}}">{{$estado->name}}</option>
+         <option value="{{$estado->id}}" @if ($estado->id == 14) selected @endif>{{$estado->name}}</option>
       @endforeach
       </select>
 
