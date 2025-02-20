@@ -563,7 +563,7 @@ if (count($partesApellido) >= 2)
     ->orderBy('id', 'desc')
     ->orderBy('card_code', 'desc')
     ->first();
-    $in->card_code=$in->card_code;
+    $in->card_code=$in->card_code+1;
 
        $this->logs('Redirecion a la Vista index','Index');
 
