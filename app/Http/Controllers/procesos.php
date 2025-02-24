@@ -135,13 +135,13 @@ $a=intval(Auth::user()->id);
         
 
            $request->validate([
-        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
+        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:20480'
     ]);
   
     if($request->hasFile('archivo')){
 
        
-      
+      //dd();
         $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
         $archivo=request()->archivo;
@@ -494,7 +494,7 @@ public function datos(){
   else
       {
        $request->validate([
-        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
+        'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:20480'
     ]);
   
     if($request->hasFile('archivo'))
