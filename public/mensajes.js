@@ -28,7 +28,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error("Error AJAX:", status, error); // Imprime el error AJAX
-                console.log("Respuesta del servidor (error):", xhr.responseText); // Imprime la respuesta del servidor (si hay)
+                console.log("Respuesta del servidor (error):", JSON.parse(xhr.responseText)); // Imprime la respuesta del servidor (si hay)
                 alert("Ocurrió un error al enviar el mensaje. Por favor, inténtalo de nuevo.");
             }
         });

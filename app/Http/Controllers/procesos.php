@@ -46,6 +46,8 @@ class procesos extends Controller
         $usuarios=user::all()->where('rol','!=','admin');
 $user_id=Auth::user();
 
+
+
 $messages = mensajes::where(function ($query) use ($user_id) {
             $query->where('emisor', auth()->id())
                   ->where('receptor', $user_id->id);
@@ -61,9 +63,11 @@ $messages = mensajes::where(function ($query) use ($user_id) {
 
      public function send(Request $request)
     {
+$a=intval(Auth::user()->id);
 
    $message = new mensajes();
-        $message->emisor = auth()->id();
+
+        $message->emisor = $a;
         $message->receptor = $request->receiver_id;
         $message->contenido = $request->message;
         $message->save();
@@ -144,14 +148,7 @@ $messages = mensajes::where(function ($query) use ($user_id) {
 
         $image = image::read($archivo)
         ->scale(width: 800);
-       // dd($image);
-
-      /*  $image->resize(800, null, function ($constraint) {
-    $constraint->aspectRatio();
-});*/
-
-        //$image->save('imgs/usuarios/' . $avatarName, 100); 
-
+     
        $image->save(public_path('imgs/usuarios/'.$avatarName));
        
         $avatarPath = $avatarName;
@@ -503,10 +500,15 @@ public function datos(){
     if($request->hasFile('archivo'))
     {
 
-        $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
+            $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
-        $request->archivo->move('imgs/usuarios', $avatarName);
-        
+        $archivo=request()->archivo;
+
+        $image = image::read($archivo)
+        ->scale(width: 800);
+     
+       $image->save(public_path('imgs/usuarios/'.$avatarName));
+       
         $avatarPath = $avatarName;
        
     }
