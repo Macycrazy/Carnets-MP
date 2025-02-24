@@ -141,7 +141,7 @@ $a=intval(Auth::user()->id);
     if($request->hasFile('archivo')){
 
        
-      //dd();
+      //dd(a);
         $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
         $archivo=request()->archivo;
