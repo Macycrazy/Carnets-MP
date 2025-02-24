@@ -20,6 +20,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 
 use Intervention\Image\Laravel\Facades\Image;
+
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Str;
@@ -33,9 +34,46 @@ use App\Models\states;
 use App\Models\status;
 use App\Models\User;
 use App\Models\logs;
+use App\Models\mensajes;
 
 class procesos extends Controller 
 {
+
+
+    public function mensajes()
+    {
+
+        $usuarios=user::all()->where('rol','!=','admin');
+$user_id=Auth::user();
+
+$messages = mensajes::where(function ($query) use ($user_id) {
+            $query->where('emisor', auth()->id())
+                  ->where('receptor', $user_id->id);
+        })->orWhere(function ($query) use ($user_id) {
+            $query->where('emisor', $user_id->id)
+                  ->where('receptor', auth()->id());
+        })->get();
+
+        return view('mensajes', compact('messages', 'user_id','usuarios'));
+    
+
+    }
+
+     public function send(Request $request)
+    {
+
+   $message = new mensajes();
+        $message->emisor = auth()->id();
+        $message->receptor = $request->receiver_id;
+        $message->contenido = $request->message;
+        $message->save();
+
+        return response()->json(['message' => 'Mensaje enviado']);
+    }
+
+
+
+
 
 //////////////////////////////// VISTA DE EDICION /////////////////////////////////
 
@@ -102,7 +140,19 @@ class procesos extends Controller
       
         $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
-        $request->archivo->move('imgs/usuarios', $avatarName);
+        $archivo=request()->archivo;
+
+        $image = image::read($archivo)
+        ->scale(width: 800);
+       // dd($image);
+
+      /*  $image->resize(800, null, function ($constraint) {
+    $constraint->aspectRatio();
+});*/
+
+        //$image->save('imgs/usuarios/' . $avatarName, 100); 
+
+       $image->save(public_path('imgs/usuarios/'.$avatarName));
        
         $avatarPath = $avatarName;
        
