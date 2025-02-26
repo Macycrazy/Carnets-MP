@@ -34,6 +34,25 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
          <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
+          <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
+           <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.bootstrap5.css">
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.4.3/css/scroller.bootstrap5.css">
+            <style type="text/css">
+
+               #CajoNeta {
+
+  animation: crecer 1s ease-in-out; /* Animación continua */
+}
+
+@keyframes crecer {
+  0% {
+    height: 0%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+            </style>
    </head>
    <!-- body -->
    <body class="main-layout">
@@ -46,12 +65,13 @@
          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
          @auth
 
-         <a href="#main">Crear</a>
+         <a href="#main" id="Btnregistro">Registrar Carnet</a>
 
-         <a href="#example">Consultar</a>
+         <a href="#example" id="Btnconsulta">Consultar Carnets</a>
 
          @if(Auth::user()->rol == 'admin')
-         <a href="#ActividDad">actividades</a>
+
+         <a href="#ActividDad" id="logs">Actividades</a>
          @endif
 
          <form method="POST" action="{{route('logout')}}">
@@ -111,7 +131,11 @@
 
                      <div class="right_bottun" style="vertical-align: middle;">
                         @auth
-                        <h2  style="vertical-align: middle;margin: 0;padding: 0;color:white;">Bienvenido: {{ ucfirst(Auth::user()->name) }} </h2>
+                        <h2  style="vertical-align: middle;margin: 0;padding: 0;color:white;text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black;">Bienvenido: {{ ucfirst(Auth::user()->name) }} </h2>
                          @endauth
                       
                         <button class="openbtn" onclick="openNav()">
@@ -141,15 +165,21 @@
 @auth
 <!-- /////////////////// REGISTRO DE CARNETS //////////////////-->
 
-<section class="w-75 m-auto mt-5" style="text-align: center; background-color: white;padding: 1%;border: dotted 1px grey;border-radius: 3rem;">
-  @if (session('success'))
-    <div class="alert alert-success" role="alert">
+ @if (session('success'))
+    <div class="alert alert-success w-25 m-auto" role="alert">
   {{session('success')}}
 </div>
 @endif
  @if (session('alert') )
-    <div class="alert alert-success" role="alert">{{session('alert')}}</div>
+    <div class="alert alert-danger w-25 m-auto" role="alert">{{session('alert')}}</div>
 @endif
+
+<div class="w-100 d-flex">
+<!--<button class="btn btn-primary m-auto" style="aspect-ratio: 1;" id="Btnregistro">Crear</button>-->
+</div>
+<section class="w-75 m-auto mt-5" id="Cuadrore" style="text-align: center; background-color: white;padding: 1%;border: dotted 1px grey;border-radius: 3rem;display: none;">
+ 
+
 
 
 <form style="font-family: arial;" method="POST" action="{{route('registrar')}}" id="Registro" enctype="multipart/form-data" autocomplete="off">
@@ -365,6 +395,8 @@
 @guest
 <section class="w-50 m-auto" style="text-align: center;">
 
+  
+
             <main class="form-signin w-100 m-auto">
 
   <form action="{{route('login')}}" method="POST">
@@ -400,6 +432,15 @@
    </button>
 
   </form>
+<br>
+   @if (session('success'))
+    <div class="alert alert-success w-25 m-auto" role="alert">
+  {{session('success')}}
+</div>
+@endif
+ @if (session('alert') )
+    <div class="alert alert-danger w-25 m-auto" role="alert">{{session('alert')}}</div>
+@endif
 
 </main>
 
@@ -413,13 +454,18 @@
         
       </section>
       <!-- BANNER -->
-      <br>
+     
       @auth
 
       @if(Auth::user()->rol == 'admin')
 
-       <div class="card m-auto" style="width: 95%;">
-                <div class="card-body"> 
+
+        
+       <div class="card m-auto" style="width: 95%;display: none;" id="CajoNeta">
+        <!--  <button class="btn btn-outline-secondary w-25 m-auto" id="logs">Logs</button>-->
+
+                <div class="card-body"  > 
+
             <table id="ActividDad" class="table table-striped nowrap" style="width:100%">
                 <thead >
                     <tr >
@@ -443,12 +489,12 @@
             </table>
         </div>
         </div>
-        <br>
+
         @endif
 
 
 
-      <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 1%;border-radius: 2rem;">
+      <div class="" style="width: 99%;background-color:white;margin: 0 auto;padding: 1%;border-radius: 2rem;display: none;" id="Cuadrcon">
 
 
 <table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;size: auto;">
@@ -460,9 +506,10 @@
                 <th>Apellido</th>
                 <th>Departamento</th>
                 <th>Cargo</th>
+
+                <th data-dt-order="disable">Foto de perfil</th>
                 <th>Estado</th>
                 <th data-dt-order="disable">Nota</th>
-                <th data-dt-order="disable">Foto de perfil</th>
                 <th >Creado El:</th>
                 <th data-dt-order="disable">Editar</th>
                 @if(Auth::user()->rol == 'admin')
@@ -482,10 +529,7 @@
                 <td>{{ mb_ucfirst($b->lastname, 'UTF-8') }}</td>
                 <td>{{$b->department}}</td>
                  <td>{{ mb_ucfirst($b->charge, 'UTF-8') }}</td>
-                  <td>{{$b->id_status}}</td>
-                
-                <td >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
-                <td >
+                 <td >
 
                   @if(File::exists('imgs/usuarios/'.$b->cedule.'.jpg'))
 
@@ -500,6 +544,10 @@
                   No tiene
                   @endif
                 </td>
+                  <td>{{$b->id_status}}</td>
+                
+                <td >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
+                
                 <td>{{ \Carbon\Carbon::parse($b->created_at)->format('d-m-Y') }}</td>
                 <td  ><a href="{{route('editar',$b->card_code)}}" > <button class="btn btn-warning">Editar</button> </a></td>
                  @if(Auth::user()->rol == 'admin')
@@ -557,22 +605,7 @@
 
 
           <!-- /////////////////// VISTA DE CARNETS //////////////////-->
-      
-      <!--  footer -->
-      <footer>
-         
-            <div class="copyright">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <p>© 2019 All Rights Reserved. Design by<a href="https://html.design/"> Desarrolado por Miguel Cardenas.</a></p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </footer>
-      <!-- end footer -->
+     
       <!-- Javascript files-->
 
 
@@ -764,16 +797,27 @@ function validateForm() {
          }
       </script>
       <script type="text/javascript" src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+       <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.4.3/js/dataTables.scroller.js"></script>
+           <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.4.3/js/scroller.bootstrap5.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.js"></script>
+
       <script type="text/javascript">
     
       $('#example').DataTable({
-    "order": [[ 10, "desc" ]] // Ordena por la tercera columna (índice 2) en orden descendente
+    "order": [[ 10, "desc" ]] ,
+    responsive: true,
+     scrollCollapse: true,
+    scroller: true,
+    scrollY: 350// Ordena por la tercera columna (índice 2) en orden descendente
 });
    </script>
    <script type="text/javascript">
    
 
 new DataTable('#ActividDad', {
+
      ajax: "{{route('actividades')}}",
      columns:[
         {data:'usuario'},
@@ -783,11 +827,51 @@ new DataTable('#ActividDad', {
         {data:'controlador'},
         {data:'created_at'}
         ],
-        "order": [[ 4, "desc" ]]
-
+        "order": [[ 4, "desc" ]],
+        responsive: true,
+     scrollCollapse: true,
+    scroller: true,
+    scrollY: 350
           
 });
 
+$logt=document.getElementById('logs');
+
+$loga= document.getElementById('CajoNeta');
+
+$logt.addEventListener('click', () => {
+  if ($loga.style.display === 'block') {
+    $loga.style.display = 'none';
+  } else {
+    $loga.style.display = 'block';
+  }
+});
+
+
+$btnr=document.getElementById('Btnregistro');
+
+$cdr=document.getElementById('Cuadrore');
+
+$btnr.addEventListener('click', () => {
+  if ($cdr.style.display === 'block') {
+    $cdr.style.display = 'none';
+  } else {
+    $cdr.style.display = 'block';
+  }
+});
+
+
+$btnc=document.getElementById('Btnconsulta');
+
+$cdc=document.getElementById('Cuadrcon');
+
+$btnc.addEventListener('click', () => {
+  if ($cdc.style.display === 'block') {
+    $cdc.style.display = 'none';
+  } else {
+    $cdc.style.display = 'block';
+  }
+});
 
 </script>
     

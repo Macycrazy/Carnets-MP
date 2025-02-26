@@ -547,16 +547,13 @@ public function datos(){
 
         $lastname=$valores->lastname;
 
-        $partesNombre = explode(' ', $name);
+         $partesNombre = explode(' ', $name);
 
-if (count($partesNombre) >= 2) 
-{
 
-    $partesNombre[1] = Str::substr($partesNombre[1], 0, 1) . '.';
+$nombreFormateado = $partesNombre[0] . ' '; 
 
-}
-
-$nombreFormateado = implode(' ', $partesNombre);
+$ultimaParte = end($partesNombre); 
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
 
 $partesApellido = explode(' ', $lastname);
 
@@ -696,7 +693,7 @@ else
 
         Auth::logout();
 
-        return redirect()->route('index')->with('alert','Vuelva Pronto');
+        return redirect()->route('index')->with('success','Vuelva Pronto');
         
 }
 
