@@ -771,4 +771,28 @@ public function actividades()
 ////////////////////////////////ACTIVIDADES TABLA /////////////////////
 
 
+public function verificarUsuario(Request $request)
+{
+    $email = $request->input('email');
+    $password = $request->input('password');
+
+    $usuario = User::where('email', $email)->first(); // Busca el usuario por correo electrónico
+
+    if ($usuario) {
+        if ($usuario && Hash::check($password, $usuario->password)) { //verifica la contraseña
+        return response()->json(['exists' => true, 'redirect' => route('login')]);
+
+    }
+
+    else
+       {
+        return response()->json(['user' => true]);
+       } 
+
+    }
+      else {
+        return response()->json(['exists' => false]);
+    }
+}
+
 }

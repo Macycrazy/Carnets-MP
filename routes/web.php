@@ -35,3 +35,5 @@ Route::get('/editar_{id}', [procesos::class, 'editar'])->name('editar');
 Route::put('/actualizar_{id}', [procesos::class, 'actualizar'])->name('actualizar');
 
 Route::get('actividades', [procesos::class, 'actividades'])->name('actividades');
+
+Route::post('verificarUsuario', [procesos::class, 'verificarUsuario'])->name('verificarUsuario');

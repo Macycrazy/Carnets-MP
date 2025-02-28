@@ -37,12 +37,30 @@
           <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.css">
            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.bootstrap5.css">
             <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.4.3/css/scroller.bootstrap5.css">
+            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/5.0.4/css/fixedColumns.bootstrap5.css">
+            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+  </symbol>
+  <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+  </symbol>
+  <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+  </symbol>
+</svg>
             <style type="text/css">
 
                #CajoNeta {
 
   animation: crecer 1s ease-in-out; /* Animación continua */
 }
+
+ .blur-out {
+            transition: filter 2s ease-out, opacity 2s ease-out;
+            filter: blur(5px);
+            opacity: 0;
+        }
 
 @keyframes crecer {
   0% {
@@ -65,24 +83,22 @@
          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
          @auth
 
-         <a href="#main" id="Btnregistro">Registrar Carnet</a>
+         <a href="#" id="Btnregistro" onclick="closeNav()">Registrar Carnet</a>
 
-         <a href="#example" id="Btnconsulta">Consultar Carnets</a>
+         <a href="#" id="Btnconsulta" onclick="closeNav()">Consultar Carnets</a>
 
          @if(Auth::user()->rol == 'admin')
 
-         <a href="#ActividDad" id="logs">Actividades</a>
+         <a href="#" id="logs" onclick="closeNav()">Actividades</a>
          @endif
 
          <form method="POST" action="{{route('logout')}}">
 
             @csrf
 
-         <button href="" type="sumbit" class="btn btn-primary m-auto p-auto" style="font-size: 10px;" >
+         <button href="" type="sumbit" class="btn btn-primary m-auto text-center p-2" style="font-size: 100%;text-align: center;" >
 
-            <i class="fa fa-close" aria-hidden="true">
-               
-            </i>
+           
 
          Cerrar Sesion
 
@@ -94,7 +110,7 @@
 
          @guest
 
-         <a href="#service">
+         <a href="#service" onclick="closeNav()">
 
          Iniciar Sesion
 
@@ -166,17 +182,27 @@
 <!-- /////////////////// REGISTRO DE CARNETS //////////////////-->
 
  @if (session('success'))
-    <div class="alert alert-success w-25 m-auto" role="alert">
-  {{session('success')}}
+   
+
+<div class="alert alert-success alert-dismissible fade show w-50 m-auto align-items-center" role="alert" id="AlertAs">
+   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+<strong> {{session('success')}} </strong>
+ 
 </div>
+
+
 @endif
  @if (session('alert') )
-    <div class="alert alert-danger w-25 m-auto" role="alert">{{session('alert')}}</div>
+
+
+    <div class="alert alert-danger alert-dismissible fade show w-50 m-auto align-items-center" role="alert" id="AlertAs">
+   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+ 
+<strong> {{session('alert')}}</strong>
+ 
+</div>
 @endif
 
-<div class="w-100 d-flex">
-<!--<button class="btn btn-primary m-auto" style="aspect-ratio: 1;" id="Btnregistro">Crear</button>-->
-</div>
 <section class="w-75 m-auto mt-5" id="Cuadrore" style="text-align: center; background-color: white;padding: 1%;border: dotted 1px grey;border-radius: 3rem;display: none;">
  
 
@@ -403,13 +429,13 @@
 
    @csrf
 
-    <h1 class="h3 mb-3 fw-normal">Iniciar Sesion</h1>
+    <h1 class="h1 mb-3 fw-normal">Iniciar Sesion</h1>
 
     <div class="form-floating">
 
-      <input type="email" class="form-control" id="floatingInput" placeholder="correo@gmail.com" name="email">
+      <input type="email" class="form-control" id="CorrEo" placeholder="correo@gmail.com" name="email">
 
-      <label for="floatingInput">Correo electronico</label>
+      <label for="CorrEo">Correo electronico</label>
 
     </div>
 
@@ -417,29 +443,44 @@
 
     <div class="form-floating">
 
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Contraseña" name="password">
+      <input type="password" class="form-control" id="ContrAsena" placeholder="Contraseña" name="password">
 
-      <label for="floatingPassword">Contraseña</label>
+      <label for="ContrAsena">Contraseña</label>
 
     </div>
 
 <br>
 
-   <button class="btn btn-primary w-100 py-2" type="submit">
+   <button class="btn btn-primary w-75 py-2" type="submit" id="loginBtn">
 
-    Iniciar
+    Registrarse
 
    </button>
 
   </form>
 <br>
+   <div class="w-50 m-auto" id="AliNeo"></div>
+
    @if (session('success'))
-    <div class="alert alert-success w-25 m-auto" role="alert">
-  {{session('success')}}
+   
+
+<div class="alert alert-success alert-dismissible fade show w-50 m-auto align-items-center" role="alert" id="AlertAs">
+   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:" ><use xlink:href="#check-circle-fill"/></svg>
+ {{session('success')}}
+ 
 </div>
+
+
 @endif
  @if (session('alert') )
-    <div class="alert alert-danger w-25 m-auto" role="alert">{{session('alert')}}</div>
+
+
+    <div class="alert alert-danger alert-dismissible fade show w-50 m-auto align-items-center" role="alert" id="AlertAs">
+   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+ 
+{{session('alert')}}
+ 
+</div>
 @endif
 
 </main>
@@ -611,6 +652,7 @@
 
       <script src="js/jquery.min.js"></script>
       <script type="text/javascript" src="cropper/cropper.js"></script>
+      @auth
   <script type="text/javascript">
 
 
@@ -657,6 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     preview:'.preview'
                 });
                 $("#downloadButton").attr('hidden',false);
+                 $("#downloadButton").attr('disabled',false);
+                
+            
             };
             reader.readAsDataURL(file);
 
@@ -680,6 +725,8 @@ $("#downloadButton").click(function () {
         const croppedImageInput = $("input[name='archivo']");
         croppedImageInput[0].files = dataTransfer.files;
         console.log(croppedImageInput[0].files);
+        $("#downloadButton").addClass("btn-success");
+        $("#downloadButton").attr('disabled',true);
         $("#save").attr('disabled',false);
     });
 
@@ -689,7 +736,7 @@ $("#downloadButton").click(function () {
   </script>
  
 
-
+@endauth
 
 
 <script type="text/javascript">
@@ -796,21 +843,26 @@ function validateForm() {
            document.getElementById("mySidepanel").style.width = "0";
          }
       </script>
+      @auth
       <script type="text/javascript" src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
        <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.4.3/js/dataTables.scroller.js"></script>
            <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.4.3/js/scroller.bootstrap5.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.4/js/dataTables.responsive.js"></script>
       <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.4/js/responsive.bootstrap5.js"></script>
+      <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/dataTables.fixedColumns.js"></script>
+      <script type="text/javascript" src="
+https://cdn.datatables.net/fixedcolumns/5.0.4/js/fixedColumns.bootstrap5.js"></script>
 
       <script type="text/javascript">
     
       $('#example').DataTable({
     "order": [[ 10, "desc" ]] ,
-    responsive: true,
-     scrollCollapse: true,
-    scroller: true,
-    scrollY: 350// Ordena por la tercera columna (índice 2) en orden descendente
+    fixedColumns: true,
+    paging: false,
+    scrollCollapse: true,
+    scrollX: true,
+    scrollY: 300
 });
    </script>
    <script type="text/javascript">
@@ -839,42 +891,199 @@ $logt=document.getElementById('logs');
 
 $loga= document.getElementById('CajoNeta');
 
-$logt.addEventListener('click', () => {
-  if ($loga.style.display === 'block') {
-    $loga.style.display = 'none';
-  } else {
-    $loga.style.display = 'block';
-  }
-});
-
 
 $btnr=document.getElementById('Btnregistro');
 
 $cdr=document.getElementById('Cuadrore');
-
-$btnr.addEventListener('click', () => {
-  if ($cdr.style.display === 'block') {
-    $cdr.style.display = 'none';
-  } else {
-    $cdr.style.display = 'block';
-  }
-});
 
 
 $btnc=document.getElementById('Btnconsulta');
 
 $cdc=document.getElementById('Cuadrcon');
 
+$logt.addEventListener('click', () => {
+  if ($loga.style.display === 'block') {
+
+    $loga.style.display = 'none';
+  } else {
+   $cdr.style.display = 'none';
+$cdc.style.display = 'none';
+    $loga.style.display = 'block';
+
+  }
+});
+
+
+
+$btnr.addEventListener('click', () => {
+  if ($cdr.style.display === 'block') {
+    $cdr.style.display = 'none';
+  } else {
+   $cdc.style.display = 'none';
+    $loga.style.display = 'none';
+    $cdr.style.display = 'block';
+  }
+});
+
+
+
 $btnc.addEventListener('click', () => {
   if ($cdc.style.display === 'block') {
     $cdc.style.display = 'none';
   } else {
+    $loga.style.display = 'none';
+    $cdr.style.display = 'none';
     $cdc.style.display = 'block';
   }
 });
 
 </script>
+@endauth
+     
+   
+   <script>
+        setTimeout(function() {
+            let alerta = document.getElementById('AlertAs');
+            if (alerta) { // Verifica si el elemento existe
+                alerta.classList.add('blur-out');
+
+                setTimeout(function() {
+                    alerta.remove();
+                }, 2000); // 500ms = 0.5 segundos (debe coincidir con la transición CSS)
+            }
+        }, 4000);
+
+
+
+    </script>
+<script type="text/javascript">
+
+
+   document.getElementById('loginBtn').addEventListener('click', function(event) {
+    event.preventDefault(); // Previene el envío del formulario por defecto
+
+    let email = document.getElementById('CorrEo').value;
+    let password = document.getElementById('ContrAsena').value;
+
+    if (document.getElementById('CorrEo').checkValidity() && document.getElementById('ContrAsena').checkValidity()) {
     
+        // Los campos son válidos, realiza la solicitud AJAX
+        fetch('{{route("verificarUsuario") }}', { // Reemplaza '/ruta-a-tu-backend' con la ruta correcta
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Agrega el token CSRF
+            },
+            body: JSON.stringify({ email: email, password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+         if (data.user) {
+             mostrarAlerta('warning', 'Contraseña Invalida');
+            }
+            else if (data.exists) {
+             enviarDatosInicioSesion(email, password);
+            } else {
+                // El usuario no existe, muestra la alerta
+                mostrarAlerta('warning', 'Los Datos No Fueron Encontrados');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarAlerta('danger', 'Ocurrió un error al verificar el usuario');
+        });
+    } else {
+        // Los campos no son válidos, muestra un mensaje de error o realiza otras acciones
+        mostrarAlerta('warning', 'Por favor, complete todos los campos correctamente');
+    }
+});
+
+
+   function enviarDatosInicioSesion(email, password) {
+    fetch('{{ route("login") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ email: email, password: password })
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirige a la página de inicio o a donde necesites
+         mostrarAlertai('success', 'Bienvenido... Redirigiendo');
+            
+        } else {
+            mostrarAlerta('danger', 'Error al iniciar sesión');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarAlerta('danger', 'Ocurrió un error al iniciar sesión');
+    });
+}
+
+function mostrarAlerta(tipo, mensaje) {
+    let alerta = document.createElement('div');
+    let main = document.getElementById('AliNeo');
+    alerta.className = `alert alert-${tipo} alert-dismissible fade show w-100 m-auto align-items-center`;
+   
+    alerta.innerHTML = `
+         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>  ${mensaje}
+        
+    `;
+     alerta.id = `AlertAs`;
+  
+    main.appendChild(alerta);
+
+       setTimeout(function() {
+            let alerta = document.getElementById('AlertAs');
+            if (alerta) { // Verifica si el elemento existe
+                alerta.classList.add('blur-out');
+
+                setTimeout(function() {
+                    alerta.remove();
+                }, 2000); // 500ms = 0.5 segundos (debe coincidir con la transición CSS)
+            }
+        }, 4000);
+
+
+}
+
+function mostrarAlertai(tipo, mensaje) {
+    let alerta = document.createElement('div');
+    let main = document.getElementById('AliNeo');
+    alerta.className = `alert alert-${tipo} alert-dismissible fade show w-100 m-auto align-items-center`;
+   
+    alerta.innerHTML = `
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+  ${mensaje}
+        
+    `;
+     alerta.id = `AlertAs`;
+   
+    main.appendChild(alerta);
+
+       setTimeout(function() {
+            let alerta = document.getElementById('AlertAs');
+            if (alerta) { // Verifica si el elemento existe
+                alerta.classList.add('blur-out');
+
+                setTimeout(function() {
+                    alerta.remove();
+                           location.reload(); 
+                }, 2000);   
+            }
+        }, 2000);
+
+
+
+}
+
+
+</script>
+
+
 
    </body>
 </html>
