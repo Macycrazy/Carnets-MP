@@ -887,10 +887,13 @@ new DataTable('#ActividDad', {
           
 });
 
-$logt=document.getElementById('logs');
+const usuario = '{{Auth::user()->rol}}'
+       if(usuario == 'admin'){
+       $logt=document.getElementById('logs');
+      
 
 $loga= document.getElementById('CajoNeta');
-
+ }
 
 $btnr=document.getElementById('Btnregistro');
 
@@ -900,11 +903,11 @@ $cdr=document.getElementById('Cuadrore');
 $btnc=document.getElementById('Btnconsulta');
 
 $cdc=document.getElementById('Cuadrcon');
-
+  if(usuario == 'admin'){
 $logt.addEventListener('click', () => {
   if ($loga.style.display === 'block') {
 
-    $loga.style.display = 'none';
+   // $loga.style.display = 'none';
   } else {
    $cdr.style.display = 'none';
 $cdc.style.display = 'none';
@@ -912,15 +915,17 @@ $cdc.style.display = 'none';
 
   }
 });
-
+ }
 
 
 $btnr.addEventListener('click', () => {
   if ($cdr.style.display === 'block') {
-    $cdr.style.display = 'none';
+   // $cdr.style.display = 'none';
   } else {
    $cdc.style.display = 'none';
+  if(usuario == 'admin'){
     $loga.style.display = 'none';
+     }
     $cdr.style.display = 'block';
   }
 });
@@ -929,9 +934,11 @@ $btnr.addEventListener('click', () => {
 
 $btnc.addEventListener('click', () => {
   if ($cdc.style.display === 'block') {
-    $cdc.style.display = 'none';
+   // $cdc.style.display = 'none';
   } else {
+  if(usuario == 'admin'){
     $loga.style.display = 'none';
+     }
     $cdr.style.display = 'none';
     $cdc.style.display = 'block';
   }
