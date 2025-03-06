@@ -11,6 +11,13 @@ use App\Http\Controllers\procesos;
 
 Route::get('/', [procesos::class, 'index'])->name('index');
 
+Route::get('/check-new-messages', [procesos::class, 'checkNewMessages'])->name('check-new-messages');
+
+
+
+
+Route::get('/messages/{userId}', [procesos::class, 'getMessages']);
+
 Route::get('/prueba', [procesos::class, 'prueba'])->name('prueba');
 
 Route::get('/mensajes', [procesos::class, 'mensajes'])->name('mensajes');

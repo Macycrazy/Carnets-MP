@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Event;
 
 
 use Intervention\Image\Laravel\Facades\Image;
@@ -36,27 +37,80 @@ use App\Models\User;
 use App\Models\logs;
 use App\Models\mensajes;
 
+use App\Events\mensajeevento;
+
 class procesos extends Controller 
 {
+
+     public function checkNewMessages()
+    {
+        $user_id = Auth::user();
+
+        $lastMessage = Mensajes::where(function ($query) use ($user_id) {
+            $query->where('emisor', auth()->id())
+                ->where('receptor', $user_id->id);
+        })->orWhere(function ($query) use ($user_id) {
+            $query->where('emisor', $user_id->id)
+                ->where('receptor', auth()->id());
+        })->latest('id')->first();
+
+        if ($lastMessage && session('last_checked_message_id') < $lastMessage->id) {
+            session(['last_checked_message_id' => $lastMessage->id]);
+            return response()->json(['newMessages' => true]);
+
+        }
+
+        return response()->json(['newMessages' => false]);
+
+    }
+
+    public function getMessages($userId)
+{
+     $authUser = Auth::id();
+
+    $messages = Mensajes::where(function ($query) use ($authUser, $userId) {
+        $query->where('emisor', $authUser)->where('receptor', $userId);
+    })->orWhere(function ($query) use ($authUser, $userId) {
+        $query->where('emisor', $userId)->where('receptor', $authUser);
+    })->get();
+
+    $messages = $messages->map(function ($message) use ($authUser) {
+        // ... (tu código existente) ...
+        $message->sender_online = User::find($message->emisor)->isOnline();
+        $message->sender_last_seen = User::find($message->emisor)->lastSeen();
+        $message->receiver_online = User::find($message->receptor)->isOnline();
+        $message->receiver_last_seen = User::find($message->receptor)->lastSeen();
+
+        return $message;
+    });
+
+      $messages = $messages->map(function ($message) {
+        $message->fdate = $message->created_at->format('d/m/Y H:i');
+        return $message;
+    });
+
+    return response()->json($messages);
+}
 
 
     public function mensajes()
     {
+        if (Auth::user()->rol=='admin') {
+        $usuarios = User::select('*')->orderBy('id', 'asc')->get();
+        }
+        else
+        {
+                    $usuarios = User::where('rol', '!=', 'admin')->get();
+                    }
+        $user_id = Auth::user();
 
-        $usuarios=user::all()->where('rol','!=','admin');
-$user_id=Auth::user();
+        $user_ip = Auth::id(); // Obtener el ID del usuario logueado
 
+$messages = Mensajes::where('emisor', $user_ip)
+    ->orWhere('receptor', $user_ip)
+    ->get();
 
-
-$messages = mensajes::where(function ($query) use ($user_id) {
-            $query->where('emisor', auth()->id())
-                  ->where('receptor', $user_id->id);
-        })->orWhere(function ($query) use ($user_id) {
-            $query->where('emisor', $user_id->id)
-                  ->where('receptor', auth()->id());
-        })->get();
-
-        return view('mensajes', compact('messages', 'user_id','usuarios'));
+        return view('mensajes', compact('messages', 'user_id', 'usuarios'));
     
 
     }
@@ -64,15 +118,18 @@ $messages = mensajes::where(function ($query) use ($user_id) {
      public function send(Request $request)
     {
 $a=intval(Auth::user()->id);
+     $user = Auth::user();
 
-   $message = new mensajes();
-
-        $message->emisor = $a;
+        $message = new Mensajes();
+        $message->emisor = $a; // Assuming user ID is used as emisor
         $message->receptor = $request->receiver_id;
         $message->contenido = $request->message;
         $message->save();
 
-        return response()->json(['message' => 'Mensaje enviado']);
+        // Broadcast the event with the message and relevant user data
+     //   Event::dispatch(new MensajeEvento($user, $message));
+
+        return response()->json(['message' => $message]);
     }
 
 
@@ -229,18 +286,13 @@ $nombreFormateado = $partesNombre[0] . ' ';
 $ultimaParte = end($partesNombre); 
 $nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
 
-
-
 $partesApellido = explode(' ', $lastname);
 
-if (count($partesApellido) >= 2) 
-{
+$apellidoFormateado = $partesApellido[0] . ' '; 
 
-    $partesApellido[1] = Str::substr($partesApellido[1], 0, 1) . '.';
+$ultimaPartea = end($partesApellido); 
+$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
 
-}
-
-$apellidoFormateado = implode(' ', $partesApellido);
 
  $valores->name=$nombreFormateado ;
 
@@ -555,16 +607,14 @@ $nombreFormateado = $partesNombre[0] . ' ';
 $ultimaParte = end($partesNombre); 
 $nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
 
+
 $partesApellido = explode(' ', $lastname);
 
-if (count($partesApellido) >= 2) 
-{
+$apellidoFormateado = $partesApellido[0] . ' '; 
 
-    $partesApellido[1] = Str::substr($partesApellido[1], 0, 1) . '.';
+$ultimaPartea = end($partesApellido); 
+$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
 
-}
-
-    $apellidoFormateado = implode(' ', $partesApellido);
 
     $valores->name=$nombreFormateado ;
 
