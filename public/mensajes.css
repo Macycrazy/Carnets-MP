@@ -6,15 +6,15 @@
 .card {
     background: #fff;
     transition: .5s;
-    border: 0;
+    border: 1;
     margin-bottom: 30px;
     border-radius: .55rem;
     position: relative;
     width: 100%;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+    box-shadow: 11px 10px 2px 0 #00408547;
 }
 .chat-app .people-list {
-    width: 280px;
+    width: 200px;
     position: absolute;
     left: 0;
     top: 0;
@@ -23,7 +23,7 @@
 }
 
 .chat-app .chat {
-    margin-left: 280px;
+    margin-left: 200px;
     border-left: 1px solid #eaeaea
 }
 
@@ -133,7 +133,7 @@
 
 .chat .chat-history .message:after {
     bottom: 100%;
-    left: 7%;
+    left: 20%;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -146,31 +146,34 @@
 }
 
 .chat .chat-history .my-message {
-    background: #efefef
+    background: lightblue;
+    min-width: 100px;
+    text-align: right;
+
 }
 
 .chat .chat-history .my-message:after {
     bottom: 100%;
-    left: 50%;
+    left: 80%;
     border: solid transparent;
     content: " ";
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-bottom-color: #efefef;
+    border-bottom-color: lightblue;
     border-width: 10px;
     margin-left: -10px
 }
 
 .chat .chat-history .other-message {
-    background: #e8f1f3;
-    text-align: right
+    background: lightskyblue;
+    text-align: left;
 }
 
 .chat .chat-history .other-message:after {
-    border-bottom-color: #e8f1f3;
-    left: 93%
+    border-bottom-color: lightskyblue;
+    right: 10%
 }
 
 .chat .chat-message {
@@ -234,16 +237,16 @@
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 992px) {
+/*@media only screen and (min-width: 768px) and (max-width: 992px) {*/
     .chat-app .chat-list {
-        height: 650px;
+        height: 35vw;
         overflow-x: auto
     }
     .chat-app .chat-history {
-        height: 600px;
+        height: 35vw;
         overflow-x: auto
     }
-}
+/*}*/
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
     .chat-app .chat-list {

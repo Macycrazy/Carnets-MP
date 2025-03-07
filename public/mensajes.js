@@ -6,6 +6,8 @@ $.ajaxSetup({
 
 
 $(document).ready(function() {
+
+    setInterval(checkNewMessages, 1000);
   
  $('#message-form').submit(function(event) {
         event.preventDefault();
@@ -37,8 +39,9 @@ $(document).ready(function() {
         });
     });
 
-console.log(checkNewMessagesUrl)
+
     function checkNewMessages() {
+
         $.ajax({
             url: checkNewMessagesUrl, // Ruta Laravel para verificar nuevos mensajes
             type: 'GET',
@@ -46,7 +49,7 @@ console.log(checkNewMessagesUrl)
                 if (response.newMessages) {
                    location.reload(); // Recarga la página si hay nuevos mensajes
                 }
-
+                console.log(response.newMessages)
             },
             error: function(xhr, status, error) {
                 console.error("Error al verificar nuevos mensajes:", JSON.parse(xhr.responseText));
@@ -55,5 +58,5 @@ console.log(checkNewMessagesUrl)
     }
 
     // Verifica nuevos mensajes cada 10 segundos
-    setInterval(checkNewMessages, 1000);
+    
 });

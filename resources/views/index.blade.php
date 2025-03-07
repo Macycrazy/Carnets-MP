@@ -83,6 +83,8 @@
          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
          @auth
 
+          <a href="{{route('mensajes')}}" >Soporte</a>
+
          <a href="#" id="Btnregistro" onclick="closeNav()">Registrar Carnet</a>
 
          <a href="#" id="Btnconsulta" onclick="closeNav()">Consultar Carnets</a>
@@ -958,7 +960,7 @@ $btnc.addEventListener('click', () => {
                     alerta.remove();
                 }, 2000); // 500ms = 0.5 segundos (debe coincidir con la transición CSS)
             }
-        }, 4000);
+        }, 2000);
 
 
 
@@ -1052,7 +1054,7 @@ function mostrarAlerta(tipo, mensaje) {
                     alerta.remove();
                 }, 2000); // 500ms = 0.5 segundos (debe coincidir con la transición CSS)
             }
-        }, 4000);
+        }, 2000);
 
 
 }
@@ -1081,7 +1083,7 @@ function mostrarAlertai(tipo, mensaje) {
                            location.reload(); 
                 }, 2000);   
             }
-        }, 2000);
+        }, 1000);
 
 
 

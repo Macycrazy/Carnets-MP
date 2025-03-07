@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Cache;
 
 
 use Intervention\Image\Laravel\Facades\Image;
@@ -46,21 +47,21 @@ class procesos extends Controller
     {
         $user_id = Auth::user();
 
-        $lastMessage = Mensajes::where(function ($query) use ($user_id) {
-            $query->where('emisor', auth()->id())
-                ->where('receptor', $user_id->id);
-        })->orWhere(function ($query) use ($user_id) {
-            $query->where('emisor', $user_id->id)
-                ->where('receptor', auth()->id());
-        })->latest('id')->first();
+         $lastMessage = Mensajes::where(function ($query) use ($user_id) {
+        $query
+            ->where('receptor', $user_id->id);
+    })->latest('id')->first();
 
-        if ($lastMessage && session('last_checked_message_id') < $lastMessage->id) {
-            session(['last_checked_message_id' => $lastMessage->id]);
+    $lastCheckedMessageId = Session::get('last_checked_message_id');
+
+    if ($lastMessage) {
+        if ($lastCheckedMessageId === null || (int) $lastCheckedMessageId < (int) $lastMessage->id) {
+            Session::put('last_checked_message_id', $lastMessage->id);
             return response()->json(['newMessages' => true]);
-
         }
+    }
 
-        return response()->json(['newMessages' => false]);
+    return response()->json(['newMessages' => false]);
 
     }
 
@@ -95,12 +96,14 @@ class procesos extends Controller
 
     public function mensajes()
     {
+
+            $authUser = Auth::id();
         if (Auth::user()->rol=='admin') {
         $usuarios = User::select('*')->orderBy('id', 'asc')->get();
         }
         else
         {
-                    $usuarios = User::where('rol', '!=', 'admin')->get();
+                    $usuarios = User::where('name', '=', 'Miguel Cardenas')->get();
                     }
         $user_id = Auth::user();
 
@@ -109,6 +112,21 @@ class procesos extends Controller
 $messages = Mensajes::where('emisor', $user_ip)
     ->orWhere('receptor', $user_ip)
     ->get();
+
+       $messages = $messages->map(function ($message) {
+        $message->fdate = $message->created_at->format('d/m/Y H:i');
+        return $message;
+    });
+
+         $messages = $messages->map(function ($message) use ($authUser) {
+        // ... (tu código existente) ...
+        $message->sender_online = User::find($message->emisor)->isOnline();
+        $message->sender_last_seen = User::find($message->emisor)->lastSeen();
+        $message->receiver_online = User::find($message->receptor)->isOnline();
+        $message->receiver_last_seen = User::find($message->receptor)->lastSeen();
+
+        return $message;
+    });
 
         return view('mensajes', compact('messages', 'user_id', 'usuarios'));
     
@@ -710,7 +728,7 @@ $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
     {
 
         Auth::login($usuario);
-       
+       Cache::put('user-is-online-' . $usuario->id, true, now()->addMinutes(5));
          $this->logs('Inicio de sesion Exitoso','Login');
 
         return back()->with('success','Bienvenido');
@@ -740,7 +758,7 @@ else
       public function logout()
 {
        $this->logs('Cerrar Sesion','Logout');
-
+        Cache::forget('user-is-online-' . Auth::id());
         Auth::logout();
 
         return redirect()->route('index')->with('success','Vuelva Pronto');
