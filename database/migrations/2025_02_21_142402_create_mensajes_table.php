@@ -15,6 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id')->primary();
             $table->bigInteger('emisor');
             $table->bigInteger('receptor');
+            $table->bigInteger('have_file')->default(0);
+            $table->text('file')->nullable();
             $table->text('contenido');
             $table->timestamps();
         });

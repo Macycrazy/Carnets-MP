@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cache;
+use Telegram\Bot\Laravel\Facades\Telegram;
+use Telegram\Bot\FileUpload\InputFile; // Importar la clase InputFile
+
 
 
 use Intervention\Image\Laravel\Facades\Image;
@@ -43,9 +46,47 @@ use App\Events\mensajeevento;
 class procesos extends Controller 
 {
 
+    public function sendMessage($receptor,$mensaje,$foto)
+    {
+        $chat_id = $receptor;
+        $message = $mensaje;
+
+         $rutaFoto = $foto;
+// return response()->json(['message' => $foto]);
+     try {
+        if ($foto) { // Verificar si $foto tiene un valor
+            Telegram::sendPhoto([
+                'chat_id' => $chat_id,
+                'photo' => $foto,
+                'caption' => $message,
+            ]);
+            return 'Mensaje e imagen enviados con éxito';
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $message,
+            ]);
+            return 'Mensaje enviado con éxito, sin imagen';
+        }
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        return 'Error al enviar mensaje: ' . $e->getMessage();
+    }
+    }
+
      public function checkNewMessages()
     {
         $user_id = Auth::user();
+
+         $emisor = Mensajes::where(function ($query) use ($user_id) {
+        $query
+       
+            ->where('receptor', $user_id->id);
+
+    }) ->latest('mensajes.id')
+         ->join('userEntity as u', 'u.id', '=', 'mensajes.emisor')
+         ->select('mensajes.id','u.name as emisor')
+         ->first();
 
          $lastMessage = Mensajes::where(function ($query) use ($user_id) {
         $query
@@ -57,7 +98,7 @@ class procesos extends Controller
     if ($lastMessage) {
         if ($lastCheckedMessageId === null || (int) $lastCheckedMessageId < (int) $lastMessage->id) {
             Session::put('last_checked_message_id', $lastMessage->id);
-            return response()->json(['newMessages' => true]);
+            return response()->json(['newMessages' => true,'emisor' => $emisor]);
         }
     }
 
@@ -69,30 +110,77 @@ class procesos extends Controller
 {
      $authUser = Auth::id();
 
-    $messages = Mensajes::where(function ($query) use ($authUser, $userId) {
-        $query->where('emisor', $authUser)->where('receptor', $userId);
-    })->orWhere(function ($query) use ($authUser, $userId) {
-        $query->where('emisor', $userId)->where('receptor', $authUser);
-    })->get();
+$messages = Mensajes::where(function ($query) use ($authUser, $userId) {
+    $query->where('emisor', $authUser)->where('receptor', $userId);
+})
+->orWhere(function ($query) use ($authUser, $userId) {
+    $query->where('emisor', $userId)->where('receptor', $authUser);
+})
+->groupBy('have_file', 'created_at', 'contenido','emisor','receptor')
+->orderBy('created_at','asc')
+->selectRaw('have_file, created_at, contenido, array_to_json(array_agg(file)) as files,emisor,receptor')
+->get();
 
-    $messages = $messages->map(function ($message) use ($authUser) {
-        // ... (tu código existente) ...
-        $message->sender_online = User::find($message->emisor)->isOnline();
-        $message->sender_last_seen = User::find($message->emisor)->lastSeen();
-        $message->receiver_online = User::find($message->receptor)->isOnline();
-        $message->receiver_last_seen = User::find($message->receptor)->lastSeen();
+$messages = $messages->map(function ($message) use ($authUser) {
+    $sender = User::find($message->emisor);
+    $receiver = User::find($message->receptor);
 
-        return $message;
-    });
+    // Verificar si $sender y $receiver son null
+    if ($sender) {
+        $message->sender_online = $sender->isOnline();
+        $message->sender_last_seen = $sender->lastSeen();
+    } else {
+        $message->sender_online = false; // O cualquier valor predeterminado
+        $message->sender_last_seen = null;
+    }
 
-      $messages = $messages->map(function ($message) {
+    if ($receiver) {
+        $message->receiver_online = $receiver->isOnline();
+        $message->receiver_last_seen = $receiver->lastSeen();
+    } else {
+        $message->receiver_online = false; // O cualquier valor predeterminado
+        $message->receiver_last_seen = null;
+    }
+
+    // Asegurarse que created_at existe antes de formatear la fecha.
+    if($message->created_at){
         $message->fdate = $message->created_at->format('d/m/Y H:i');
-        return $message;
-    });
+    } else {
+        $message->fdate = null;
+    }
+
+
+
+    return $message;
+});
+
+//dd(json_decode(json_encode($messages->toArray()), true)); 
+
+
 
     return response()->json($messages);
 }
 
+
+public function getUsersStatus()
+    {
+           if (Auth::user()->rol=='admin') {
+        $usuarios = User::select('*')->orderBy('id', 'asc')->get();
+        }
+        else
+        {
+                    $usuarios = User::where('name', '=', 'Miguel Cardenas')->get();
+                    }
+
+                    $status = $usuarios->map(function ($usuario) {
+            return [
+                'id' => $usuario->id,
+                'online' => $usuario->isOnline(),
+            ];
+        });
+
+        return response()->json(['status' => $status]);
+    }
 
     public function mensajes()
     {
@@ -105,6 +193,7 @@ class procesos extends Controller
         {
                     $usuarios = User::where('name', '=', 'Miguel Cardenas')->get();
                     }
+                 //   dd(cache());
         $user_id = Auth::user();
 
         $user_ip = Auth::id(); // Obtener el ID del usuario logueado
@@ -135,19 +224,83 @@ $messages = Mensajes::where('emisor', $user_ip)
 
      public function send(Request $request)
     {
+
+        if($request->receiver_id=='-4600162193')
+        {
+             $receptor = $request->receiver_id;
+    $mensaje = $request->message;
+    $archivos = $request->file('archivos');
+             if ($archivos && is_array($archivos) && !empty($archivos)) {
+        $foto = $archivos[0]->getPathname();
+
+       
+      try {
+        if ($foto) { // Verificar si $foto tiene un valor
+
+            Telegram::sendPhoto([
+                'chat_id' => $request->receiver_id,
+                'photo' => InputFile::create($foto, 'archivo.jpg'),
+                'caption' => $request->message,
+            ]);
+              return response()->json(['message' => 'Mensaje enviado con éxito']);
+         
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $request->receiver_id,
+                'text' => $request->message,
+            ]);
+          
+             return response()->json(['message' => 'Mensaje enviado con éxito, sin imagen']);
+        }
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        //return 'Error al enviar mensaje: ' . $e->getMessage();
+         return response()->json(['message' => $e->getMessage()]);
+
+    }
+    }
+         
+            
+        }
+        else{
 $a=intval(Auth::user()->id);
      $user = Auth::user();
-
-        $message = new Mensajes();
-        $message->emisor = $a; // Assuming user ID is used as emisor
+$message = new Mensajes();
+      if ($request->hasFile('archivos')) {
+           
+            $archivos = $request->file('archivos');
+              foreach ($archivos as $archivo) {
+                $message = new Mensajes();
+                $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+                $ruta = $archivo->move(public_path('imgs/mensajes/contenido'), $nombreArchivo); // Cambiado aquí
+              
+                   $message->have_file=1;
+                $message->file = asset('imgs/mensajes/contenido/' . $nombreArchivo); // Cambiado aquí
+                $message->emisor = $a; // Assuming user ID is used as emisor
         $message->receptor = $request->receiver_id;
         $message->contenido = $request->message;
-        $message->save();
+            $message->save();
+            }
+        }
+        else
+        {
+           $message->emisor = $a; // Assuming user ID is used as emisor
+        $message->receptor = $request->receiver_id;
+        $message->contenido = $request->message;
+            $message->save();}
+       
+           
+
+        //$message = new Mensajes();
+       // $message->emisor = $a; // Assuming user ID is used as emisor
+       // $message->receptor = $request->receiver_id;
+       // $message->contenido = $request->message;
+       // $message->save();
 
         // Broadcast the event with the message and relevant user data
      //   Event::dispatch(new MensajeEvento($user, $message));
 
-        return response()->json(['message' => $message]);
+        return response()->json(['message' => $message]);}
     }
 
 
@@ -655,6 +808,9 @@ $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
 //////////////////////////////// INDEX /////////////////////////////////
      public function index()
     {
+    
+
+     
 
     $data=$this->datos();
 
@@ -683,6 +839,7 @@ $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
     $in->card_code=$in->card_code+1;
 
        $this->logs('Redirecion a la Vista index','Index');
+
 
       //dd($in);
     return view('index', 
@@ -728,7 +885,7 @@ $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
     {
 
         Auth::login($usuario);
-       Cache::put('user-is-online-' . $usuario->id, true, now()->addMinutes(5));
+       Cache::forever('user-is-online-' . $usuario->id, true);
          $this->logs('Inicio de sesion Exitoso','Login');
 
         return back()->with('success','Bienvenido');

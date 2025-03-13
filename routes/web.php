@@ -11,9 +11,11 @@ use App\Http\Controllers\procesos;
 
 Route::get('/', [procesos::class, 'index'])->name('index');
 
+Route::post('/telegram/send', [TelegramController::class, 'sendMessage']);
+
 Route::get('/check-new-messages', [procesos::class, 'checkNewMessages'])->name('check-new-messages');
 
-
+Route::get('/get-users-status', [procesos::class, 'getUsersStatus']);
 
 
 Route::get('/messages/{userId}', [procesos::class, 'getMessages']);
