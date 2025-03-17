@@ -46,3 +46,5 @@ Route::put('/actualizar_{id}', [procesos::class, 'actualizar'])->name('actualiza
 Route::get('actividades', [procesos::class, 'actividades'])->name('actividades');
 
 Route::post('verificarUsuario', [procesos::class, 'verificarUsuario'])->name('verificarUsuario');
+
+Route::post('/carga_carnet', [procesos::class, 'carga_carnet'])->name('carga_carnet');

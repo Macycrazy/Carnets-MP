@@ -70,6 +70,78 @@
     height: 100%;
   }
 }
+.image-upload-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.image-box {
+  width: 150px;
+  aspect-ratio: 2/3;
+  border: 2px dashed #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: .5rem;
+}
+
+.image-box label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: .5rem;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  vertical-align: middle;
+  max-width: 29vw;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
             </style>
    </head>
    <!-- body -->
@@ -543,45 +615,55 @@
 
 
 <table id="example" class="table table-striped  m-auto" style="width:95%;text-align:center;vertical-align: middle;size: auto;">
-        <thead>
-            <tr>
-                <th>Cedula</th>
-                <th>Codigo de Carnet</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Departamento</th>
-                <th>Cargo</th>
+        <thead style="text-align:center;vertical-align: middle;">
+            <tr style="text-align:center;vertical-align: middle;">
+                <th style="text-align:center;vertical-align: middle;">Cedula</th>
+                <th style="text-align:center;vertical-align: middle;">Codigo de Carnet</th>
+                <th style="text-align:center;vertical-align: middle;">Nombre</th>
+                <th style="text-align:center;vertical-align: middle;">Apellido</th>
+                <th style="text-align:center;vertical-align: middle;">Departamento</th>
+                <th style="text-align:center;vertical-align: middle;">Cargo</th>
 
-                <th data-dt-order="disable">Foto de perfil</th>
-                <th>Estado</th>
-                <th data-dt-order="disable">Nota</th>
-                <th >Creado El:</th>
-                <th data-dt-order="disable">Editar</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Foto de perfil</th>
+                <th style="text-align:center;vertical-align: middle;">Estado</th>
                 @if(Auth::user()->rol == 'admin')
-                <th>Descargar Imagen</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Cargar Carnet</th>
+                 @endif
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Frente</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Contra</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Nota</th>
+                <th style="text-align:center;vertical-align: middle;" >Creado El:</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Editar</th>
+                @if(Auth::user()->rol == 'admin')
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Descargar Imagen</th>
                 @endif
                
                 
             </tr>
         </thead>
-        <tbody>
+        <tbody style="text-align:center;vertical-align: middle;">
          @foreach($a as $b)
 
-            <tr>
-                <td>{{$b->cedule}}</td>
-                <td>{{$b->card_code}}</td>
-                <td>{{ mb_ucfirst($b->name, 'UTF-8') }}</td>
-                <td>{{ mb_ucfirst($b->lastname, 'UTF-8') }}</td>
-                <td>{{$b->department}}</td>
-                 <td>{{ mb_ucfirst($b->charge, 'UTF-8') }}</td>
-                 <td >
+            <tr style="text-align:center;vertical-align: middle;">
+                <td style="text-align:center;vertical-align: middle;">{{$b->cedule}}</td>
+                <td style="text-align:center;vertical-align: middle;">{{$b->card_code}}</td>
+                <td style="text-align:center;vertical-align: middle;">{{ mb_ucfirst($b->name, 'UTF-8') }}</td>
+                <td style="text-align:center;vertical-align: middle;">{{ mb_ucfirst($b->lastname, 'UTF-8') }}</td>
+                <td style="text-align:center;vertical-align: middle;">{{$b->department}}</td>
+                 <td style="text-align:center;vertical-align: middle;">{{ mb_ucfirst($b->charge, 'UTF-8') }}</td>
+                 <td style="text-align:center;vertical-align: middle;" >
 
                   @if(File::exists('imgs/usuarios/'.$b->cedule.'.jpg'))
 
                   
 
-                 <a href="imgs/usuarios/{{ $b->cedule}}.jpg" > <img src="imgs/usuarios/{{ $b->cedule}}.jpg" style="max-height:100px" >
-                 </a>
+          
+
+                     <a href="imgs/usuarios/{{ $b->cedule}}.jpg" class="image-link">
+  <img src="imgs/usuarios/{{ $b->cedule}}.jpg" style="max-height:100px" class="thumbnail-image">
+</a>
+
+
 
                  
 
@@ -589,14 +671,97 @@
                   No tiene
                   @endif
                 </td>
-                  <td>{{$b->id_status}}</td>
+                  <td style="text-align:center;vertical-align: middle;">{{$b->id_status}}</td>
+                @if(Auth::user()->rol == 'admin')
+                <td style="text-align:center;vertical-align: middle;">
+                  <button type="button" class="btn btn-primary" data-toggle="modal"data-target="#add{{$b->card_code}}">
+  +
+</button>
+               
+                  <form method="POST" action="{{route('carga_carnet')}}" enctype="multipart/form-data">
+                  @csrf
+
+                  <div class="modal fade" id="add{{$b->card_code}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{$b->name}} {{$b->lastname}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+    <div class="image-upload-container">
+  <input type="hidden" name="carnet_id" value="{{$b->card_code}}">
+   <input type="hidden" name="cedula" value="{{$b->cedule}}">
+  <div class="image-box" id="front-box_{{$b->card_code}}">
+    <label for="front-input_{{$b->card_code}}">Frente</label>
+    <input type="file" id="front-input_{{$b->card_code}}" accept="image/jpeg" name="front" style="display: none;">
+  </div>
+  <div class="image-box" id="back-box_{{$b->card_code}}">
+    <label for="back-input_{{$b->card_code}}">Trasero</label>
+    <input type="file" id="back-input_{{$b->card_code}}" accept="image/jpeg" name="back" style="display: none;">
+  </div>
+</div>
+   </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">registrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+                  </form>
+               </td>
+                 @endif
+
+                <td style="text-align:center;vertical-align: middle;">   @if(File::exists($b->front))
+
+                  
+
+          
                 
-                <td >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
+                  <a href="{{ $b->front}}"  class="image-link">
+  <img src="{{ $b->front}}" style="max-height:100px" class="thumbnail-image">
+</a>
+
+<div id="image-modal" class="modal">
+ 
+  <img class="modal-content" id="full-image">
+</div>
+
+                 
+
+                  @else
+                 No Cargado
+                  @endif
+               </td>
+                <td style="text-align:center;vertical-align: middle;">   
+                  @if(File::exists($b->back))
+
+                  
+
+                <a href="{{ $b->back }}" class="image-link">
+  <img src="{{ $b->back }}" style="max-height:100px" class="thumbnail-image">
+</a>
+
+<div id="image-modal" class="modal">
+
+  <img class="modal-content" id="full-image">
+</div>
+
+                 
+
+                  @else
+                  No cargado
+                  @endif</td>
+                <td style="text-align:center;vertical-align: middle;" >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
                 
-                <td>{{ \Carbon\Carbon::parse($b->created_at)->format('d-m-Y') }}</td>
-                <td  ><a href="{{route('editar',$b->card_code)}}" > <button class="btn btn-warning">Editar</button> </a></td>
+                <td style="text-align:center;vertical-align: middle;">{{ \Carbon\Carbon::parse($b->created_at)->format('d-m-Y') }}</td>
+                <td style="text-align:center;vertical-align: middle;"  ><a href="{{route('editar',$b->card_code)}}" > <button class="btn btn-warning">Editar</button> </a></td>
                  @if(Auth::user()->rol == 'admin')
-                 <td  ><a href="{{ route('descargar_imagen',$b->cedule.'.jpg') }}" > <button class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                 <td style="text-align:center;vertical-align: middle;"  ><a href="{{ route('descargar_imagen',$b->cedule.'.jpg') }}" > <button class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
   <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
 </svg></button> </a></td>
@@ -661,6 +826,86 @@
       <script src="js/jquery.min.js"></script>
       <script type="text/javascript" src="cropper/cropper.js"></script>
       @auth
+      <script type="text/javascript">
+         
+         document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('.image-link');
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('full-image');
+  const closeBtn = document.querySelector('.close');
+
+  images.forEach(image => {
+    image.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link behavior
+      modal.style.display = 'flex';
+      modalImg.src = this.querySelector('img').src;
+    });
+  });
+
+  closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
+
+      </script>
+      <script>
+   document.addEventListener('DOMContentLoaded', function() {
+  const containers = document.querySelectorAll('.image-upload-container');
+
+  containers.forEach(container => {
+    const cardCode = container.querySelector('input[name="carnet_id"]').value;
+    const frontBox = document.getElementById(`front-box_${cardCode}`);
+    const backBox = document.getElementById(`back-box_${cardCode}`);
+    const frontInput = document.getElementById(`front-input_${cardCode}`);
+    const backInput = document.getElementById(`back-input_${cardCode}`);
+
+    frontBox.addEventListener('click', () => {
+      frontInput.click();
+    });
+
+    backBox.addEventListener('click', () => {
+      backInput.click();
+    });
+
+    frontInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          //frontBox.innerHTML = '';
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.zIndex=1000;
+          frontBox.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    backInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+       //   backBox.innerHTML = '';
+          const img = document.createElement('img');
+        
+          img.src = e.target.result;
+           img.style.zIndex=1000;
+          backBox.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  });
+});
+      </script>
   <script type="text/javascript">
 
 
@@ -971,6 +1216,7 @@ $btnc.addEventListener('click', () => {
 
 
     </script>
+    @guest
 <script type="text/javascript">
 
 
@@ -1098,7 +1344,7 @@ function mostrarAlertai(tipo, mensaje) {
 
 </script>
 
-
+@endguest
 
    </body>
 </html>

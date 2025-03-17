@@ -40,6 +40,7 @@ use App\Models\status;
 use App\Models\User;
 use App\Models\logs;
 use App\Models\mensajes;
+use App\Models\partes_carnet;
 
 use App\Events\mensajeevento;
 
@@ -527,6 +528,12 @@ public function datos(){
             'Status.id',
             '=',
             'Carnets.id_status'
+        ) ->leftjoin(
+
+            'partes_carnets',
+            'partes_carnets.carnet_id',
+            '=',
+            'Carnets.card_code'
         )
             ->select(
             'Carnets.name',
@@ -540,6 +547,8 @@ public function datos(){
             'Status.name as id_status',
             'Department.name as department',
             'Charge.name as charge',
+            'partes_carnets.front as front',
+            'partes_carnets.back as back',
             'Access_levels.name as access',
             'Carnets.created_at'
         )
@@ -803,7 +812,55 @@ $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
 
 //////////////////////////////// REGISTRO DE CARNETS /////////////////////////////////
 
+/////////////////////////////// IMAGEN DE CARNET /////////////////////////////////////
 
+public function carga_carnet(request $request)
+{
+
+     if($request->hasFile('front') && $request->hasFile('back'))
+    {
+
+            $avatarName =request()->cedula;
+
+        $front=request()->front;
+        $back=request()->back;
+
+  
+
+        $frontroute='imgs/carnets/front/';
+        $backroute='imgs/carnets/back/';
+
+              $frente = image::read($front);
+        $trasero = image::read($back);
+
+        $frontextension=$frontroute.$avatarName.'-front.'.request()->front->getClientOriginalExtension();
+
+        $backextension=$backroute.$avatarName.'-back.'.request()->back->getClientOriginalExtension();
+
+      //  $fronttotal=$frontextension;
+      //  $backtotal=$backroute.$avatarName.$backextension;
+
+      $frente->save(public_path($frontextension));
+
+       $trasero->save(public_path($backextension));
+       
+        $avatarPath = $avatarName;
+
+         $carnet = new partes_carnet;
+
+    $carnet -> front = $frontextension;
+    $carnet -> back = $backextension;
+    $carnet -> carnet_id = $request->carnet_id;
+//dd($carnet);
+    $carnet -> save();
+
+    return back()->with('success','Carnet Cargado');
+       
+    }
+   
+}
+
+/////////////////////////////// IMAGEN DE CARNET /////////////////////////////////////
 
 //////////////////////////////// INDEX /////////////////////////////////
      public function index()
