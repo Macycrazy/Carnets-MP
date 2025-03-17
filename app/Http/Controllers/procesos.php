@@ -816,8 +816,53 @@ $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
 
 public function carga_carnet(request $request)
 {
+    $variable=partes_carnet::all()->where('carnet_id','=',$request->carnet_id)->first();
+if($variable)
+        {
+           
+      if($request->hasFile('front') && $request->hasFile('back'))
 
+    {   $avatarName =request()->cedula;
+
+        $front=request()->front;
+        $back=request()->back;
+
+  
+
+        $frontroute='imgs/carnets/front/';
+        $backroute='imgs/carnets/back/';
+
+              $frente = image::read($front);
+        $trasero = image::read($back);
+
+        $frontextension=$frontroute.$avatarName.'-front.'.request()->front->getClientOriginalExtension();
+
+        $backextension=$backroute.$avatarName.'-back.'.request()->back->getClientOriginalExtension();
+
+      //  $fronttotal=$frontextension;
+      //  $backtotal=$backroute.$avatarName.$backextension;
+
+      $frente->save(public_path($frontextension));
+
+       $trasero->save(public_path($backextension));
+  
+
+    return back()->with('success','Carnet Actualizado');
+       
+    }
+    else
+    {
+        return back()->with('alert','Faltan datos');
+    }
+}
+
+  
+
+          
+else
+{
      if($request->hasFile('front') && $request->hasFile('back'))
+
     {
 
             $avatarName =request()->cedula;
@@ -857,7 +902,11 @@ public function carga_carnet(request $request)
     return back()->with('success','Carnet Cargado');
        
     }
-   
+    else
+    {
+        return back()->with('alert','Faltan datos');
+    }
+   }
 }
 
 /////////////////////////////// IMAGEN DE CARNET /////////////////////////////////////
