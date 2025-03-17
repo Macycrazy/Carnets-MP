@@ -201,6 +201,8 @@ public function getUsersStatus()
 
 $messages = Mensajes::where('emisor', $user_ip)
     ->orWhere('receptor', $user_ip)
+    ->where('emisor','-4729533633')
+    ->orwhere('receptor','-4729533633')
     ->get();
 
        $messages = $messages->map(function ($message) {
@@ -208,15 +210,7 @@ $messages = Mensajes::where('emisor', $user_ip)
         return $message;
     });
 
-         $messages = $messages->map(function ($message) use ($authUser) {
-        // ... (tu código existente) ...
-        $message->sender_online = User::find($message->emisor)->isOnline();
-        $message->sender_last_seen = User::find($message->emisor)->lastSeen();
-        $message->receiver_online = User::find($message->receptor)->isOnline();
-        $message->receiver_last_seen = User::find($message->receptor)->lastSeen();
-
-        return $message;
-    });
+ 
 
         return view('mensajes', compact('messages', 'user_id', 'usuarios'));
     
@@ -226,41 +220,48 @@ $messages = Mensajes::where('emisor', $user_ip)
      public function send(Request $request)
     {
 
-        if($request->receiver_id=='-4600162193')
+        if($request->receiver_id=='-4729533633')
         {
              $receptor = $request->receiver_id;
-    $mensaje = $request->message;
-    $archivos = $request->file('archivos');
-             if ($archivos && is_array($archivos) && !empty($archivos)) {
-        $foto = $archivos[0]->getPathname();
+                $mensaje = $request->message;
+                $archivos = $request->file('archivos');
+                        if ($archivos && is_array($archivos) && !empty($archivos)) {
+                             $foto = $archivos[0]->getPathname();
 
-       
-      try {
-        if ($foto) { // Verificar si $foto tiene un valor
+                        }
+                        else{
+                        $foto=null;
+                        }
+            try {
+                    if ($foto) { // Verificar si $foto tiene un valor
 
-            Telegram::sendPhoto([
-                'chat_id' => $request->receiver_id,
-                'photo' => InputFile::create($foto, 'archivo.jpg'),
-                'caption' => $request->message,
-            ]);
-              return response()->json(['message' => 'Mensaje enviado con éxito']);
+                                Telegram::sendPhoto([
+                                'chat_id' => $request->receiver_id,
+                                'photo' => InputFile::create($foto, 'archivo.jpg'),
+                                'caption' => $request->message,
+                                ]);
+                                return response()->json(['message' => 'Mensaje enviado con éxito']);
          
-        } else {
-            Telegram::sendMessage([
-                'chat_id' => $request->receiver_id,
-                'text' => $request->message,
-            ]);
+                                } 
+                    else 
+                                {
+
+                                Telegram::sendMessage([
+                                'chat_id' => $request->receiver_id,
+                                'text' => $request->message,
+                                ]);
           
-             return response()->json(['message' => 'Mensaje enviado con éxito, sin imagen']);
-        }
-    } catch (\Exception $e) {
+                                return response()->json(['message' => 'Mensaje enviado con éxito, sin imagen']);
+                                }   
+                } 
+            catch (\Exception $e) 
+                {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
         //return 'Error al enviar mensaje: ' . $e->getMessage();
          return response()->json(['message' => $e->getMessage()]);
 
-    }
-    }
-         
+                }
+        
             
         }
         else{

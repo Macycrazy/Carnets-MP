@@ -44,7 +44,7 @@
             </div>
         </li>
     @endforeach
-    <li class="clearfix user-link" data-user-id="-4600162193" data-user-name="Telegram">
+    <li class="clearfix user-link" data-user-id="-4729533633" data-user-name="Telegram">
             <div class="about">
                 <div class="name">Telegram</div>
                 <div class="status">
