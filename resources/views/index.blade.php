@@ -106,7 +106,7 @@
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  z-index: 1200; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -114,8 +114,7 @@
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-
-  justify-content: center; /* Centrar horizontalmente */
+    justify-content: center; /* Centrar horizontalmente */
   align-items: center; /* Centrar verticalmente */
 }
 
@@ -726,10 +725,7 @@
   <img src="{{ $b->front}}" style="max-height:100px" class="thumbnail-image">
 </a>
 
-<div id="image-modal" class="modal">
- 
-  <img class="modal-content" id="full-image">
-</div>
+
 
                  
 
@@ -746,10 +742,6 @@
   <img src="{{ $b->back }}" style="max-height:100px" class="thumbnail-image">
 </a>
 
-<div id="image-modal" class="modal">
-
-  <img class="modal-content" id="full-image">
-</div>
 
                  
 
@@ -768,7 +760,11 @@
                 @endif
                 
             </tr>
-          
+        
+<div id="image-modal" class="modal">
+
+  <img class="modal-content" id="full-image">
+</div>  
       @endforeach
               </tbody>
     </table>
