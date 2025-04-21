@@ -454,20 +454,40 @@ $message = new Mensajes();
         $partesNombre = explode(' ', $name);
 
 
-$nombreFormateado = $partesNombre[0] . ' '; 
+if(count($partesNombre) >= 2)
+{
+ 
+   $nombreFormateado = $partesNombre[0] . ' '; 
 
 $ultimaParte = end($partesNombre); 
 $nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
 
-$partesApellido = explode(' ', $lastname);
+}
+else
+{
+    $nombreFormateado = $partesNombre[0] ; 
 
-$apellidoFormateado = $partesApellido[0] . ' '; 
+}
+$partesApellido = explode(' ', $lastname);
+//dd($partesApellido);
+
+if(count($partesApellido) >= 2)
+{
+ 
+    $apellidoFormateado = $partesApellido[0] . ' '; 
+    
 
 $ultimaPartea = end($partesApellido); 
 $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
 
-
+}
+else
+{
+    
+    $apellidoFormateado = $partesApellido[0]; 
+}
  $valores->name=$nombreFormateado ;
+ 
 
  $carnet->update(['name' => $valores->name]);
 
@@ -782,20 +802,51 @@ public function datos(){
 
          $partesNombre = explode(' ', $name);
 
+if(count($partesNombre) >= 2)
+{
+ 
+   $nombreFormateado = $partesNombre[0] . ' '; 
 
-$nombreFormateado = $partesNombre[0] . ' '; 
+$ultimaParte = end($partesNombre); 
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
+
+}
+else
+{
+    $nombreFormateado = $partesNombre[0] ; 
+
+}
+
+/*$nombreFormateado = $partesNombre[0] . ' '; 
 
 $ultimaParte = end($partesNombre); 
 $nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
 
 
+*/
 $partesApellido = explode(' ', $lastname);
 
-$apellidoFormateado = $partesApellido[0] . ' '; 
+//$apellidoFormateado = $partesApellido[0] . ' '; 
+
+//$ultimaPartea = end($partesApellido); 
+//$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
+
+
+if(count($partesApellido) >= 2)
+{
+ 
+    $apellidoFormateado = $partesApellido[0] . ' '; 
+    
 
 $ultimaPartea = end($partesApellido); 
 $apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
 
+}
+else
+{
+    
+    $apellidoFormateado = $partesApellido[0]; 
+}
 
     $valores->name=$nombreFormateado ;
 
