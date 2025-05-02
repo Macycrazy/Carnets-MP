@@ -330,6 +330,21 @@
 
       <input class="form-control col-md-3" type="text" id="document" name="document" placeholder="ej. 12345678" required>
 
+      <span class="input-group-text" id="identifier">Nacionalidad</span>
+
+     
+      <select class="form-control col-md-2" id="identifier" name="identifier" required>
+
+         <option selected disabled>Nacionalidad</option>
+
+
+         <option value="V">Venezolano</option>
+
+
+         <option value="E">Extranjero</option>
+
+      </select>
+
 
      <span class="input-group-text" id="adress">Direccion</span>
 
@@ -644,7 +659,7 @@
          @foreach($a as $b)
 
             <tr style="text-align:center;vertical-align: middle;">
-                <td style="text-align:center;vertical-align: middle;">{{$b->cedule}}</td>
+                <td style="text-align:center;vertical-align: middle;">{{$b->foranity}} - {{$b->cedule}}</td>
                 <td style="text-align:center;vertical-align: middle;">{{$b->card_code}}</td>
                 <td style="text-align:center;vertical-align: middle;">{{ mb_ucfirst($b->name, 'UTF-8') }}</td>
                 <td style="text-align:center;vertical-align: middle;">{{ mb_ucfirst($b->lastname, 'UTF-8') }}</td>

@@ -116,7 +116,21 @@ class="btn btn-outline-secondary mt-3 mb-3 p-0" href="" onclick="window.history.
 <span class="input-group-text" id="adress">Direccion</span>
       <input class="form-control" type="text" id="adress" name="adress" placeholder="ej. CIIP" value="{{$editar->address}}" required>
 
-      
+       <span class="input-group-text" id="identifier">Nacionalidad</span>
+
+     
+      <select class="form-control col-md-2" id="identifier" name="identifier" required>
+
+         <option selected disabled>Nacionalidad</option>
+
+
+         <option value="V" @if ($editar->foranity== "V") selected @endif>Venezolano</option>
+
+
+         <option value="E" @if ($editar->foranity== "E") selected @endif>Extranjero</option>
+
+      </select>
+
 
    </div>
 

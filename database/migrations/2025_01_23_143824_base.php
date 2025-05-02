@@ -129,6 +129,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('lastname')->nullable();
+            $table->string('identifier')->default('V');
             $table->string('card_code')->nullable();
             $table->timestamp('expiration')->nullable();
             $table->text('note')->nullable();

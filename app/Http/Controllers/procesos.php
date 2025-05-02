@@ -409,6 +409,10 @@ $message = new Mensajes();
 
     $carnet->update(['cedule' => $valores->cedule]);
 
+  $valores->foranity=$request->identifier;
+
+    $carnet->update(['foranity' => $valores->foranity]);
+
     $valores->cellpone=$request->phone;
 
     $carnet->update(['cellpone' => $valores->cellpone]);
@@ -562,6 +566,7 @@ public function datos(){
             'Carnets.cedule',
             'Carnets.card_code',
             'Carnets.address',
+             'Carnets.foranity',
             'Carnets.cellpone',
             'Carnets.expiration',
             'Carnets.note as note',
@@ -783,6 +788,8 @@ public function datos(){
         
         $valores->card_code=$request->code;
         
+        $valores->foranity=$request->identifier;
+
         $valores->note=strtoupper($request->comment);
         
         $valores->id_department=$request->department;

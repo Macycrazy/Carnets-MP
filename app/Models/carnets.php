@@ -14,6 +14,7 @@ class carnets extends Model
         'name',
          'lastname',
          'card_code',
+              'foranity',
           'expiration',
            'note',
             'cedule',
