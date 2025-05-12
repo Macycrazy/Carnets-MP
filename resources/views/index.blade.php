@@ -645,11 +645,16 @@
                  @endif
                 <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Frente</th>
                 <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Contra</th>
+                 @if(Auth::user()->rol == 'admin')
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Front</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Back</th>
+                @endif
                 <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Nota</th>
                 <th style="text-align:center;vertical-align: middle;" >Creado El:</th>
                 <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Editar</th>
                 @if(Auth::user()->rol == 'admin')
                 <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Descargar Imagen</th>
+                <th style="text-align:center;vertical-align: middle;" data-dt-order="disable">Retirar</th>
                 @endif
                
                 
@@ -763,6 +768,40 @@
                   @else
                   No cargado
                   @endif</td>
+                   @if(Auth::user()->rol == 'admin')
+                   <td style="text-align:center;vertical-align: middle;"  >
+@if($b->valor_carnet)
+                     <a href="{{ route('descargar_carnet',['id' => $b->valor_carnet,'tipo' => 'front']) }}" >
+                        @endif
+                        <button class="btn btn-success">
+
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+
+  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+
+  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+
+</svg>
+</button> 
+</a>
+</td>
+ <td style="text-align:center;vertical-align: middle;"  >
+@if($b->valor_carnet)
+                     <a href="{{ route('descargar_carnet',['id' => $b->valor_carnet,'tipo' => 'back']) }}" >
+                        @endif
+                        <button class="btn btn-success">
+
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+
+  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+
+  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+
+</svg>
+</button> 
+</a>
+</td>
+@endif
                 <td style="text-align:center;vertical-align: middle;" >{{ mb_ucfirst($b->note, 'UTF-8') }}</td>
                 
                 <td style="text-align:center;vertical-align: middle;">{{ \Carbon\Carbon::parse($b->created_at)->format('d-m-Y') }}</td>
@@ -772,6 +811,21 @@
   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
   <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
 </svg></button> </a></td>
+
+  <td style="text-align:center;vertical-align: middle;"  >
+   <form action="{{ route('sendMessage',
+    ['receptor' => '-4729533633',
+    'mensaje'=> 'Carnet Con Identificador '. $b->foranity.'-'. $b->cedule.' Listo para ser retirado.',
+   'foto' => $b->cedule ? $b->cedule : 'null']) }}" method="POST">
+    @csrf
+  <a href="" >
+
+      <button class="btn btn-success">
+         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+  <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+</svg></button> </a>
+</form>
+</td>
                 @endif
                 
             </tr>

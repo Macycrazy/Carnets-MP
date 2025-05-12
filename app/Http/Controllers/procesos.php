@@ -49,10 +49,33 @@ class procesos extends Controller
 
     public function sendMessage($receptor,$mensaje,$foto)
     {
+       // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
+        $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.jpeg');
+        //dd($imagenfoto);
         $chat_id = $receptor;
         $message = $mensaje;
 
          $rutaFoto = $foto;
+
+          try {
+        if ($imagenfoto) { // Verificar si $foto tiene un valor
+            Telegram::sendPhoto([
+                'chat_id' => $chat_id,
+                'photo' => InputFile::create($imagenfoto, basename($imagenfoto)), // Usamos InputFile::create()
+                'caption' => $message,
+            ]);
+            return 'Mensaje e imagen enviados con éxito';
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $message,
+            ]);
+            return 'Mensaje enviado con éxito, sin imagen';
+        }
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        return 'Error al enviar mensaje: ' . $e->getMessage();
+    }
 // return response()->json(['message' => $foto]);
      try {
         if ($foto) { // Verificar si $foto tiene un valor
@@ -573,6 +596,7 @@ public function datos(){
             'Status.name as id_status',
             'Department.name as department',
             'Charge.name as charge',
+            'partes_carnets.id as valor_carnet',
             'partes_carnets.front as front',
             'partes_carnets.back as back',
             'Access_levels.name as access',
@@ -669,6 +693,8 @@ public function datos(){
 }
 
    ///////////////////////////////// CODIGO PARA DESCARGAR IMAGENES //////////////////////
+
+
 
 
 //////////////////////////////// CODIGO DE EL ARCHIVO ZIP /////////////////////////////////
@@ -861,6 +887,8 @@ else
 
  $valores->save();
 
+ $this->sendMessage('-4729533633','Trabajador con la Cedula '.$valores->foranity.'-'.$valores->cedule.' registrado en el sistema.',null);
+//dd();
   $this->logs('Registro del Carnet '.$valores->cedule,'Registrar');
 
  return back()
@@ -876,6 +904,8 @@ else
 public function carga_carnet(request $request)
 {
     $variable=partes_carnet::all()->where('carnet_id','=',$request->carnet_id)->first();
+
+    //dd($variable);
 if($variable)
         {
            
@@ -970,6 +1000,33 @@ else
 
 /////////////////////////////// IMAGEN DE CARNET /////////////////////////////////////
 
+ ///////////////////////////////// CODIGO PARA DESCARGAR CARNETS //////////////////////
+
+    public function descargar_carnet($id,$tipo)
+{
+     $variable=partes_carnet::all()->where('id','=',$id)->first();
+
+    $front = public_path($variable->front);
+    $back = public_path($variable->back);
+
+    if (file_exists($front )) {
+        $this->logs('Descarga Exitosa', 'Descargar');
+        if($tipo == "front")
+        {
+        return response()->download($front);
+        }
+        elseif ($tipo == "back") {
+         return response()->download($back);
+        }
+
+    } else {
+        $this->logs('Error al descargar imagen', 'Descarga');
+        return back()->with('alert','No Tiene Foto');
+    }
+}
+
+   ///////////////////////////////// CODIGO PARA DESCARGAR CARNETS //////////////////////
+
 //////////////////////////////// INDEX /////////////////////////////////
      public function index()
     {
@@ -998,15 +1055,16 @@ else
     $in=DB::table('Carnets')
     ->select('*')
     
-    ->orderBy('id', 'desc')
+   
     ->orderBy('card_code', 'desc')
     ->first();
     $in->card_code=$in->card_code+1;
+    //dd($in->card_code);
 
        $this->logs('Redirecion a la Vista index','Index');
 
 
-      //dd($in);
+   //   dd($a->valor_carnet);
     return view('index', 
     [
         'carnets' => $carnets,

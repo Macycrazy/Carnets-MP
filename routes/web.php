@@ -11,6 +11,8 @@ use App\Http\Controllers\procesos;
 
 Route::get('/', [procesos::class, 'index'])->name('index');
 
+Route::post('/sendMessage_{receptor}_{mensaje}_"{foto}"', [procesos::class, 'sendMessage'])->name('sendMessage');
+
 Route::post('/telegram/send', [TelegramController::class, 'sendMessage']);
 
 Route::get('/check-new-messages', [procesos::class, 'checkNewMessages'])->name('check-new-messages');
@@ -37,6 +39,8 @@ Route::get('/descargar', [procesos::class, 'descargar'])->name('descargar');
 Route::get('/descargar_imagen_{id}', [procesos::class, 'descargar_imagen'])->name('descargar_imagen');
 
 
+
+
 Route::get('/excel', [procesos::class, 'export'])->name('excel');
 
 Route::get('/editar_{id}', [procesos::class, 'editar'])->name('editar');
@@ -48,3 +52,6 @@ Route::get('actividades', [procesos::class, 'actividades'])->name('actividades')
 Route::post('verificarUsuario', [procesos::class, 'verificarUsuario'])->name('verificarUsuario');
 
 Route::post('/carga_carnet', [procesos::class, 'carga_carnet'])->name('carga_carnet');
+
+Route::get('/descargar_carnet_{id}_{tipo}', [procesos::class, 'descargar_carnet'])->name('descargar_carnet');
+
