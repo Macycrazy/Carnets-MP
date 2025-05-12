@@ -51,11 +51,32 @@ class procesos extends Controller
     {
        // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
         $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.jpeg');
+
+         $imagenperfil=public_path('imgs/usuarios/'.$foto.'.jpg');
         //dd($imagenfoto);
         $chat_id = $receptor;
         $message = $mensaje;
 
          $rutaFoto = $foto;
+          try {
+        if ($imagenperfil) { // Verificar si $foto tiene un valor
+            Telegram::sendPhoto([
+                'chat_id' => $chat_id,
+                'photo' => InputFile::create($imagenperfil, basename($imagenperfil)), // Usamos InputFile::create()
+                'caption' => $message,
+            ]);
+            return back()->with('success','Mensaje e imagen enviados con éxito');
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => $message,
+            ]);
+            return back()->with('success','Mensaje enviado con éxito, sin imagen');
+        }
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        return 'Error al enviar mensaje: ' . $e->getMessage();
+    }
 
           try {
         if ($imagenfoto) { // Verificar si $foto tiene un valor
@@ -64,13 +85,13 @@ class procesos extends Controller
                 'photo' => InputFile::create($imagenfoto, basename($imagenfoto)), // Usamos InputFile::create()
                 'caption' => $message,
             ]);
-            return 'Mensaje e imagen enviados con éxito';
+            return back()->with('success','Mensaje e imagen enviados con éxito');
         } else {
             Telegram::sendMessage([
                 'chat_id' => $chat_id,
                 'text' => $message,
             ]);
-            return 'Mensaje enviado con éxito, sin imagen';
+            return back()->with('success','Mensaje enviado con éxito, sin imagen');
         }
     } catch (\Exception $e) {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
