@@ -50,56 +50,40 @@ class procesos extends Controller
     public function sendMessage($receptor,$mensaje,$foto)
     {
        // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
+       
         $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.jpeg');
-
          $imagenperfil=public_path('imgs/usuarios/'.$foto.'.jpg');
+
+        //dd(File::exists($imagenperfil));
+
+
         //dd($imagenfoto);
         $chat_id = $receptor;
         $message = $mensaje;
 
          $rutaFoto = $foto;
-          try {
-        if ($imagenperfil) { // Verificar si $foto tiene un valor
-            Telegram::sendPhoto([
-                'chat_id' => $chat_id,
-                'photo' => InputFile::create($imagenperfil, basename($imagenperfil)), // Usamos InputFile::create()
-                'caption' => $message,
-            ]);
-            return back()->with('success','Mensaje e imagen enviados con éxito');
-        } else {
-            Telegram::sendMessage([
-                'chat_id' => $chat_id,
-                'text' => $message,
-            ]);
-            return back()->with('success','Mensaje enviado con éxito, sin imagen');
-        }
-    } catch (\Exception $e) {
-      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
-        return 'Error al enviar mensaje: ' . $e->getMessage();
-    }
 
           try {
-        if ($imagenfoto) { // Verificar si $foto tiene un valor
+          //  dd(File::exists($imagenfoto));
+             if (File::exists($imagenfoto) == true) { // Verificar si $foto tiene un valor
             Telegram::sendPhoto([
                 'chat_id' => $chat_id,
                 'photo' => InputFile::create($imagenfoto, basename($imagenfoto)), // Usamos InputFile::create()
                 'caption' => $message,
             ]);
             return back()->with('success','Mensaje e imagen enviados con éxito');
-        } else {
-            Telegram::sendMessage([
+        } 
+        if (File::exists($imagenperfil) == true) { // Verificar si $foto tiene un valor
+            Telegram::sendPhoto([
                 'chat_id' => $chat_id,
-                'text' => $message,
+                'photo' => InputFile::create($imagenperfil, basename($imagenperfil)), // Usamos InputFile::create()
+                'caption' => $message,
             ]);
-            return back()->with('success','Mensaje enviado con éxito, sin imagen');
+            return back()->with('success','Mensaje e imagen enviados con éxito');
         }
-    } catch (\Exception $e) {
-      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
-        return 'Error al enviar mensaje: ' . $e->getMessage();
-    }
-// return response()->json(['message' => $foto]);
-     try {
-        if ($foto) { // Verificar si $foto tiene un valor
+       
+      
+        if ($foto == true) { // Verificar si $foto tiene un valor
             Telegram::sendPhoto([
                 'chat_id' => $chat_id,
                 'photo' => $foto,
@@ -111,13 +95,80 @@ class procesos extends Controller
                 'chat_id' => $chat_id,
                 'text' => $message,
             ]);
-            return 'Mensaje enviado con éxito, sin imagen';
+            return back()->with('success','Mensaje enviado con éxito, sin imagen');
         }
     } catch (\Exception $e) {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
         return 'Error al enviar mensaje: ' . $e->getMessage();
     }
+          try {
+         
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        return 'Error al enviar mensaje: ' . $e->getMessage();
     }
+
+         
+// return response()->json(['message' => $foto]);
+    
+    }
+
+    //------------------------------------------------------------------------------------------------------
+
+    public function reportMessages($receptor,$mensaje,$foto,$tipo)
+    {
+       // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
+       //dd();
+        $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.jpeg');
+         $imagenperfil=public_path('imgs/usuarios/'.$foto.'.jpg');
+
+        //dd(File::exists($imagenperfil));
+
+
+        //dd($imagenfoto);
+        $chat_id = $receptor;
+        $message = $mensaje;
+
+         $rutaFoto = $foto;
+
+          try {
+          //  dd(File::exists($imagenfoto));
+             if (File::exists($imagenfoto) == true && $tipo == 'Retiro') { // Verificar si $foto tiene un valor
+            Telegram::sendPhoto([
+                'chat_id' => $chat_id,
+                'photo' => InputFile::create($imagenfoto, basename($imagenfoto)), // Usamos InputFile::create()
+                'caption' => $message,
+            ]);
+            return back()->with('success','Mensaje e imagen enviados con éxito');
+        } 
+            if (File::exists($imagenperfil) == true && $tipo == 'Solicitud') { // Verificar si $foto tiene un valor
+            Telegram::sendPhoto([
+                'chat_id' => $chat_id,
+                'photo' => InputFile::create($imagenperfil, basename($imagenperfil)), // Usamos InputFile::create()
+                'caption' => $message,
+            ]);
+            return back()->with('success','Mensaje e imagen enviados con éxito');
+        }
+       
+      
+       
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        return 'Error al enviar mensaje: ' . $e->getMessage();
+    }
+          try {
+         
+    } catch (\Exception $e) {
+      //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
+        return 'Error al enviar mensaje: ' . $e->getMessage();
+    }
+
+         
+// return response()->json(['message' => $foto]);
+    
+    }
+
+    //-------------------------------------------------------------------------------------------------------
 
      public function checkNewMessages()
     {

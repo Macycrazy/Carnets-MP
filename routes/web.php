@@ -11,7 +11,7 @@ use App\Http\Controllers\procesos;
 
 Route::get('/', [procesos::class, 'index'])->name('index');
 
-Route::post('/sendMessage_{receptor}_{mensaje}_"{foto}"', [procesos::class, 'sendMessage'])->name('sendMessage');
+Route::post('/sendMessage_{receptor}_{mensaje}_{foto}_{tipo}', [procesos::class, 'reportMessages'])->name('reportar');
 
 Route::post('/telegram/send', [TelegramController::class, 'sendMessage']);
 

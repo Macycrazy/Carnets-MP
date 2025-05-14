@@ -692,10 +692,11 @@
                   @endif
                 </td>
                 <td style="text-align:center;vertical-align: middle;"  >
-   <form action="{{ route('sendMessage',
+   <form action="{{ route('reportar',
     ['receptor' => '-4729533633',
     'mensaje'=> 'Se solicita la impresion del carnet del trabajador con documento '. $b->foranity.'-'. $b->cedule.'.',
-   'foto' => $b->cedule ? $b->cedule : 'null']) }}" method="POST">
+   'foto' => $b->cedule ? $b->cedule : 'null',
+   'tipo' => 'Solicitud']) }}" method="POST">
     @csrf
   <a href="" >
 
@@ -828,10 +829,11 @@
 </svg></button> </a></td>
 
   <td style="text-align:center;vertical-align: middle;"  >
-   <form action="{{ route('sendMessage',
+   <form action="{{ route('reportar',
     ['receptor' => '-4729533633',
     'mensaje'=> 'Carnet Con Identificador '. $b->foranity.'-'. $b->cedule.' Listo para ser retirado.',
-   'foto' => $b->cedule ? $b->cedule : 'null']) }}" method="POST">
+   'foto' => $b->cedule ? $b->cedule : 'null',
+   'tipo' => 'Retiro']) }}" method="POST">
     @csrf
   <a href="" >
 
