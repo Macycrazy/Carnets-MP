@@ -133,6 +133,7 @@ return new class extends Migration
             $table->string('card_code')->nullable();
             $table->timestamp('expiration')->nullable();
             $table->text('note')->nullable();
+            
             $table->string('cedule')->nullable();
             $table->text('address')->nullable();
             $table->string('cellpone')->nullable();
@@ -144,15 +145,15 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->onUpdate('current_timestamp');
 
-            $table->foreign('id_department')->references('id')->on('Department')->onDelete('set null');
-            $table->foreign('id_charge')->references('id')->on('Charge')->onDelete('set null');
-            $table->foreign('id_status')->references('id')->on('Status')->onDelete('set null');
-            $table->foreign('id_access_levels')->references('id')->on('Access_levels')->onDelete('set null');
-            $table->foreign('id_state')->references('id')->on('State')->onDelete('set null');
+            $table->foreign('id_department')->references('id')->on('Department');
+            $table->foreign('id_charge')->references('id')->on('Charge');
+            $table->foreign('id_status')->references('id')->on('Status');
+            $table->foreign('id_access_levels')->references('id')->on('Access_levels');
+            $table->foreign('id_state')->references('id')->on('State');
         });
 
         Schema::table('Type_creations', function (Blueprint $table) {
-            $table->foreign('id_carnet')->references('id')->on('Carnets')->onDelete('set null');
+            $table->foreign('id_carnet')->references('id')->on('Carnets');
         });
     }
 

@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+  use Carbon\Carbon;
 
 class cargos extends Seeder
 {
@@ -13,39 +16,36 @@ class cargos extends Seeder
     public function run(): void
     {
           // Cargos
-        DB::table('Charge')->insert([
-            ['name' => 'GERENTE'],
-            ['name' => 'MESONERO'],
-            [ 'name' => 'PRESIDENTE' ],
-            [ 'name' => 'ASISTENTE ADMINISTRATIVO' ],
-            [ 'name' => 'TECNICO' ],
-            [ 'name' => 'ASISTENTE EJECUTIVO' ],
-            [ 'name' => 'CHOFER' ],
-            [ 'name' => 'SUPERVISOR AUXILIAR' ],
-            [ 'name' => 'CHEF' ],
-            [ 'name' => 'COCINERO' ],
-            [ 'name' => 'VICEPRESIDENTE' ],
-            [ 'name' => 'GERENTE GENERAL' ],
-            [ 'name' => 'AUDITOR INTERNO' ],
-            [ 'name' => 'CONSULTOR JURIDICO' ],
-            [ 'name' => 'CONSULTORA JURIDICA' ],
-            [ 'name' => 'GERENTE DE AREA' ],
-            [ 'name' => 'GERENTE DE LINEA' ],
-            [ 'name' => 'COORDINADOR' ],
-            [ 'name' => 'PROFESIONAL' ],
-            [ 'name' => 'OBRERO' ],
-            [ 'name' => 'PERSONAL MEDICO' ],
-            [ 'name' => 'OFICIAL DE SEGURIDAD' ],
-            [ 'name' => 'ESCOLTA' ],
-            [ 'name' => 'SUPERVISOR DE SEGURIDAD' ],
-            [ 'name' => 'AUXILIAR DE SERVICIO' ],
-            [ 'name' => 'ENFERMERA' ],
-            [ 'name' => 'ENFERMERO' ],
-            [ 'name' => 'MEDICO' ],
-            [ 'name' => 'JEFE DE SERVICIO' ],
-            [ 'name' => 'ASESOR' ],
-            [ 'name' => 'VISITANTE' ]
-        ]);
+     
+
+$uniqueCharges = [
+    'ASESOR',
+    'ASISTENTE EJECUTIVO',
+    'AUDITOR INTERNO',
+    'BACHILLER',
+    'BACHILLER III NIVEL VII',
+    'CONSULTOR JURIDICO',
+    'COORDINADOR',
+    'GERENTE',
+    'GERENTE GENERAL',
+    'OBRERO CERTIFICADO',
+    'OBRERO GENERAL',
+    'OBRERO SUPERVISOR',
+    'PASANTE',
+    'PRESIDENTE',
+    'PROFESIONAL',
+    'TECNICO',
+];
+
+$dataToInsert = array_map(function ($chargeName) {
+    return [
+        'name' => $chargeName,
+        'created_at' => Carbon::now(),
+        'updated_at' => Carbon::now(),
+    ];
+}, $uniqueCharges);
+
+DB::table('Charge')->insert($dataToInsert);
         
     }
 }

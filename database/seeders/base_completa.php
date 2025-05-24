@@ -88,31 +88,29 @@ class base_completa extends Seeder
         ]);
 */
         // Carnets
-      /*  DB::table('Carnets')->insert([
-            [
-                'name' => 'John',
-                'lastname' => 'Doe',
-                'card_code' => 'ABC123',
-                'expiration' => '2025-12-31', // Formato YYYY-MM-DD
-                'note' => 'This is a note.',
-                'cedule' => 'V-12345678',
-                'address' => '123 Main St',
-                'cellpone' => '0412-1234567', // Corregir nombre de columna
-                'id_department' => 1, // Usar IDs numéricos
-                'id_charge' => 1,
-                'id_status' => 1,
-                'id_access_levels' => 1,
-                //'gender_id' => 1,
-                //'hair_color_id' => 1,
-                'id_state' => 1,
-                //'municipality_id' => 'Libertador', // Si no tienes la tabla municipalities, guarda el nombre
-               // 'parish_id' => 'El Paraíso', // Si no tienes la tabla parishes, guarda el nombre
-               // 'skin_color_id' => 1,
-               // 'civil_status_id' => 1,
-                'created_at' => '2023-01-01',
-                'updated_at' => '2024-01-01',
-            ]
+        DB::table('Carnets')->insert([
+            'name' => 'MIGUEL A.',
+            'lastname' => 'CARDENAS Y.',
+            'identifier' => 'V',
+            'card_code' => '100038',
+            'expiration' => '2026-01-01 00:00:00', // Fecha tal cual la proporcionaste
+            'note' => '',
+            // 'foranity' => 'V', // Este campo no estaba en tu migración original, lo he comentado.
+                               // Si existe en tu base de datos, descomenta y ajústalo.
+            'cedule' => '28443995',
+            'address' => 'CIIP',
+            'cellpone' => '04242994267',
+            'id_department' => 1,
+            'id_charge' => 4,
+            'id_status' => 1,
+            'id_access_levels' => 1,
+            'id_state' => 14,
+            // Las fechas created_at y updated_at se gestionan por useCurrent() y onUpdate('current_timestamp') en la migración
+            // Si quieres forzar los valores específicos que diste, puedes incluirlos:
+            // 'created_at' => '2025-05-23 19:32:45',
+            // 'updated_at' => '2025-05-23 16:14:44',
+            // Pero lo más común es dejar que la BD los genere si tienes useCurrent().
         ]);
-        */
+
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\procesos;
+use App\Http\Controllers\QrCodeController;
 
 /*Route::get('/', function () {
     return view('index');
@@ -54,4 +55,14 @@ Route::post('verificarUsuario', [procesos::class, 'verificarUsuario'])->name('ve
 Route::post('/carga_carnet', [procesos::class, 'carga_carnet'])->name('carga_carnet');
 
 Route::get('/descargar_carnet_{id}_{tipo}', [procesos::class, 'descargar_carnet'])->name('descargar_carnet');
+
+
+
+Route::get('/qr', [QrCodeController::class, 'showQrCode'])->name('qr');
+
+Route::get('/trabajador_{trabajador}', [QrCodeController::class, 'trabajadores'])->name('trabajador');
+
+
+
+Route::get('/guardar', [QrCodeController::class, 'guardar'])->name('guardar');
 

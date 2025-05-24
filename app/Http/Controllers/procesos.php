@@ -20,7 +20,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Laravel\Facades\Telegram;
-use Telegram\Bot\FileUpload\InputFile; // Importar la clase InputFile
+use Telegram\Bot\FileUpload\InputFile; 
+use SimpleSoftwareIO\QrCode\Facades\QrCode;// Importar la clase InputFile
 
 
 
@@ -41,6 +42,8 @@ use App\Models\User;
 use App\Models\logs;
 use App\Models\mensajes;
 use App\Models\partes_carnet;
+use App\Models\datos;
+use App\Models\trabajadores;
 
 use App\Events\mensajeevento;
 
@@ -409,7 +412,7 @@ $message = new Mensajes();
     public function editar($id)
     {
         $editar= db::table('Carnets')
-         ->select('*', DB::raw('DATE(expiration) as expiration'))
+         ->select('*','identifier as foranity', DB::raw('DATE(expiration) as expiration'))
        
         ->where('card_code','=',$id)->first();
 
@@ -506,7 +509,7 @@ $message = new Mensajes();
 
   $valores->foranity=$request->identifier;
 
-    $carnet->update(['foranity' => $valores->foranity]);
+    $carnet->update(['identifier' => $valores->foranity]);
 
     $valores->cellpone=$request->phone;
 
@@ -661,7 +664,7 @@ public function datos(){
             'Carnets.cedule',
             'Carnets.card_code',
             'Carnets.address',
-             'Carnets.foranity',
+             'Carnets.identifier as foranity',
             'Carnets.cellpone',
             'Carnets.expiration',
             'Carnets.note as note',
@@ -827,12 +830,62 @@ public function datos(){
 
     //////////////////////////////// CODIGO DE EL ARCHIVO ZIP /////////////////////////////////
 
+    /////////////////////////////////////////////////QR////////////////////////////////////////
+
+public function guardar(request $request)
+    {
+$request->cedula=$request->document;
+//dd($request->cedula);
+
+            $codigoEncriptado = md5($request->cedula); // Esto es solo un ejemplo, no es seguro para producción
+//dd($codigoEncriptado);
+        $qrCodeContentUrl = url('/trabajador_' . $codigoEncriptado);
+      
+
+        
+        $directory = 'qrcodes';
+        $fileName = 'QR_cedula_' . Str::slug($request->cedula) . '.png';
+        $fullPathForStorage = public_path('QR/' . $fileName);
+
+    
+        Storage::disk('public')->makeDirectory($directory);
+
+$logoRelativePath = '/Logo.png'; 
+
+  $logoAbsolutePath = '/public'.$logoRelativePath;
+//return '<img src="'.$logoRelativePath .'">';
+//  dd( $logoAbsolutePath);
+  
+
+         // El archivo del logo existe, procede a generar el QR con el logo
+           QrCode::format('png') // Crucial: PNG o JPEG
+                  ->size(300)
+                  ->merge($logoAbsolutePath, .5) // Usamos la ruta absoluta verificada
+                  ->generate($qrCodeContentUrl, $fullPathForStorage);
+
+
+
+        $dato = datos::create([
+            //dd( $codigoEncriptado),
+            'cedula' => $request->cedula,
+            'codigo' => $codigoEncriptado,
+            'qr_code_path' => $fileName,
+            
+        ]);
+
+    
+
+
+        //  return redirect()->back()->with('success', 'Dato y QR guardados exitosamente.');
+    }
+  /////////////////////////////////////////////////QR////////////////////////////////////////
+
     //////////////////////////////// REGISTRO DE CARNETS /////////////////////////////////
 
     public function registrar(request $request)
     {
 
-     
+    // dd(File::exists(public_path('imgs/usuarios/' . request('document') . '.jpg')));
 
       $carnet = carnets::select('*')->where('card_code','=',$request->code)->first();
 
@@ -849,14 +902,21 @@ public function datos(){
       }
   else
       {
+
+        $this->guardar($request);
        $request->validate([
         'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:20480'
     ]);
   
     if($request->hasFile('archivo'))
     {
-
+        if (File::exists(public_path('imgs/usuarios/' . request('document') . '.jpg'))) {
+           
+        }
+       else
+       {
             $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
+     
 
         $archivo=request()->archivo;
 
@@ -866,6 +926,7 @@ public function datos(){
        $image->save(public_path('imgs/usuarios/'.$avatarName));
        
         $avatarPath = $avatarName;
+          }
        
     }
   
@@ -959,7 +1020,7 @@ else
 
  $valores->save();
 
- $this->sendMessage('-4729533633','Trabajador con la Cedula '.$valores->foranity.'-'.$valores->cedule.' registrado en el sistema.',null);
+ //$this->sendMessage('-4729533633','Trabajador con la Cedula '.$valores->foranity.'-'.$valores->cedule.' registrado en el sistema.',null);
 //dd();
   $this->logs('Registro del Carnet '.$valores->cedule,'Registrar');
 
@@ -1130,11 +1191,19 @@ else
    
     ->orderBy('card_code', 'desc')
     ->first();
+  //dd($in);
+    if($in == null)
+    {
+        // dd($in->card_code);
+        $in->card_code = '1';
+
+    }
+   
     $in->card_code=$in->card_code+1;
     //dd($in->card_code);
 
        $this->logs('Redirecion a la Vista index','Index');
-
+//dd('imgs/usuarios/'.$in->cedule.'.jpg');
 
    //   dd($a->valor_carnet);
     return view('index', 

@@ -14,8 +14,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            base_completa::class,
+          
+             cargos::class,
+            departamentos::class,
+             estados::class,
+             status::class,
              usuarios::class,
+               base_completa::class,
         ]);
 
 
