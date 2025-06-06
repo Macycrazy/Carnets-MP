@@ -54,7 +54,7 @@ class procesos extends Controller
     {
        // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
        
-        $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.jpeg');
+  
          $imagenperfil=public_path('imgs/usuarios/'.$foto.'.jpg');
 
         //dd(File::exists($imagenperfil));
@@ -68,23 +68,7 @@ class procesos extends Controller
 
           try {
           //  dd(File::exists($imagenfoto));
-             if (File::exists($imagenfoto) == true) { // Verificar si $foto tiene un valor
-            Telegram::sendPhoto([
-                'chat_id' => $chat_id,
-                'photo' => InputFile::create($imagenfoto, basename($imagenfoto)), // Usamos InputFile::create()
-                'caption' => $message,
-            ]);
-            return back()->with('success','Mensaje e imagen enviados con éxito');
-        } 
-        if (File::exists($imagenperfil) == true) { // Verificar si $foto tiene un valor
-            Telegram::sendPhoto([
-                'chat_id' => $chat_id,
-                'photo' => InputFile::create($imagenperfil, basename($imagenperfil)), // Usamos InputFile::create()
-                'caption' => $message,
-            ]);
-            return back()->with('success','Mensaje e imagen enviados con éxito');
-        }
-       
+                
       
         if ($foto == true) { // Verificar si $foto tiene un valor
             Telegram::sendPhoto([
@@ -122,7 +106,7 @@ class procesos extends Controller
     {
        // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
        //dd();
-        $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.jpeg');
+        $imagenfoto=public_path('imgs/carnets/front/'.$foto.'-front.png');
          $imagenperfil=public_path('imgs/usuarios/'.$foto.'.jpg');
 
         //dd(File::exists($imagenperfil));
@@ -860,7 +844,6 @@ $logoRelativePath = '/Logo.png';
          // El archivo del logo existe, procede a generar el QR con el logo
            QrCode::format('png') // Crucial: PNG o JPEG
                   ->size(300)
-                  ->merge($logoAbsolutePath, .5) // Usamos la ruta absoluta verificada
                   ->generate($qrCodeContentUrl, $fullPathForStorage);
 
 
@@ -947,7 +930,7 @@ $logoRelativePath = '/Logo.png';
         
         $valores->card_code=$request->code;
         
-        $valores->foranity=$request->identifier;
+        $valores->identifier=$request->identifier;
 
         $valores->note=strtoupper($request->comment);
         
@@ -1020,7 +1003,7 @@ else
 
  $valores->save();
 
- //$this->sendMessage('-4729533633','Trabajador con la Cedula '.$valores->foranity.'-'.$valores->cedule.' registrado en el sistema.',null);
+ $this->sendMessage('-4729533633','Trabajador con la Cedula '.$valores->foranity.'-'.$valores->cedule.' registrado en el sistema.',null);
 //dd();
   $this->logs('Registro del Carnet '.$valores->cedule,'Registrar');
 
@@ -1186,22 +1169,22 @@ else
 
 
     $in=DB::table('Carnets')
-    ->select('*')
+    ->select('card_code')
     
    
     ->orderBy('card_code', 'desc')
     ->first();
-  //dd($in);
+
     if($in == null)
     {
         // dd($in->card_code);
-        $in->card_code = '1';
+        $in->card_code = '000000001';
 
     }
-   
-    $in->card_code=$in->card_code+1;
-    //dd($in->card_code);
 
+    $in->card_code=str_pad($in->card_code+1, 8, '0', STR_PAD_LEFT);
+    //dd($in->card_code);
+ // dd($in);
        $this->logs('Redirecion a la Vista index','Index');
 //dd('imgs/usuarios/'.$in->cedule.'.jpg');
 

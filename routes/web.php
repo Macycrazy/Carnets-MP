@@ -66,3 +66,7 @@ Route::get('/trabajador_{trabajador}', [QrCodeController::class, 'trabajadores']
 
 Route::get('/guardar', [QrCodeController::class, 'guardar'])->name('guardar');
 
+Route::get('/guardar_masivo', [QrCodeController::class, 'guardarmasivo'])->name('guardar_masivo');
+
+Route::get('/generar_carnet_{cedula}', [QrCodeController::class, 'trabajadoresqr'])->name('generar_carnet');
+

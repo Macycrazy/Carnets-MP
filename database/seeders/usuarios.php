@@ -59,6 +59,6 @@ class usuarios extends Seeder
                 'password' => Hash::make('4.C4rr3r418'),
             ],
         ]);
-
+        $this->command->info('Seeder de usuarios Hecho.');
     }
 }

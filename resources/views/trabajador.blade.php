@@ -7,207 +7,236 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-       body {
-    background-color: #f8f9fa; /* Color inicial (blanco pálido) */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 30px;
+        body {
+            background-color: #f8f9fa; /* Initial color (pale white) */
+            display: flex;
+            flex-direction: column; /* Allows vertical stacking of elements */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px; /* Base padding for larger screens */
+            overflow-x: hidden; /* Prevent horizontal scroll on smaller screens */
 
-    /* --- Animación del Fondo --- */
-    animation: changeBackgroundColor 30s infinite alternate;
-    /*
-        'changeBackgroundColor': Nombre de la animación que definiremos.
-        '30s': Duración total de un ciclo de la animación (ida y vuelta).
-        'infinite': La animación se repetirá indefinidamente.
-        'alternate': La animación se reproduce hacia adelante y luego hacia atrás en ciclos alternos.
-                     Esto significa que irá de blanco a azul, y luego de azul a blanco,
-                     lo que da un efecto de vaivén.
-    */
-}
+            /* --- Background Animation --- */
+            animation: changeBackgroundColor 30s infinite alternate;
+        }
 
- body::before {
-            width: 100%;
+        /* Background watermark */
+         body::before {
             content: ''; /* Obligatorio para pseudo-elementos */
             position: absolute; /* Para posicionarlo libremente */
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            
             background-image: url("{{ asset('watermark.png') }}"); /* Ruta a tu imagen */
-            background-repeat: repeat-x repeat-y;
+            background-repeat: repeat;
             background-position: center center;
-            background-size: 20%; /* Ajusta el tamaño de la marca de agua */
-            opacity: .08; /* Solo la marca de agua es semitransparente */
-            z-index: -1000; /* Colócalo detrás del contenido real */
+            background-size: 10%;
+            opacity: .08;
+            z-index: -1000;
         }
 
-@keyframes changeBackgroundColor {
-      0% {
-        background-color: #f8f9fa; /* Blanco */
-    }
-    
-    50% {
-        background-color: #007bff; /* Cambia a azul */
-    }
-    
-    100% {
-        background-color: #f8f9fa; /* Vuelve a blanco al final del ciclo */
-    }
-}
+        @keyframes changeBackgroundColor {
+            0% {
+                background-color: #f8f9fa; /* White */
+            }
+            50% {
+                background-color: #e0f2f7; /* A light blue for transition */
+            }
+            100% {
+                background-color: #f8f9fa; /* Returns to white at the end of the cycle */
+            }
+        }
 
-        .carnet-container {
-            background-color: #fff;
+        #carnetFrontal {
+            font-family: Sans-serif;
+             @if($dato->cargo == 'GERENTE GENERAL')
+
+        background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VIP.1.jpg')}}"); 
+
+    @elseif($dato->cargo == 'ASISTENTE EJECUTIVO' || $dato->cargo == 'GERENTE' || $dato->cargo == 'COORDINADOR')
+
+       background-image: url("{{asset('carnets imagenes/CARNET-CIIP-NARANJA.jpg')}}"); 
+
+    @elseif($dato->cargo == 'PROFESIONAL' || $dato->cargo == 'ANALISTA')
+
+         background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VERDE.AD.1.jpg')}}"); 
+
+    @elseif($dato->cargo == 'BACHILLER III NIVEL VII' || $dato->cargo == 'ASISTENTE ADMINISTRATIVO' || $dato->cargo == 'TECNICO' || $dato->cargo == 'ESCOLTA' || $dato->cargo == 'CHOFER')
+
+     background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VERDE.1.jpg')}}"); 
+
+    @elseif($dato->cargo == 'SERVICIO MEDICO' )
+
+      background-image: url("{{asset('carnets imagenes/CARNET-CIIP-ROJO.1.jpg')}}"); 
+
+    @elseif($dato->cargo == 'OBRERO SUPERVISOR' ||$dato->cargo == 'OBRERO CERTIFICADO' || $dato->cargo == 'OBRERO GENERAL' || $dato->cargo == 'AUXILIAR DE SERVICIO' ||  $dato->cargo == 'SUPERVISOR AUXILIAR'  )
+
+      background-image: url("{{asset('carnets imagenes/CARNET-CIIP-MORADO.1.jpg')}}"); 
+
+       @else
+
+      background-image: url("{{asset('carnets imagenes/CARNET-CIIP_Regular.1.jpg')}}"); 
+
+
+    @endif
+            background-size: 100% 100%; /* Ensures background image covers the container */
+            background-repeat: no-repeat;
+            background-position: center center;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 90%; /* Responsive width */
-            max-width: 400px; /* Maximum width for larger screens */
-            /* Necesario para que el pseudo-elemento se posicione correctamente */
+            width: 400px; /* Fixed width for larger screens (default) */
+            aspect-ratio: 3/4; /* Maintains proportion */
             position: relative;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: auto; /* Center the carnet */
+
         }
-        .carnet-header {
-            background-color: #007bdd;
-            color: #fff;
-            text-align: center;
-            padding: 1.5rem 0;
-            /* Asegura que el contenido del header esté por encima de la marca de agua */
-            position: relative;
-            z-index: 1;
+
+        /* Specific styles for the QR image */
+        .qr-code-img {
+            height: 90px; /* Max QR size */
+            width: 95px;
+            display: block; /* Ensures no extra space */
+            margin-right: 40px; /* Optional: space from the right edge */
         }
+
         .carnet-body {
-            padding: 1.5rem;
             text-align: center;
-            /* Asegura que el contenido del body esté por encima de la marca de agua */
             position: relative;
             z-index: 1;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding:10%;
+            padding-top: 125px; /* Ajuste para mover el contenido hacia abajo y alinearlo con la foto */
         }
 
-        /* --- INICIO CÓDIGO DE MARCA DE AGUA CON PSEUDO-ELEMENTO --- */
-        .carnet-container::before {
-            width: 200%;
-            content: ''; /* Obligatorio para pseudo-elementos */
-            position: absolute; /* Para posicionarlo libremente */
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            transform: rotate(45deg);
-            background-image: url("{{ asset('watermark.png') }}"); /* Ruta a tu imagen */
-            background-repeat: repeat-x repeat-y;
-            background-position: center center;
-            background-size: 50%; /* Ajusta el tamaño de la marca de agua */
-            opacity: .08; /* Solo la marca de agua es semitransparente */
-            z-index: 0; /* Colócalo detrás del contenido real */
-        }
-        /* --- FIN CÓDIGO DE MARCA DE AGUA --- */
-
-       .profile-picture {
-    width: 120px;
-    aspect-ratio: 1; /* Esto asegura que el cuadro siempre sea cuadrado (1:1) */
-    border-radius: 50%;
-    object-fit: cover; /* Esto hace que la imagen cubra el área, recortando si es necesario */
-    object-position: top; /* ¡Esta es la clave! Hace que la imagen se alinee con la parte superior del contenedor. */
-    margin-bottom: 1rem;
-    border: 5px solid #eee;
-    /* La propiedad 'position: top;' que tenías no es una propiedad CSS válida en este contexto.
-       Si querías posicionar el elemento mismo, usarías 'position: absolute;' o 'relative;'
-       junto con 'top: Xpx;'. Para la imagen dentro de su contenedor, usa object-position. */
-}
-        .info-row {
-            margin-bottom: 0.75rem;
-            text-align: center;
-        }
-        .info-label {
-            font-weight: bold;
-            color: #495057;
+        .profile-picture {
+            width: 148.6px;
+            aspect-ratio: 2/2.21; /* Mantén la proporción de la foto */
+            object-fit: fill;
+            object-position: top;
+            margin: 0 auto 20px auto;
             display: block;
-            margin-bottom: 0.2rem;
+            border: none; /* ELIMINADO: Quitar borde de la foto */
+            border-radius: 16px;
+           
         }
+
         .info-value {
-            color: #212529;
+            color: black;
+            font-weight: bold;
+            display: block;
+            line-height: 1.3;
+            text-shadow: 0 0 1px rgba(255, 255, 255, 0.5); /* Subtle text shadow for better readability over background */
         }
-        .qr-code {
-            margin-top: 1rem;
+        .name-value {
+            font-size: 20px; /* Adjusted for larger, more readable text */
+            font-weight: 700;
         }
+        .id-value {
+            font-size: 20px; /* Adjusted */
+            font-weight: 600;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .department-value {
+            font-size: 16px; /* Slightly larger */
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: .5px;
+            line-height: 1.2; /* Line-height adjustment for management text */
+        }
+       .position-value {
+            font-size: 18px; /* Ajustado */
+            font-weight: 800;
+           margin-top: 20px;
+        }
+
         .signature-area {
-            margin-top: 1.5rem;
+            margin-top: 30px;
             text-align: center;
             font-style: italic;
-            color: #6c757d;
             border-top: 1px dashed #ced4da;
-            padding-top: 1rem;
+            padding-top: 10px;
+            font-size: 0.8em;
         }
-        /* Responsive adjustments */
-        @media (max-width: 576px) {
-            .carnet-container {
-                max-width: 300px;
+
+     
+
+        /* --- Media Query for Phones (fixed smaller size) --- */
+        @media (max-width: 576px) { /* Targets most phones in portrait mode */
+            body {
+                padding: 15px; /* Smaller overall padding for phones */
             }
-            .carnet-header h2 {
-                font-size: 1.5rem;
-                max-height: 100px;
+
+            #carnetFrontal {
+                width: 280px; /* Fixed smaller width for phones */
+                margin: 20px auto; /* Add vertical margin and center horizontally */
+                border-radius: 10px; /* Slightly smaller border-radius */
             }
+
             .carnet-body {
-                padding: 1rem;
+                padding: 5%; /* Reduced padding inside the carnet */
+                padding-top: 87px; /* Adjusted for smaller photo and overall size */
             }
+
             .profile-picture {
-                width: 100px;
-                height: 100px;
+                width: 104px; /* Smaller photo */
+                margin-bottom: 8px;
+                border-radius: 11.5px;
             }
+
+            .name-value {
+                font-size: 15px; /* Smaller font sizes */
+            }
+            .id-value {
+                margin-top: 10px;
+                font-size: 15px;
+            }
+            .department-value {
+                font-size: 11px;
+            }
+            .position-value {
+                font-size: 13px;
+                margin-top: 4px;
+            }
+
+       
         }
     </style>
 </head>
 <body>
-    <div class="carnet-container">
-        <div class="carnet-header">
+    <div style="display:flex;">
+        <div class="carnet-container" id="carnetFrontal">
+            <div class="carnet-body">
+                @if(File::exists(public_path('imgs/usuarios/'.$dato->cedula.'.jpg')))
+                    <img src="{{ asset('imgs/usuarios/'.$dato->cedula.'.jpg') }}" alt="Foto del Trabajador" class="profile-picture">
+                @else
+                    <img src="{{ asset('imgs/mensajes/contenido/1742237245_ciiplogo.jpg') }}" alt="Foto por defecto" class="profile-picture">
+                @endif
 
-            <h2> <img src="{{ asset('logo-blanco.png') }}" style="max-height: 80px;max-width: 80%;"></h2>
-        </div>
-        <div class="carnet-body">
-             <span class="info-value">{{ $dato->nombre }} {{ $dato->apellido }}</span>
-             <br>
-               @if(File::exists('imgs/usuarios/'.$dato->cedula.'.jpg'))
-            <img src="imgs/usuarios/{{$dato->cedula}}.jpg" alt="Foto del Trabajador" class="profile-picture">
-            @else
-             <img src="/imgs/mensajes/contenido/1742237245_ciiplogo.jpg" alt="Foto del Trabajador" class="profile-picture">
-             @endif
-            <div class="info-row">
-           
-               
-            </div>
-            <div class="info-row">
-           
-                <span class="info-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
-            </div>
-             <div class="info-row">
-           
-                <span class="info-value">{{ $dato->cargo}}</span>
-            </div>
-             <div class="info-row">
-           
-                <span class="info-value">{{ $dato->departamento}}</span>
-            </div>
-          
-            <div class="signature-area">
-               
-                <span>Av.Venezuela, Torre Epsilon, El rosal de cahcao, Estado miranda.</span>
-                <br>
-                 <span style="opacity: .5;">&copy;Copyright by Miguel Cardenas</span>
+                <div class="info-row">
+                    <span class="info-value name-value">{{ $dato->nombre }} {{ $dato->apellido }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-value department-value">{{$dato->departamento}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-value position-value">{{ $dato->cargo}}</span>
+                </div>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-    <script type="text/javascript">
-        /*
-    miguelangelcardenasyepez@gmail.com
-    +58-242994267
-
-            */
-    </script>
+    {{-- You might want to add the download button back if needed --}}
+    {{-- <button id="downloadCarnet" class="btn-descargar">Descargar Carnet</button> --}}
 </body>
 </html>

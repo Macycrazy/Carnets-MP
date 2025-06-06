@@ -24,3 +24,5 @@ yarn-error.log
 public/imgs/usuarios/
 public/imgs/mensajes/
 public/imgs/carnets/
+public/QR/
+config/database.php

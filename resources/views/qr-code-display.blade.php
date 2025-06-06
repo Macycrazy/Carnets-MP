@@ -1,3 +1,5 @@
+ @if(Auth::user()->rol == 'admin')
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,6 +8,7 @@
     <title>Carnet de Trabajador</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -15,6 +18,21 @@
             min-height: 100vh;
             margin: 0;
             padding: 30px;
+        }
+
+  body::before {
+            content: ''; /* Obligatorio para pseudo-elementos */
+            position: absolute; /* Para posicionarlo libremente */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("{{ asset('watermark.png') }}"); /* Ruta a tu imagen */
+            background-repeat: repeat;
+            background-position: center center;
+            background-size: 10%;
+            opacity: .08;
+            z-index: -1000;
         }
         .carnet-container {
             background-color: #fff;
@@ -52,7 +70,7 @@
             right: 0;
             bottom: 0;
             transform: rotate(45deg);
-            background-image: url("{{ asset('watermark.png') }}"); /* Ruta a tu imagen */
+            background-image: url("{{ asset('MARCADEAGUA.bmp') }}"); /* Ruta a tu imagen */
             background-repeat: repeat;
             background-position: center center;
             background-size: 50%; /* Ajusta el tamaño de la marca de agua */
@@ -118,34 +136,104 @@
             <h2> <img src="{{ asset('logo-blanco.png') }}" style="max-height: 80px;max-width: 80%;"></h2>
         </div>
         <div class="carnet-body">
+
+            <strong style="text-align:center;">Creación de codigo QR</strong>
+            <br>
+
          
+ @if (session('warning'))
+   
+   <br>
+<div class="alert alert-warning" style="margin: 0 auto;" role="alert">
+
+<strong style="text-align:center;"><i class="bi bi-x-octagon-fill"></i> {{session('warning')}} </strong>
+ 
+</div>
+
+
+@endif
+
+        
+ @if (session('success'))
+   
+   <br>
+<div class="alert alert-success" style="margin: 0 auto;" role="alert">
+
+<strong style="text-align:center;"><i class="bi bi-check-circle-fill"></i> {{session('success')}} </strong>
+ 
+</div>
+
+
+@endif
+
+
+ @if (session('danger'))
+   
+   <br>
+<div class="alert alert-danger" style="margin: 0 auto;" role="alert">
+
+<strong style="text-align:center;"><i class="bi bi-exclamation-triangle-fill"></i>{{session('danger')}} </strong>
+ 
+</div>
+
+
+@endif
+<br>
             <div class="info-row">
              <form action="{{route('guardar')}}">
       @csrf
-      <input class="form-control"type="text" name="cedula" placeholder="Cedula">
+      <input class="form-control"type="text" name="cedula" placeholder="Cedula" style="text-align: center;">
 
        </form>
+<br>
+        <form action="{{route('guardar_masivo')}}">
+      @csrf
+      <input class="btn btn-outline-secondary" type="submit" value="Creacion Masiva" style="text-align: center;" >
 
-      
-           
-            <div class="qr-code">
+       </form>
+<br>
+      <div class="card-body">
+        {{$datos->links()}}
+        <table class="table table-light table-striped" style="vertical-align: middle;text-align: center;align-items: center">
+
+    <thead class="thead">
+
+<tr>
+    <th>Cedula</th>
+     <th>Qr</th>
+     </tr>
+     </thead>
+
+<tbody>
               @foreach($datos as $dato)
-            
-                  <p> Cedula: {{$dato->cedula}} </p>
+              
+
+  
+
+    <tr>
+        <td>
+                  <p style="vertical-align: middle;margin:0 auto">{{$dato->cedula}} </p>
           
-     
+     </td>
     
-      
+       <td>
+
            <a href="{{route('trabajador',$dato->codigo)}}">
        
-       <img src="{{ asset('QR/'.$dato->qr_code_path) }}" >
+       <img src="{{ asset('QR/'.$dato->qr_code_path) }}" style="max-height: 100px;">
 
        </a>
-       <br>
-       @endforeach
-        </div>
+       </td>
+       </tr>
+    
+      
+          @endforeach
+           </tbody>
+  </table>
+  </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
+ @endif

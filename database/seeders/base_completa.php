@@ -111,6 +111,6 @@ class base_completa extends Seeder
             // 'updated_at' => '2025-05-23 16:14:44',
             // Pero lo más común es dejar que la BD los genere si tienes useCurrent().
         ]);
-
+  $this->command->info('Seeder de La base completa Hecho.');
     }
 }

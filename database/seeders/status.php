@@ -20,5 +20,6 @@ class status extends Seeder
             ['name' => 'Activo'],
             ['name' => 'Inactivo'],
         ]);
+          $this->command->info('Seeder de statuses hecho.');
     }
 }

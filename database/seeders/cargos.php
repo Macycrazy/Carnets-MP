@@ -22,7 +22,7 @@ $uniqueCharges = [
     'ASESOR',
     'ASISTENTE EJECUTIVO',
     'AUDITOR INTERNO',
-    'BACHILLER',
+    'ASISTENTE ADMINISTRATIVO',
     'BACHILLER III NIVEL VII',
     'CONSULTOR JURIDICO',
     'COORDINADOR',
@@ -46,6 +46,6 @@ $dataToInsert = array_map(function ($chargeName) {
 }, $uniqueCharges);
 
 DB::table('Charge')->insert($dataToInsert);
-        
+          $this->command->info('Seeder de cargos Hecho.');
     }
 }

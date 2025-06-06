@@ -42,5 +42,6 @@ class estados extends Seeder
             [ 'name' => 'Distrito Capital' ],
           //  [ 'name' => 'Dependencias Federales' ]
         ]);
+          $this->command->info('Seeder de estados Hecho.');
     }
 }

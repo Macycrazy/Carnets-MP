@@ -74,6 +74,7 @@ class departamentos extends Seeder
             'INSTITUTO DE ESTUDIOS ECONÓMICOS Y TECNOLÓGICOS',
             'PRESIDENCIA',
             'SERVICIO MÉDICO',
+            'GERENCIA GENERAL DE SEGURIDAD INTEGRAL'
         ];
 
         $dataToInsert = array_map(function ($departmentName) {
@@ -87,6 +88,6 @@ class departamentos extends Seeder
         // Asegúrate de usar el nombre de tabla correcto (minúsculas, plural por convención)
         DB::table('Department')->insert($dataToInsert);
 
-        $this->command->info('Seeder de Departamentos completado.');
+        $this->command->info('Seeder de Departamentos hecho.');
     }
 }

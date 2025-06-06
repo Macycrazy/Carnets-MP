@@ -26,7 +26,7 @@ text-align: center;
             right: 0;
             bottom: 0;
            
-            background-image: url("{{ asset('watermark.png') }}"); /* Ruta a tu imagen */
+            background-image: url("{{ asset('MARCADEAGUA.png') }}"); /* Ruta a tu imagen */
             background-repeat: repeat-x repeat-y;
             background-position: center center;
             background-size: 50%; /* Ajusta el tamaño de la marca de agua */
