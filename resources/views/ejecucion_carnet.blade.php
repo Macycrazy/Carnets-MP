@@ -6,6 +6,9 @@
     <title>Carnet de Trabajador</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa; /* Color inicial (blanco pálido) */
@@ -51,36 +54,36 @@
         }
 
         #carnetFrontal {
-            font-family: Sans-serif;
+           font-family: 'Georama', sans-serif;
             @if($dato->cargo == 'GERENTE GENERAL')
 
-        background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VIP.1.jpg')}}"); 
+        background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
 
 
     @elseif($dato->cargo == 'ASISTENTE EJECUTIVO' || $dato->cargo == 'GERENTE' || $dato->cargo == 'COORDINADOR')
 
-       background-image: url("{{asset('carnets imagenes/CARNET-CIIP-NARANJA.jpg')}}"); 
+       background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
     @elseif($dato->cargo == 'PROFESIONAL' || $dato->cargo == 'ANALISTA')
 
-         background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VERDE.AD.1.jpg')}}"); 
+         background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
     @elseif($dato->cargo == 'ASISTENTE ADMINISTRATIVO' || $dato->cargo == 'TECNICO' || $dato->cargo == 'ESCOLTA' || $dato->cargo == 'CHOFER')
 
-     background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VERDE.1.jpg')}}"); 
+     background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
     @elseif($dato->cargo == 'SERVICIO MEDICO' )
 
-      background-image: url("{{asset('carnets imagenes/CARNET-CIIP-ROJO.1.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
     @elseif($dato->cargo == 'AUXILIAR DE SERVICIO' ||  $dato->cargo == 'SUPERVISOR AUXILIAR'  )
 
-      background-image: url("{{asset('carnets imagenes/CARNET-CIIP-MORADO.1.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
         @else
 
-      background-image: url("{{asset('carnets imagenes/CARNET-CIIP_Regular.1.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
 
 
     @endif
@@ -88,8 +91,8 @@
             background-repeat: no-repeat;
             background-position: center center;
            /* border-radius: 15px;*/
-            width: 400px; /* Ancho fijo para la visualización */
-            aspect-ratio: 3/4; /* Mantiene la proporción */
+            width: 634px; /* Ancho fijo para la visualización */
+             height: 1004px; /* Ancho fijo para la visualización */
             position: relative;
             box-shadow: none; /* ELIMINADO: Quitar sombra para la captura sin bordes */
             display: flex;
@@ -106,31 +109,31 @@
 .carnet-trasero {
     @if($dato->cargo == 'GERENTE GENERAL')
 
-        background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VIP.2.jpg')}}"); 
+        background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
     @elseif($dato->cargo == 'ASISTENTE EJECUTIVO' || $dato->cargo == 'GERENTE' || $dato->cargo == 'COORDINADOR')
 
-       background-image: url("{{asset('carnets imagenes/CARNET-CIIP-NARANJA.2.jpg')}}"); 
+       background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
     @elseif($dato->cargo == 'PROFESIONAL' || $dato->cargo == 'ANALISTA')
 
-         background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VERDE.AD.2.jpg')}}"); 
+         background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
     @elseif($dato->cargo == 'ASISTENTE ADMINISTRATIVO' || $dato->cargo == 'TECNICO' || $dato->cargo == 'ESCOLTA' || $dato->cargo == 'CHOFER')
 
-     background-image: url("{{asset('carnets imagenes/CARNET-CIIP-VERDE.2.jpg')}}"); 
+     background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
     @elseif($dato->cargo == 'SERVICIO MEDICO' )
 
-      background-image: url("{{asset('carnets imagenes/CARNET-CIIP-ROJO.2.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
     @elseif($dato->cargo == 'AUXILIAR DE SERVICIO' ||  $dato->cargo == 'SUPERVISOR AUXILIAR'  )
 
-      background-image: url("{{asset('carnets imagenes/CARNET-CIIP-MORADO.2.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
         @else
 
-      background-image: url("{{asset('carnets imagenes/CARNET-CIIP_Regular.2.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
 
     @endif
@@ -138,8 +141,8 @@
     background-repeat: no-repeat;
     background-position: center center;
     /*border-radius: 15px;*/
-    width: 400px; /* Mismo ancho que el frontal */
-    aspect-ratio: 3/4; /* Misma proporción que el frontal */
+     width: 634px; /* Ancho fijo para la visualización */
+             height: 1004px; /* Ancho fijo para la visualización */
     position: relative;
     box-shadow: none; /* Sin sombra para la captura limpia */
     display: flex; /* Usamos flexbox para el contenido */
@@ -159,7 +162,7 @@
             align-items: center;
             overflow: hidden;
             vertical-align: middle;
-            margin-top: 5px; /* HALF of 10px */
+            margin-bottom: 250px; /* HALF of 10px */
             margin-right: 1px;
         }
 
@@ -168,12 +171,13 @@
 
 /* Estilos específicos para la imagen del QR */
 .qr-code-img {
-    height: 90px; /* Tamaño máximo del QR */
+    height: 120px; /* Tamaño máximo del QR */
   
-width: 95px;
+width: 120px;
     display: block; /* Asegura que no haya espacio extra */
   
-    margin-right: 30px; /* Opcional: espacio desde el borde derecho */
+    margin-right: 74px; /* Opcional: espacio desde el borde derecho */
+    margin-bottom: 291px;
 }
 
         .carnet-body {
@@ -184,12 +188,12 @@ width: 95px;
             height: 100%;
             box-sizing: border-box;
             padding:10%;
-            padding-top: 125px; /* Ajuste para mover el contenido hacia abajo y alinearlo con la foto */
+            padding-top: 335px; /* Ajuste para mover el contenido hacia abajo y alinearlo con la foto */
         }
 
         .profile-picture {
-            width: 148.6px;
-            aspect-ratio: 2/2.2; /* Mantén la proporción de la foto */
+            width: 241px;
+            aspect-ratio: 1/1; /* Mantén la proporción de la foto */
             object-fit: fill;
             object-position: top;
             margin: 0 auto 20px auto;
@@ -208,16 +212,19 @@ width: 95px;
             text-shadow: 0 0 1px rgba(255, 255, 255, 0.5); /* Sutil sombra de texto para mayor legibilidad sobre el fondo */
         }
         .name-value {
-            font-size: 20px; /* Ajustado para que sea más grande y legible */
+            font-size: 45px; /* Ajustado para que sea más grande y legible */
             font-weight: 700;
+            line-height: 1;
+            color: #323364;
          
           
         }
         .id-value {
-            font-size: 20px; /* Ajustado */
+            font-size: 28px; /* Ajustado */
             font-weight: 600;
-             margin-top: 5px;
+             margin-top: 20px;
             margin-bottom: 5px;
+            color: #565756;
           
         }
         .department-value {
@@ -273,17 +280,13 @@ width: 95px;
             @endif
 
             <div class="info-row">
-                <span class="info-value name-value">{{ $dato->nombre }} {{ $dato->apellido }}</span>
+                <span class="info-value name-value">{{ $dato->nombre }} </span>
+                 <span class="info-value name-value">{{ $dato->apellido }} </span>
             </div>
             <div class="info-row">
                 <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
             </div>
-            <div class="info-row">
-                <span class="info-value department-value">{{$dato->departamento}}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-value position-value">{{ $dato->cargo}}</span>
-            </div>
+            
         </div>
     </div>
     <br>    <br>    <br>
@@ -295,10 +298,7 @@ width: 95px;
   
     {{-- Dynamic Barcode: Generates barcode from $dato->card_code --}}
    
-        <div class="barcode-container" style="align-content: center;text-align: center;">
-          
-             {!! DNS1D::getBarcodeSVG(str_replace('.', '', $dato->card_code), 'C39', 1, 40, 'black', true) !!}
-        </div>
+      
    </div>
 
 </div>

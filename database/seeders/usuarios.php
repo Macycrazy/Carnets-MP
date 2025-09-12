@@ -38,26 +38,13 @@ class usuarios extends Seeder
             ],
             
              [
-                'name' => 'Kristina Sulcas',
-                'email' => 'k.sulcas@ciip.com.ve',
+                'name' => 'Marca Pais',
+                'email' => 'marcapais@email.com.ve',
                 'isActive' => true,
                 'rol' => 'user',
-                'password' => Hash::make('K.sulc4s54'),
+                'password' => Hash::make('mp123456.'),
             ],
-             [
-                'name' => 'LOISBETH CORVOS',
-                'email' => 'l.corvos@ciip.com.ve',
-                'isActive' => true,
-                'rol' => 'user',
-                'password' => Hash::make('L.c0rv0s51'),
-            ],
-            [
-                'name' => 'ALFREDO CARRERA',
-                'email' => 'a.carrera@ciip.com.ve',
-                'isActive' => true,
-                'rol' => 'user',
-                'password' => Hash::make('4.C4rr3r418'),
-            ],
+             
         ]);
         $this->command->info('Seeder de usuarios Hecho.');
     }

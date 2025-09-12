@@ -19,24 +19,21 @@ class cargos extends Seeder
      
 
 $uniqueCharges = [
-    'ASESOR',
-    'ASISTENTE EJECUTIVO',
-    'AUDITOR INTERNO',
-    'ASISTENTE ADMINISTRATIVO',
-    'BACHILLER III NIVEL VII',
-    'CONSULTOR JURIDICO',
-    'COORDINADOR',
-    'GERENTE',
-    'GERENTE GENERAL',
-    'OBRERO CERTIFICADO',
-    'OBRERO GENERAL',
-    'OBRERO SUPERVISOR',
-    'PASANTE',
-    'PRESIDENTE',
-    'PROFESIONAL',
-    'TECNICO',
-];
-
+            'PRESIDENTE',
+            'REALIZADOR AUDIOVISUAL',
+            'ASISTENTE EJECUTIVO',
+            'PERIODISTA',
+            'ASISTENTE ADMINISTRATIVO',
+            'HP',
+            'AUDITOR INTERNO',
+            'ANALISTA',
+            'GERENTE GENERAL',
+            'GERENTE',
+            'ABOGADO',
+            'CHOFER',
+            'PRODUCTOR',
+            'DISEÑADOR',
+        ];
 $dataToInsert = array_map(function ($chargeName) {
     return [
         'name' => $chargeName,
