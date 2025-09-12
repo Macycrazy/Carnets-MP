@@ -64,7 +64,7 @@
 
                         <!-- <a href="https://www.ciip.com.ve"> -->
 
-                           <img src="images/logo-ciip.png" alt="#" />
+                           <img src="imgs/logo mp.png" alt="#" style="width:200px" />
 
                         <!--</a>-->
 
