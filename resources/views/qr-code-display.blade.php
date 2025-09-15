@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carnet de Trabajador</title>
-
+    <link rel="icon" type="image/x-icon" href="imgs/logo mp.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
@@ -131,9 +131,46 @@
     </style>
 </head>
 <body>
+    @include('head')
+    <div id="mySidepanel" class="sidepanel">
+         
+         @auth
+
+         <a href="{{route('index')}}" id="Btnregistro" onclick="closeNav()">Volver</a>
+
+         
+
+
+         <form method="POST" action="{{route('logout')}}">
+
+            @csrf
+
+         <button href="" type="sumbit" class="btn btn-primary m-auto text-center p-2" style="font-size: 100%;text-align: center;" >
+
+           
+
+         Cerrar Sesion
+
+      </button>
+
+         </form>
+
+         @endauth
+
+         @guest
+
+         <a href="#service" onclick="closeNav()">
+
+         Iniciar Sesion
+
+         </a>
+
+         @endguest
+
+      </div>
     <div class="carnet-container">
         <div class="carnet-header">
-            <h2> <img src="{{ asset('logo-blanco.png') }}" style="max-height: 80px;max-width: 80%;"></h2>
+            <h2> <img src="{{ asset('imgs/logo mp.png') }}" style="max-height: 80px;max-width: 80%;"></h2>
         </div>
         <div class="carnet-body">
 
@@ -234,6 +271,25 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+      <script>
+         function openNav() {
+           document.getElementById("mySidepanel").style.width = "20%";
+           document.getElementById("mySidepanel").style.backgroundColor = "#009ef2";
+         }
+         
+         function closeNav() {
+           document.getElementById("mySidepanel").style.width = "0";
+         }
+      </script>
+   
+   </body>
+</html>
+
+
+ <script>
+      openNav()
+   </script>
 </body>
 </html>
  @endif

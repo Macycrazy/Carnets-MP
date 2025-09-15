@@ -267,6 +267,7 @@ function validateForm() {
          function openNav() {
            document.getElementById("mySidepanel").style.width = "20%";
            document.getElementById("mySidepanel").style.backgroundColor = "#009ef2";
+           
          }
          
          function closeNav() {

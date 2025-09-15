@@ -528,3 +528,7 @@ function validateForm() {
    </body>
 </html>
 
+
+ <script>
+      openNav()
+   </script>

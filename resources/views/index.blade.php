@@ -158,3 +158,7 @@
       <!-- Javascript files-->
 
    @include('control')
+
+   <script>
+      openNav()
+   </script>

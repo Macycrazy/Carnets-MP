@@ -7,7 +7,7 @@
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
       <title>Sistema de carnetizaciones CIIP</title>
-      <link rel="icon" href="imgs/icono.ico" type="image/x-icon">
+      <link rel="icon" type="image/x-icon" href="imgs/logo mp.png">
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">

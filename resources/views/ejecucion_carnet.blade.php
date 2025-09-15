@@ -188,12 +188,12 @@ width: 120px;
             height: 100%;
             box-sizing: border-box;
             padding:10%;
-            padding-top: 335px; /* Ajuste para mover el contenido hacia abajo y alinearlo con la foto */
+            padding-top: 334px; /* Ajuste para mover el contenido hacia abajo y alinearlo con la foto */
         }
 
         .profile-picture {
             width: 241px;
-            aspect-ratio: 1/1; /* Mantén la proporción de la foto */
+            height: 260px;
             object-fit: fill;
             object-position: top;
             margin: 0 auto 20px auto;
