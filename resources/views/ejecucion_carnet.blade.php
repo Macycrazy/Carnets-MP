@@ -57,33 +57,33 @@
            font-family: 'Georama', sans-serif;
             @if($dato->cargo == 'GERENTE GENERAL')
 
-        background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+        background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
 
 
     @elseif($dato->cargo == 'ASISTENTE EJECUTIVO' || $dato->cargo == 'GERENTE' || $dato->cargo == 'COORDINADOR')
 
-       background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+       background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
     @elseif($dato->cargo == 'PROFESIONAL' || $dato->cargo == 'ANALISTA')
 
-         background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+         background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
     @elseif($dato->cargo == 'ASISTENTE ADMINISTRATIVO' || $dato->cargo == 'TECNICO' || $dato->cargo == 'ESCOLTA' || $dato->cargo == 'CHOFER')
 
-     background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+     background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
     @elseif($dato->cargo == 'SERVICIO MEDICO' )
 
-      background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
     @elseif($dato->cargo == 'AUXILIAR DE SERVICIO' ||  $dato->cargo == 'SUPERVISOR AUXILIAR'  )
 
-      background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
         @else
 
-      background-image: url("{{asset('carnets imagenes/CARNET-01.jpg')}}"); 
+      background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
 
 
     @endif
@@ -204,7 +204,7 @@ width: 120px;
         }
 
         .info-value {
-            color: black;
+        
         
             font-weight: bold;
             display: block;
@@ -228,11 +228,15 @@ width: 120px;
           
         }
         .department-value {
-            font-size: 16px; /* Ligeramente más grande */
-             font-weight: 700;
-            margin-bottom: 5px;
-              letter-spacing: .5px;
-            line-height: 1.2; /* Ajuste del line-height para el texto de la gerencia */
+             font-family: 'Georama', sans-serif;
+              position: absolute;
+              color: white;
+              font-size: 35px;
+              font-weight: bold;
+  bottom:20px;
+  width: 100%; 
+  left: 0%;
+  margin: 0 auto;
         }
         .position-value {
             font-size: 18px; /* Ajustado */
@@ -285,6 +289,10 @@ width: 120px;
             </div>
             <div class="info-row">
                 <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="department-value">{{ $dato->departamento }}</span>
             </div>
             
         </div>
