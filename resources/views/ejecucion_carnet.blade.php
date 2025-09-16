@@ -193,7 +193,7 @@ width: 120px;
 
         .profile-picture {
             width: 241px;
-            height: 260px;
+            aspect-ratio: 1/1;
             object-fit: fill;
             object-position: top;
             margin: 0 auto 20px auto;

@@ -113,8 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 cropper = new Cropper(image, {
                   viewMode:2,
                   scalable: true,
-                    aspectRatio: 3/4,
-                    initialAspectRatio:3/4,
+                    aspectRatio: 1/1,
+                    initialAspectRatio:1/1,
                     autoCropArea:1,
                     responsive:true,
                     center:false,
