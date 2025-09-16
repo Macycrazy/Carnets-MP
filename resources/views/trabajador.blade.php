@@ -231,7 +231,7 @@ width: 120px;
              font-family: 'Georama', sans-serif;
               position: absolute;
               color: white;
-              font-size: 35px;
+              font-size: 100%;
               font-weight: bold;
   bottom:20px;
   width: 100%; 
@@ -302,3 +302,23 @@ width: 120px;
     {{-- <button id="downloadCarnet" class="btn-descargar">Descargar Carnet</button> --}}
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const departmentValues = document.querySelectorAll('.department-value');
+
+    departmentValues.forEach(element => {
+        const textContent = element.textContent.trim();
+        const wordCount = textContent.split(/\s+/).filter(word => word.length > 0).length;
+
+        if (wordCount <= 3) {
+            element.style.fontSize = '2.5em';
+        } else if (wordCount <= 6) {
+            element.style.fontSize = '1.8em';
+        } else {
+            element.style.fontSize = '1.5em';
+            element.style.bottom = '15px';
+        }
+    });
+});
+</script>
