@@ -311,14 +311,15 @@ width: 120px;
         const textContent = element.textContent.trim();
         const wordCount = textContent.split(/\s+/).filter(word => word.length > 0).length;
 
-         if (wordCount <= 3) {
+        
+        if (wordCount <= 3) {
             element.style.fontSize = '2em';
         } else if (wordCount <= 6) {
             element.style.fontSize = '1.6em';
             element.style.bottom = '30px';
         } else {
-            element.style.fontSize = '1.5em';
-            element.style.bottom = '15px';
+            element.style.fontSize = '2em';
+            element.style.bottom = '-5px';
         }
     });
 });
