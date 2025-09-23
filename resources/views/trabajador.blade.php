@@ -228,13 +228,19 @@ width: 120px;
                 <span class="info-value name-value">{{ $dato->nombre }} </span>
                  <span class="info-value name-value">{{ $dato->apellido }} </span>
             </div>
-            <div class="info-row">
+              <div class="info-row">
+                @if($dato->cargo =='GERENTE')
+                <span class="info-value id-value">{{ $dato->cargo}}</span>
+
+                  @elseif($dato->cargo =='PRESIDENTE')
+                <span class="info-value id-value">PRESIDENTA</span>
+                
+                @else
                 <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
+                @endif
             </div>
 
-            <div class="info-row">
-                <span class="department-value">{{ $dato->departamento }}</span>
-            </div>
+        
             
         </div>
     </div>
