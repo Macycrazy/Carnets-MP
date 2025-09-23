@@ -27,6 +27,7 @@ class departamentos extends Seeder
             'GERENCIA DE GESTIÓN ADMINISTRATIVA',
             'GERENCIA DE PLANIFICACIÓN Y PRESUPUESTO',
             'GERENCIA GESTIÓN COMUNICACIONAL',
+            'GERENCIA DE TECNOLOGIA',
         ];
 
         $dataToInsert = array_map(function ($departmentName) {

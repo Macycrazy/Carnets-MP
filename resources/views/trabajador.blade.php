@@ -54,38 +54,7 @@
 
         #carnetFrontal {
            font-family: 'Georama', sans-serif;
-            @if($dato->cargo == 'GERENTE GENERAL')
-
-        background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-
-
-    @elseif($dato->cargo == 'ASISTENTE EJECUTIVO' || $dato->cargo == 'GERENTE' || $dato->cargo == 'COORDINADOR')
-
-       background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-    @elseif($dato->cargo == 'PROFESIONAL' || $dato->cargo == 'ANALISTA')
-
-         background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-    @elseif($dato->cargo == 'ASISTENTE ADMINISTRATIVO' || $dato->cargo == 'TECNICO' || $dato->cargo == 'ESCOLTA' || $dato->cargo == 'CHOFER')
-
-     background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-    @elseif($dato->cargo == 'SERVICIO MEDICO' )
-
-      background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-    @elseif($dato->cargo == 'AUXILIAR DE SERVICIO' ||  $dato->cargo == 'SUPERVISOR AUXILIAR'  )
-
-      background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-        @else
-
-      background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}"); 
-
-
-    @endif
+            background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
             background-size: 100% 100%; /* Asegura que la imagen de fondo cubra el contenedor */
             background-repeat: no-repeat;
             background-position: center center;
@@ -106,36 +75,8 @@
 
          /* Estilo para el reverso del carnet */
 .carnet-trasero {
-    @if($dato->cargo == 'GERENTE GENERAL')
-
-        background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
-    @elseif($dato->cargo == 'ASISTENTE EJECUTIVO' || $dato->cargo == 'GERENTE' || $dato->cargo == 'COORDINADOR')
-
-       background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
-    @elseif($dato->cargo == 'PROFESIONAL' || $dato->cargo == 'ANALISTA')
-
-         background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
-    @elseif($dato->cargo == 'ASISTENTE ADMINISTRATIVO' || $dato->cargo == 'TECNICO' || $dato->cargo == 'ESCOLTA' || $dato->cargo == 'CHOFER')
-
-     background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
-    @elseif($dato->cargo == 'SERVICIO MEDICO' )
-
       background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
 
-    @elseif($dato->cargo == 'AUXILIAR DE SERVICIO' ||  $dato->cargo == 'SUPERVISOR AUXILIAR'  )
-
-      background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
-        @else
-
-      background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
-
-    @endif
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center center;
