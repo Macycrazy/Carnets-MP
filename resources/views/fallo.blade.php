@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>Alerta</title>
+<link rel="icon" type="image/x-icon" href="imgs/logo mp.png">
 <style>
 body {
 background-color: lightblue;

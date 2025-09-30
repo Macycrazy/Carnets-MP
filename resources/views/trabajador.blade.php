@@ -52,166 +52,160 @@
             }
         }
 
-        #carnetFrontal {
-           font-family: 'Georama', sans-serif;
-            background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
-            background-size: 100% 100%; /* Asegura que la imagen de fondo cubra el contenedor */
-            background-repeat: no-repeat;
-            background-position: center center;
-           /* border-radius: 15px;*/
-            width: 634px; /* Ancho fijo para la visualización */
-             height: 1004px; /* Ancho fijo para la visualización */
-            position: relative;
-            box-shadow: none; /* ELIMINADO: Quitar sombra para la captura sin bordes */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            /* IMPORTANTE: Para html2canvas, si quieres que la captura sea del tamaño base,
-               no le des bordes ni sombras aquí. Si las quieres en la captura, déjalas.
-               Para "sin bordes" me refiero a que la captura final no tenga sombra ni un borde visual añadido por CSS. */
-        }
+      /* Estilo para el frontal del carnet (REDUCIDO A LA MITAD) */
+#carnetFrontal {
+    font-family: 'Georama', sans-serif;
+    /* La URL se mantiene igual, asumiendo que es una variable de Laravel */
+    background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 317px; /* 634px / 2 = 317px */
+    height: 502px; /* 1004px / 2 = 502px */
+    position: relative;
+    box-shadow: none; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-
-
-         /* Estilo para el reverso del carnet */
+/* Estilo para el reverso del carnet (REDUCIDO A LA MITAD) */
 .carnet-trasero {
-      background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
-
+    background-image: url("{{asset('carnets imagenes/CARNET-02.jpg')}}"); 
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center center;
-    /*border-radius: 15px;*/
-     width: 634px; /* Ancho fijo para la visualización */
-             height: 1004px; /* Ancho fijo para la visualización */
+    width: 317px; /* 634px / 2 = 317px */
+    height: 502px; /* 1004px / 2 = 502px */
     position: relative;
-    box-shadow: none; /* Sin sombra para la captura limpia */
-    display: flex; /* Usamos flexbox para el contenido */
-    flex-direction: column; /* Alineamos los elementos en columna */
-    justify-content: flex-end; /* Alinea el contenido al final (abajo) */
-    align-items: flex-end; /* Alinea los elementos a la derecha (horizontalmente) */
-    padding: 20px; /* Padding para separar el QR de los bordes */
-       padding-bottom: 5px; /* Padding para separar el QR de los bordes */
-    box-sizing: border-box; /* Incluye padding en el tamaño total */
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 10px; /* 20px / 2 = 10px */
+    padding-bottom: 2.5px; /* 5px / 2 = 2.5px */
+    box-sizing: border-box;
 }
 
- .barcode-container {
-            width:200px; /* HALF of 180px */
-            height: 50px; /* HALF of 50px */
-            display: flex;
-            justify-content: right;
-            align-items: center;
-            overflow: hidden;
-            vertical-align: middle;
-            margin-bottom: 250px; /* HALF of 10px */
-            margin-right: 1px;
-        }
+/* Contenedor del código de barras (REDUCIDO A LA MITAD) */
+.barcode-container {
+    width: 100px; /* 200px / 2 = 100px */
+    height: 25px; /* 50px / 2 = 25px */
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-bottom: 125px; /* 250px / 2 = 125px */
+    margin-right: 0.5px; /* 1px / 2 = 0.5px */
+}
 
-
-
-
-/* Estilos específicos para la imagen del QR */
+/* Estilos específicos para la imagen del QR (REDUCIDO A LA MITAD) */
 .qr-code-img {
-    height: 120px; /* Tamaño máximo del QR */
-  
-width: 120px;
-    display: block; /* Asegura que no haya espacio extra */
-  
-    margin-right: 74px; /* Opcional: espacio desde el borde derecho */
-    margin-bottom: 291px;
+    height: 60px; /* 120px / 2 = 60px */
+    width: 60px; /* 120px / 2 = 60px */
+    display: block;
+    margin-right: 37px; /* 74px / 2 = 37px */
+    margin-bottom: 145.5px; /* 291px / 2 = 145.5px */
 }
 
-        .carnet-body {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            padding:10%;
-            padding-top: 334px; /* Ajuste para mover el contenido hacia abajo y alinearlo con la foto */
-        }
+/* Cuerpo principal del carnet (REDUCIDO A LA MITAD) */
+.carnet-body {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 5%; /* El porcentaje se mantiene igual, aunque el efecto es sobre el nuevo tamaño */
+    padding-top: 166.5px; /* 334px / 2 = 167px */
+}
 
-        
-        .profile-picture {
-            width: 241px;
-            aspect-ratio: 1/1;
-            object-fit: fill;
-            object-position: top;
-            margin: 0 auto 20px auto;
-            display: block;
-            border: none; /* ELIMINADO: Quitar borde de la foto */
-            border-radius: 16px;
-           
-        }
+/* Foto de perfil (REDUCIDO A LA MITAD) */
+.profile-picture {
+    width: 122px; /* 241px / 2 = 120.5px */
+    aspect-ratio: 1/1;
+    object-fit: fill;
+    object-position: top;
+    margin: 0 auto 10px auto; /* 20px / 2 = 10px */
+    display: block;
+    border: none; 
+    border-radius: 8px; /* 16px / 2 = 8px */
+}
 
-        .info-value {
-            color: black;
-        
-            font-weight: bold;
-            display: block;
-            line-height: 1.3;
-            text-shadow: 0 0 1px rgba(255, 255, 255, 0.5); /* Sutil sombra de texto para mayor legibilidad sobre el fondo */
-        }
-        .name-value {
-            font-size: 45px; /* Ajustado para que sea más grande y legible */
-            font-weight: 700;
-            line-height: 1;
-            color: #323364;
-         
-          
-        }
-        .id-value {
-            font-size: 28px; /* Ajustado */
-            font-weight: 600;
-             margin-top: 20px;
-            margin-bottom: 5px;
-            color: #565756;
-          
-        }
-        .department-value {
-             font-family: 'Georama', sans-serif;
-              position: absolute;
-              color: white;
-              font-size: 100%;
-              font-weight: bold;
-  bottom:20px;
-  width: 100%; 
-  left: 0%;
-  margin: 0 auto;
-        }
-        .position-value {
-            font-size: 18px; /* Ajustado */
-            font-weight: 800;
-           margin-top: 20px;
-        }
+/* Valores de información (Tamaño de fuente ajustado) */
+.info-value {
+    color: black;
+    font-weight: bold;
+    display: block;
+    line-height: 1.3; /* Se mantiene igual */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5); 
+}
 
-        .signature-area {
-            margin-top: 30px;
-            text-align: center;
-            font-style: italic;
-         
-            border-top: 1px dashed #ced4da;
-            padding-top: 10px;
-            font-size: 0.8em;
-        }
+/* Nombre (REDUCIDO A LA MITAD en fuente) */
+.name-value {
+    font-size: 22.5px; /* 45px / 2 = 22.5px */
+    font-weight: 700;
+    line-height: 1;
+    color: #323364;
+}
 
-        .btn-descargar {
-            margin-top: 30px; /* Espacio entre el carnet y el botón */
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
+/* ID (REDUCIDO A LA MITAD en fuente y márgenes) */
+.id-value {
+    font-size: 14px; /* 28px / 2 = 14px */
+    font-weight: 600;
+    margin-top: 10px; /* 20px / 2 = 10px */
+    margin-bottom: 2.5px; /* 5px / 2 = 2.5px */
+    color: #565756;
+}
 
-        .btn-descargar:hover {
-            background-color: #0056b3;
-        }
+/* Departamento (El porcentaje se mantiene, pero el valor absoluto se reduce) */
+.department-value {
+    font-family: 'Georama', sans-serif;
+    position: absolute;
+    color: white;
+    font-size: 50%; /* Se reduce el tamaño relativo para que encaje mejor si el 100% original era muy grande */
+    font-weight: bold;
+    bottom: 10px; /* 20px / 2 = 10px */
+    width: 100%; 
+    left: 0%;
+    margin: 0 auto;
+}
 
-      
+/* Posición (REDUCIDO A LA MITAD en fuente y margen) */
+.position-value {
+    font-size: 9px; /* 18px / 2 = 9px */
+    font-weight: 800;
+    margin-top: 10px; /* 20px / 2 = 10px */
+}
+
+/* Área de firma (Márgenes y padding ajustados) */
+.signature-area {
+    margin-top: 15px; /* 30px / 2 = 15px */
+    text-align: center;
+    font-style: italic;
+    border-top: 1px dashed #ced4da; /* Se mantiene 1px, pero podría reducirse si se desea */
+    padding-top: 5px; /* 10px / 2 = 5px */
+    font-size: 0.8em; /* Se mantiene o se ajusta a 0.4em para la mitad, pero 0.8em es mejor para legibilidad */
+}
+
+/* Botón de descarga (Márgenes y padding ajustados) */
+.btn-descargar {
+    margin-top: 15px; /* 30px / 2 = 15px */
+    padding: 5px 10px; /* 10px 20px / 2 */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 2.5px; /* 5px / 2 = 2.5px */
+    cursor: pointer;
+    font-size: 0.8em; /* Se ajusta para que sea más pequeño */
+    transition: background-color 0.3s ease;
+}
+
+.btn-descargar:hover {
+    background-color: #0056b3;
+}
     </style>
 </head>
 <body>
@@ -234,7 +228,7 @@ width: 120px;
                 @elseif($dato->cargo =='GERENTE')
                 <span class="info-value id-value">{{ $dato->cargo}}</span>
 
-                  @elseif($dato->cargo =='PRESIDENTE')
+                  @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
                 <span class="info-value id-value">PRESIDENTA</span>
               
                 

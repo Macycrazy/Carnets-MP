@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carnet de Trabajador</title>
-
+    <link rel="icon" type="image/x-icon" href="imgs/logo mp.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
@@ -139,7 +140,7 @@ width: 120px;
         }
 
         .profile-picture {
-            width: 241px;
+            width: 244px;
             aspect-ratio: 1/1;
             object-fit: fill;
             object-position: top;
@@ -202,26 +203,32 @@ width: 120px;
         }
 
         .btn-descargar {
-            margin-top: 30px; /* Espacio entre el carnet y el botón */
+            
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
+            
             transition: background-color 0.3s ease;
+             font-size: 2em;
+             width: 50%;
+            border-radius: .5em;
         }
 
         .btn-descargar:hover {
             background-color: #0056b3;
+           
         }
 
       
     </style>
 </head>
 <body>
-    <div style="display:flex;">
+      <button id="descargarAmbosBtn" class="btn-descargar" title="Descargar Frontal y Trasero de Carnet"><i class="bi bi-download"></i></button>
+      <br>
+    <div style="display:flex;width: 100%;justify-content: space-around;" >
     <div class="carnet-container" id="carnetFrontal">
         <div class="carnet-body">
             @if(File::exists(public_path('imgs/usuarios/'.$dato->cedula.'.jpg')))
@@ -240,7 +247,7 @@ width: 120px;
                 @elseif($dato->cargo =='GERENTE')
                 <span class="info-value id-value">{{ $dato->cargo}}</span>
 
-                  @elseif($dato->cargo =='PRESIDENTE')
+                    @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
                 <span class="info-value id-value">PRESIDENTA</span>
               
                 
@@ -253,7 +260,7 @@ width: 120px;
             
         </div>
     </div>
-    <br>    <br>    <br>
+   
   <div class="carnet-trasero" id="carnetTrasero">
     {{-- QR Code: Current image from path --}}
 
@@ -267,7 +274,7 @@ width: 120px;
 
 </div>
 
-    <button id="descargarAmbosBtn" class="btn-descargar">Descargar Ambos Lados</button>
+  
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
