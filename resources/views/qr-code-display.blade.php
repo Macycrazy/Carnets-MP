@@ -133,12 +133,12 @@
 <body>
     @include('head')
     <div id="mySidepanel" class="sidepanel">
-         
+
          @auth
 
          <a href="{{route('index')}}" id="Btnregistro" onclick="closeNav()">Volver</a>
 
-         
+
 
 
          <form method="POST" action="{{route('logout')}}">
@@ -147,7 +147,7 @@
 
          <button href="" type="sumbit" class="btn btn-primary m-auto text-center p-2" style="font-size: 100%;text-align: center;" >
 
-           
+
 
          Cerrar Sesion
 
@@ -177,27 +177,27 @@
             <strong style="text-align:center;">Creación de codigo QR</strong>
             <br>
 
-         
+
  @if (session('warning'))
-   
+
    <br>
 <div class="alert alert-warning" style="margin: 0 auto;" role="alert">
 
 <strong style="text-align:center;"><i class="bi bi-x-octagon-fill"></i> {{session('warning')}} </strong>
- 
+
 </div>
 
 
 @endif
 
-        
+
  @if (session('success'))
-   
+
    <br>
 <div class="alert alert-success" style="margin: 0 auto;" role="alert">
 
 <strong style="text-align:center;"><i class="bi bi-check-circle-fill"></i> {{session('success')}} </strong>
- 
+
 </div>
 
 
@@ -205,12 +205,12 @@
 
 
  @if (session('danger'))
-   
+
    <br>
 <div class="alert alert-danger" style="margin: 0 auto;" role="alert">
 
 <strong style="text-align:center;"><i class="bi bi-exclamation-triangle-fill"></i>{{session('danger')}} </strong>
- 
+
 </div>
 
 
@@ -243,27 +243,27 @@
 
 <tbody>
               @foreach($datos as $dato)
-              
 
-  
+
+
 
     <tr>
         <td>
                   <p style="vertical-align: middle;margin:0 auto">{{$dato->cedula}} </p>
-          
+
      </td>
-    
+
        <td>
 
-           <a href="{{route('trabajador',$dato->codigo)}}">
-       
+           <a href="{{'https://carnetsmp.ciip.com.ve/trabajador_'.$dato->codigo}}">
+
        <img src="{{ asset('QR/'.$dato->qr_code_path) }}" style="max-height: 100px;">
 
        </a>
        </td>
        </tr>
-    
-      
+
+
           @endforeach
            </tbody>
   </table>
@@ -277,12 +277,12 @@
            document.getElementById("mySidepanel").style.width = "20%";
            document.getElementById("mySidepanel").style.backgroundColor = "#009ef2";
          }
-         
+
          function closeNav() {
            document.getElementById("mySidepanel").style.width = "0";
          }
       </script>
-   
+
    </body>
 </html>
 

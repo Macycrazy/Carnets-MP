@@ -7,20 +7,20 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use ZipArchive;
-use RecursiveIteratorIterator; 
-use RecursiveDirectoryIterator; 
-use App\Exports\UserExport; 
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\FromCollection; 
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Laravel\Facades\Telegram;
-use Telegram\Bot\FileUpload\InputFile; 
+use Telegram\Bot\FileUpload\InputFile;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;// Importar la clase InputFile
 
 
@@ -47,14 +47,14 @@ use App\Models\trabajadores;
 
 use App\Events\mensajeevento;
 
-class procesos extends Controller 
+class procesos extends Controller
 {
 
     public function sendMessage($receptor,$mensaje,$foto)
     {
        // dd('imgs/carnets/front/'.$foto.'-front.jpeg');
-       
-  
+
+
          $imagenperfil=public_path('imgs/usuarios/'.$foto.'.jpg');
 
         //dd(File::exists($imagenperfil));
@@ -68,8 +68,8 @@ class procesos extends Controller
 
           try {
           //  dd(File::exists($imagenfoto));
-                
-      
+
+
         if ($foto == true) { // Verificar si $foto tiene un valor
             Telegram::sendPhoto([
                 'chat_id' => $chat_id,
@@ -89,15 +89,15 @@ class procesos extends Controller
         return 'Error al enviar mensaje: ' . $e->getMessage();
     }
           try {
-         
+
     } catch (\Exception $e) {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
         return 'Error al enviar mensaje: ' . $e->getMessage();
     }
 
-         
+
 // return response()->json(['message' => $foto]);
-    
+
     }
 
     //------------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ class procesos extends Controller
                 'caption' => $message,
             ]);
             return back()->with('success','Mensaje e imagen enviados con éxito');
-        } 
+        }
             if (File::exists($imagenperfil) == true && $tipo == 'Solicitud') { // Verificar si $foto tiene un valor
             Telegram::sendPhoto([
                 'chat_id' => $chat_id,
@@ -136,23 +136,23 @@ class procesos extends Controller
             ]);
             return back()->with('success','Mensaje e imagen enviados con éxito');
         }
-       
-      
-       
+
+
+
     } catch (\Exception $e) {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
         return 'Error al enviar mensaje: ' . $e->getMessage();
     }
           try {
-         
+
     } catch (\Exception $e) {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
         return 'Error al enviar mensaje: ' . $e->getMessage();
     }
 
-         
+
 // return response()->json(['message' => $foto]);
-    
+
     }
 
     //-------------------------------------------------------------------------------------------------------
@@ -163,7 +163,7 @@ class procesos extends Controller
 
          $emisor = Mensajes::where(function ($query) use ($user_id) {
         $query
-       
+
             ->where('receptor', $user_id->id);
 
     }) ->latest('mensajes.id')
@@ -237,7 +237,7 @@ $messages = $messages->map(function ($message) use ($authUser) {
     return $message;
 });
 
-//dd(json_decode(json_encode($messages->toArray()), true)); 
+//dd(json_decode(json_encode($messages->toArray()), true));
 
 
 
@@ -292,10 +292,10 @@ $messages = Mensajes::where('emisor', $user_ip)
         return $message;
     });
 
- 
+
 
         return view('mensajes', compact('messages', 'user_id', 'usuarios'));
-    
+
 
     }
 
@@ -323,41 +323,41 @@ $messages = Mensajes::where('emisor', $user_ip)
                                 'caption' => $request->message,
                                 ]);
                                 return response()->json(['message' => 'Mensaje enviado con éxito']);
-         
-                                } 
-                    else 
+
+                                }
+                    else
                                 {
 
                                 Telegram::sendMessage([
                                 'chat_id' => $request->receiver_id,
                                 'text' => $request->message,
                                 ]);
-          
+
                                 return response()->json(['message' => 'Mensaje enviado con éxito, sin imagen']);
-                                }   
-                } 
-            catch (\Exception $e) 
+                                }
+                }
+            catch (\Exception $e)
                 {
       //  Log::error('Error al enviar mensaje a Telegram: ' . $e->getMessage());
         //return 'Error al enviar mensaje: ' . $e->getMessage();
          return response()->json(['message' => $e->getMessage()]);
 
                 }
-        
-            
+
+
         }
         else{
 $a=intval(Auth::user()->id);
      $user = Auth::user();
 $message = new Mensajes();
       if ($request->hasFile('archivos')) {
-           
+
             $archivos = $request->file('archivos');
               foreach ($archivos as $archivo) {
                 $message = new Mensajes();
                 $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
                 $ruta = $archivo->move(public_path('imgs/mensajes/contenido'), $nombreArchivo); // Cambiado aquí
-              
+
                    $message->have_file=1;
                 $message->file = asset('imgs/mensajes/contenido/' . $nombreArchivo); // Cambiado aquí
                 $message->emisor = $a; // Assuming user ID is used as emisor
@@ -372,8 +372,8 @@ $message = new Mensajes();
         $message->receptor = $request->receiver_id;
         $message->contenido = $request->message;
             $message->save();}
-       
-           
+
+
 
         //$message = new Mensajes();
        // $message->emisor = $a; // Assuming user ID is used as emisor
@@ -397,32 +397,32 @@ $message = new Mensajes();
     {
         $editar= db::table('Carnets')
          ->select('*','identifier as foranity', DB::raw('DATE(expiration) as expiration'))
-       
+
         ->where('card_code','=',$id)->first();
 
-  
- 
+
+
 
     $data=$this->datos();
 
     $a = $data->a;
-    
+
     $carnets = $data->carnets;
-    
+
     $cargos = $data->cargos;
-    
+
     $departamentos = $data->departamentos;
-    
+
     $niveles = $data->niveles;
-    
+
     $estados = $data->estados;
 
     $status = $data->status;
 
-  
 
-         $this->logs('Vista de edicion de carnet_'.$id,'Editar');    
-    
+
+         $this->logs('Vista de edicion de carnet_'.$id,'Editar');
+
         return view('editar',[
         'carnets' => $carnets,
         'status'=>$status,
@@ -433,7 +433,7 @@ $message = new Mensajes();
         'a' => $a,
         'editar'=>$editar
             ]);
-        
+
     }
 
 //////////////////////////////// VISTA DE EDICION /////////////////////////////////
@@ -444,15 +444,15 @@ $message = new Mensajes();
     {
 
          $carnet = carnets::select('*')->where('card_code','=',$id)->first();
-        
+
 
            $request->validate([
         'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:20480'
     ]);
-  
+
     if($request->hasFile('archivo')){
 
-       
+
       //dd(a);
         $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
 
@@ -460,21 +460,21 @@ $message = new Mensajes();
 
         $image = image::read($archivo)
         ->scale(width: 800);
-     
+
        $image->save(public_path('imgs/usuarios/'.$avatarName));
-       
+
         $avatarPath = $avatarName;
-       
+
     }
-  
-     
-    
-    
+
+
+
+
        $valores = new carnets;
 
 
     $valores->name=strtoupper($request->name);
-   
+
 
     $valores->lastname=strtoupper($request->surname);
 
@@ -542,16 +542,16 @@ $message = new Mensajes();
 
 if(count($partesNombre) >= 2)
 {
- 
-   $nombreFormateado = $partesNombre[0] . ' '; 
 
-$ultimaParte = end($partesNombre); 
-$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
+   $nombreFormateado = $partesNombre[0] . ' ';
+
+$ultimaParte = end($partesNombre);
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.';
 
 }
 else
 {
-    $nombreFormateado = $partesNombre[0] ; 
+    $nombreFormateado = $partesNombre[0] ;
 
 }
 $partesApellido = explode(' ', $lastname);
@@ -559,21 +559,21 @@ $partesApellido = explode(' ', $lastname);
 
 if(count($partesApellido) >= 2)
 {
- 
-    $apellidoFormateado = $partesApellido[0] . ' '; 
-    
 
-$ultimaPartea = end($partesApellido); 
-$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
+    $apellidoFormateado = $partesApellido[0] . ' ';
+
+
+$ultimaPartea = end($partesApellido);
+$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
 
 }
 else
 {
-    
-    $apellidoFormateado = $partesApellido[0]; 
+
+    $apellidoFormateado = $partesApellido[0];
 }
  $valores->name=$nombreFormateado ;
- 
+
 
  $carnet->update(['name' => $valores->name]);
 
@@ -589,10 +589,10 @@ $carnet->update(['lastname' => $valores->lastname]);
     }
 
 //////////////////////////////// ACTUALIZACION DEL CARNET /////////////////////////////////
-  
+
 //////////////////////////////// CODIGO DE EL ARCHIVO EXCEL /////////////////////////////////
 
-    public function export() 
+    public function export()
 {
 
 $excel=Excel::download(new UserExport, 'Carnets a fecha de '.today()->format('d-m-Y').'.xlsx');
@@ -661,23 +661,23 @@ public function datos(){
             'Access_levels.name as access',
             'Carnets.created_at'
         )
-           
+
             ->get();
-       
-      
+
+
       $carnets=carnets::all();
-      
+
       $cargos=charge::orderBy('name', 'asc')->get();
-      
+
       $departamentos=department::orderBy('name', 'asc')->get();
-      
+
       $niveles=access_levels::orderBy('name', 'asc')->get();
-      
+
       $estados=states::orderBy('name', 'asc')->get();
 
       $status=status::orderBy('name', 'asc')->get();
 
-    return (object) 
+    return (object)
     [
     'a' => $a,
 
@@ -710,27 +710,27 @@ public function datos(){
 
     $destination = public_path('descargas/Imagenes.zip');
 
-    if (!is_dir(public_path('descargas'))) 
+    if (!is_dir(public_path('descargas')))
     {
 
         mkdir(public_path('descargas'), 0755, true);
 
     }
 
-    if ($this->createZip($source, $destination)) 
+    if ($this->createZip($source, $destination))
     {
            $this->logs('Descarga Exitosa','Descargar');
         return response()->download($destination);
 
-    } 
-    else 
+    }
+    else
     {
           $this->logs('Eror al descargar ZIP','Descarga');
 
         return response()->json(['error' => 'Error al comprimir los archivos']);
 
     }
-        
+
     }
 
     //////////////////////////////// CODIGO PARA DESCARGAR EN ZIP /////////////////////////////////
@@ -760,7 +760,7 @@ public function datos(){
 
    function createZip($source, $destination) {
 
-      if (!file_exists($source)) 
+      if (!file_exists($source))
     {
 
         return false;
@@ -780,27 +780,27 @@ public function datos(){
 
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
 
-    foreach ($iterator as $file) 
+    foreach ($iterator as $file)
     {
 
-        if ($iterator->isDot()) 
-        {
-
-            continue; 
-
-        }
-
-       
-        $extension = pathinfo($file, PATHINFO_EXTENSION);
-
-        if (!in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif'])) 
+        if ($iterator->isDot())
         {
 
             continue;
 
         }
 
-    
+
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+        if (!in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif']))
+        {
+
+            continue;
+
+        }
+
+
         $relativePath = substr($file, strlen($source) + 1);
 
         $zip->addFile($file, $relativePath);
@@ -823,23 +823,23 @@ $request->cedula=$request->document;
 
             $codigoEncriptado = md5($request->cedula); // Esto es solo un ejemplo, no es seguro para producción
 //dd($codigoEncriptado);
-        $qrCodeContentUrl = url('/trabajador_' . $codigoEncriptado);
-      
+        $qrCodeContentUrl = 'https://carnetsmp.ciip.com.ve/trabajador_' . $codigoEncriptado;
 
-        
+
+
         $directory = 'qrcodes';
         $fileName = 'QR_cedula_' . Str::slug($request->cedula) . '.png';
         $fullPathForStorage = public_path('QR/' . $fileName);
 
-    
+
         Storage::disk('public')->makeDirectory($directory);
 
-$logoRelativePath = '/Logo.png'; 
+$logoRelativePath = '/Logo.png';
 
   $logoAbsolutePath = '/public'.$logoRelativePath;
 //return '<img src="'.$logoRelativePath .'">';
 //  dd( $logoAbsolutePath);
-  
+
 
          // El archivo del logo existe, procede a generar el QR con el logo
            QrCode::format('png') // Crucial: PNG o JPEG
@@ -853,10 +853,10 @@ $logoRelativePath = '/Logo.png';
             'cedula' => $request->cedula,
             'codigo' => $codigoEncriptado,
             'qr_code_path' => $fileName,
-            
+
         ]);
 
-    
+
 
 
         //  return redirect()->back()->with('success', 'Dato y QR guardados exitosamente.');
@@ -890,58 +890,58 @@ $logoRelativePath = '/Logo.png';
        $request->validate([
         'archivo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:20480'
     ]);
-  
+
     if($request->hasFile('archivo'))
     {
         if (File::exists(public_path('imgs/usuarios/' . request('document') . '.jpg'))) {
-           
+
         }
        else
        {
             $avatarName =request()->document.'.'.request()->archivo->getClientOriginalExtension();
-     
+
 
         $archivo=request()->archivo;
 
         $image = image::read($archivo)
         ->scale(width: 800);
-     
+
        $image->save(public_path('imgs/usuarios/'.$avatarName));
-       
+
         $avatarPath = $avatarName;
           }
-       
+
     }
-  
-       
+
+
          $valores = new carnets;
-        
+
         $valores->name=strtoupper($request->name);
-        
+
         $valores->lastname=strtoupper($request->surname);
-        
+
         $valores->address=strtoupper($request->adress);
-        
+
         $valores->expiration=$request->date;
-        
+
         $valores->cedule=$request->document;
-        
+
         $valores->cellpone=$request->phone;
-        
+
         $valores->card_code=$request->code;
-        
+
         $valores->identifier=$request->identifier;
 
         $valores->note=strtoupper($request->comment);
-        
+
         $valores->id_department=$request->department;
-        
+
         $valores->id_status=1;
-        
+
         $valores->id_charge=$request->charge;
-        
+
         $valores->id_access_levels=$request->access;
-        
+
         $valores->id_state=$request->statesment;
 
 
@@ -953,48 +953,48 @@ $logoRelativePath = '/Logo.png';
 
 if(count($partesNombre) >= 2)
 {
- 
-   $nombreFormateado = $partesNombre[0] . ' '; 
 
-$ultimaParte = end($partesNombre); 
-$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
+   $nombreFormateado = $partesNombre[0] . ' ';
+
+$ultimaParte = end($partesNombre);
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.';
 
 }
 else
 {
-    $nombreFormateado = $partesNombre[0] ; 
+    $nombreFormateado = $partesNombre[0] ;
 
 }
 
-/*$nombreFormateado = $partesNombre[0] . ' '; 
+/*$nombreFormateado = $partesNombre[0] . ' ';
 
-$ultimaParte = end($partesNombre); 
-$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.'; 
+$ultimaParte = end($partesNombre);
+$nombreFormateado .= Str::substr($ultimaParte, 0, 1) . '.';
 
 
 */
 $partesApellido = explode(' ', $lastname);
 
-//$apellidoFormateado = $partesApellido[0] . ' '; 
+//$apellidoFormateado = $partesApellido[0] . ' ';
 
-//$ultimaPartea = end($partesApellido); 
-//$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
+//$ultimaPartea = end($partesApellido);
+//$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
 
 
 if(count($partesApellido) >= 2)
 {
- 
-    $apellidoFormateado = $partesApellido[0] . ' '; 
-    
 
-$ultimaPartea = end($partesApellido); 
-$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.'; 
+    $apellidoFormateado = $partesApellido[0] . ' ';
+
+
+$ultimaPartea = end($partesApellido);
+$apellidoFormateado .= Str::substr($ultimaPartea, 0, 1) . '.';
 
 }
 else
 {
-    
-    $apellidoFormateado = $partesApellido[0]; 
+
+    $apellidoFormateado = $partesApellido[0];
 }
 
     $valores->name=$nombreFormateado ;
@@ -1024,7 +1024,7 @@ public function carga_carnet(request $request)
     //dd($variable);
 if($variable)
         {
-           
+
       if($request->hasFile('front') && $request->hasFile('back'))
 
     {   $avatarName =request()->cedula;
@@ -1032,7 +1032,7 @@ if($variable)
         $front=request()->front;
         $back=request()->back;
 
-  
+
 
         $frontroute='imgs/carnets/front/';
         $backroute='imgs/carnets/back/';
@@ -1050,10 +1050,10 @@ if($variable)
       $frente->save(public_path($frontextension));
 
        $trasero->save(public_path($backextension));
-  
+
 
     return back()->with('success','Carnet Actualizado');
-       
+
     }
     else
     {
@@ -1061,9 +1061,9 @@ if($variable)
     }
 }
 
-  
 
-          
+
+
 else
 {
      if($request->hasFile('front') && $request->hasFile('back'))
@@ -1075,7 +1075,7 @@ else
         $front=request()->front;
         $back=request()->back;
 
-  
+
 
         $frontroute='imgs/carnets/front/';
         $backroute='imgs/carnets/back/';
@@ -1093,7 +1093,7 @@ else
       $frente->save(public_path($frontextension));
 
        $trasero->save(public_path($backextension));
-       
+
         $avatarPath = $avatarName;
 
          $carnet = new partes_carnet;
@@ -1105,7 +1105,7 @@ else
     $carnet -> save();
 
     return back()->with('success','Carnet Cargado');
-       
+
     }
     else
     {
@@ -1146,22 +1146,22 @@ else
 //////////////////////////////// INDEX /////////////////////////////////
      public function index()
     {
-    
 
-     
+
+
 
     $data=$this->datos();
 
     $a = $data->a;
-    
+
     $carnets = $data->carnets;
-    
+
     $cargos = $data->cargos;
-    
+
     $departamentos = $data->departamentos;
-    
+
     $niveles = $data->niveles;
-    
+
     $estados = $data->estados;
 
     $status = $data->status;
@@ -1170,8 +1170,8 @@ else
 
     $in=DB::table('Carnets')
     ->select('card_code')
-    
-   
+
+
     ->orderBy('card_code', 'desc')
     ->first();
 
@@ -1189,7 +1189,7 @@ else
 //dd('imgs/usuarios/'.$in->cedule.'.jpg');
 
    //   dd($a->valor_carnet);
-    return view('index', 
+    return view('index',
     [
         'carnets' => $carnets,
 
@@ -1218,17 +1218,17 @@ else
      public function Login(Request $request)
     {
 
-        $emailIngresado = $request->email; 
+        $emailIngresado = $request->email;
 
         $usuario = User::where('email', $emailIngresado)->first();
 
-    if ($usuario) 
-{ 
-    $contrasenaIngresada = $request->password; 
+    if ($usuario)
+{
+    $contrasenaIngresada = $request->password;
 
     $contrasenaAlmacenada = $usuario->password;
 
-    if (Hash::check($contrasenaIngresada, $contrasenaAlmacenada)) 
+    if (Hash::check($contrasenaIngresada, $contrasenaAlmacenada))
     {
 
         Auth::login($usuario);
@@ -1237,22 +1237,22 @@ else
 
         return back()->with('success','Bienvenido');
 
-    } 
-    else 
+    }
+    else
     {
-      
+
 
        $this->logs('Inicio de sesion Fallido','Login');
-        return back()->with('alert','Contraseña incorrecta'); 
+        return back()->with('alert','Contraseña incorrecta');
     }
-} 
-else 
+}
+else
 {
    $this->logs('Usuario No Encontrado','Login');
-     return back()->with('alert','Usuario No Encontrado'); 
+     return back()->with('alert','Usuario No Encontrado');
 }
 
-       
+
     }
 
 
@@ -1266,7 +1266,7 @@ else
         Auth::logout();
 
         return redirect()->route('index')->with('success','Vuelva Pronto');
-        
+
 }
 
 
@@ -1282,28 +1282,28 @@ else
 
         $log->ip = request()->ip();
 
-    
-            if (Auth::check()) 
+
+            if (Auth::check())
 
                 {
 
                     $user = Auth::user();
 
-                    $log->usuario = $user->id; 
-                } 
-            else 
+                    $log->usuario = $user->id;
+                }
+            else
 
                 {
 
-                    $log->usuario = 0; 
+                    $log->usuario = 0;
 
                 }
 
-        
+
         $log->accion = $accion;
-        
+
         $log->controlador = $controlador;
-        
+
         $log->save();
 
 }
@@ -1318,7 +1318,7 @@ public function actividades()
 
     $actividades = DB::table('logs')
         ->join(
-            'userEntity as users', 
+            'userEntity as users',
             'users.id', '=', 'logs.usuario'
               )
         ->select(
@@ -1332,10 +1332,10 @@ public function actividades()
         ->groupBy('logs.accion', 'logs.controlador', 'logs.ip', 'users.name')
         ->get();
 
-       
 
-    return DataTables::of($actividades) 
-    
+
+    return DataTables::of($actividades)
+
     ->toJson();
 
 }
@@ -1359,7 +1359,7 @@ public function verificarUsuario(Request $request)
     else
        {
         return response()->json(['user' => true]);
-       } 
+       }
 
     }
       else {

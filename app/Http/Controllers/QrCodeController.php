@@ -8,7 +8,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\datos;
@@ -25,41 +25,41 @@ class QrCodeController extends Controller
 
         $carnets=db::table('Carnets')->where('cedule','=',$request->cedula)->first();
 
-         if ($carnets==null) 
+         if ($carnets==null)
         {
-            
+
           return back()->with('danger', 'El empleado no se encuentra en el sistema');
-    
+
 }
-     
-           
+
+
      //  dd($carnet->cedule);
             $codigoEncriptado = md5($carnets->cedule); // Esto es solo un ejemplo, no es seguro para producción
 //dd($codigoEncriptado);
-        $qrCodeContentUrl = url('/trabajador_' . $codigoEncriptado);
-      
+        $qrCodeContentUrl = 'https://carnetsmp.ciip.com.ve/trabajador_' . $codigoEncriptado;
 
-        
+
+
         $directory = 'qrcodes';
         $fileName = 'QR_cedula_' . Str::slug($carnets->cedule) . '.png';
         $fullPathForStorage = public_path('QR/' . $fileName);
 
 
 
-        if (File::exists(public_path('QR/' . $fileName))) 
+        if (File::exists(public_path('QR/' . $fileName)))
         {
           return back()->with('warning', 'Qr ya creado');
-    
+
 }
-    
+
         Storage::disk('public')->makeDirectory($directory);
 
-$logoRelativePath = '/Logo.png'; 
+$logoRelativePath = '/Logo.png';
 
   $logoAbsolutePath = '/public'.$logoRelativePath;
 //return '<img src="'.$logoRelativePath .'">';
 //  dd( $logoAbsolutePath);
-  
+
 
          // El archivo del logo existe, procede a generar el QR con el logo
            QrCode::format('png') // Crucial: PNG o JPEG
@@ -73,10 +73,10 @@ $logoRelativePath = '/Logo.png';
             'cedula' => $carnets->cedule,
             'codigo' => $codigoEncriptado,
             'qr_code_path' => $fileName,
-            
+
         ]);
 
-    
+
 
 
           return back()->with('success', 'Dato y QR guardados exitosamente.');
@@ -88,10 +88,10 @@ $logoRelativePath = '/Logo.png';
    {
        if( Auth::user()->rol == 'admin')
        {
-  
+
 
         $datos=DB::table('datos')->paginate(10);
-      
+
 
         return view('qr-code-display', compact('datos'));
         }
@@ -103,14 +103,14 @@ $logoRelativePath = '/Logo.png';
     }
 
     public function trabajadores($trabajador)
-    {       
+    {
 
         $dato = datos::where('codigo', $trabajador)
         ->join('Carnets','Carnets.cedule','=','datos.cedula')
         ->join('Department','Department.id','=','Carnets.id_department')
         ->join('Charge','Charge.id','=','Carnets.id_charge')
         ->select('datos.*',
-            
+
             'Charge.name as cargo',
             'Department.name as departamento',
             'Carnets.name as nombre',
@@ -125,8 +125,8 @@ $logoRelativePath = '/Logo.png';
     {
         return view('trabajador', compact('dato'));
     }
-        
-    
+
+
     else
     {
        return view('fallo');
@@ -136,14 +136,14 @@ $logoRelativePath = '/Logo.png';
 
 
   public function trabajadoresqr($trabajador)
-    {       
+    {
 
         $dato = datos::where('cedula', $trabajador)
         ->join('Carnets','Carnets.cedule','=','datos.cedula')
         ->join('Department','Department.id','=','Carnets.id_department')
         ->join('Charge','Charge.id','=','Carnets.id_charge')
         ->select('datos.*',
-            
+
             'Charge.name as cargo',
                'Carnets.card_code as card_code',
             'Department.name as departamento',
@@ -159,8 +159,8 @@ $logoRelativePath = '/Logo.png';
     {
         return view('ejecucion_carnet', compact('dato'));
     }
-        
-    
+
+
     else
     {
        return view('fallo');
@@ -189,35 +189,35 @@ $logoRelativePath = '/Logo.png';
 
         $carnets=db::table('Carnets')->get();
 
-       
+
         foreach ($carnets as $carnet) {
-            
-   
-        $codigoEncriptado = md5($carnet->cedule); 
 
-        $qrCodeContentUrl = url('/trabajador_' . $codigoEncriptado);
-      
 
-        
+        $codigoEncriptado = md5($carnet->cedule);
+
+        $qrCodeContentUrl = 'https://carnetsmp.ciip.com.ve/trabajador_' . $codigoEncriptado;
+
+
+
         $directory = 'qrcodes';
 
         $fileName = 'QR_cedula_' . Str::slug($carnet->cedule) . '.png';
 
         $fullPathForStorage = public_path('QR/' . $fileName);
 
-    
+
         Storage::disk('public')->makeDirectory($directory);
 
-        $logoRelativePath = '/Logo.png'; 
+        $logoRelativePath = '/Logo.png';
 
         $logoAbsolutePath = '/public'.$logoRelativePath;
 
-  
 
-      
+
+
            QrCode::format('png')
                   ->size(300)
-                
+
                   ->generate($qrCodeContentUrl, $fullPathForStorage);
 
                    $datos=db::table('datos')->where('cedula','=',$carnet->cedule)->first();
@@ -226,18 +226,18 @@ $logoRelativePath = '/Logo.png';
         {
 
         $dato = datos::create([
-        
+
             'cedula' => $carnet->cedule,
 
             'codigo' => $codigoEncriptado,
 
             'qr_code_path' => $fileName,
-            
+
         ]);
         }
         else
         {
-            
+
         }
 
      }

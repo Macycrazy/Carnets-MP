@@ -84,10 +84,10 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('postgresql://postgres:postgres@127.0.0.1:5432/carnet2?schema=public'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'url' => env('postgresql://postgres:postgres@172.17.1.29:5432/postgres?schema=public'),
+            'host' => env('DB_HOST', '172.17.1.29'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'carnet2'),
+            'database' => env('DB_DATABASE', 'postgres'),
             'username' => env('DB_USERNAME', 'postgres'),
             'password' => env('DB_PASSWORD', 'postgres'),
             'charset' => env('DB_CHARSET', 'utf8'),
