@@ -56,7 +56,12 @@
 #carnetFrontal {
     font-family: 'Georama', sans-serif;
     /* La URL se mantiene igual, asumiendo que es una variable de Laravel */
-    background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
+    
+    @if($dato->cedula=='23434318')
+    background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}");     
+@else
+background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
+@endif
     background-size: 100% 100%; 
     background-repeat: no-repeat;
     background-position: center center;
@@ -231,7 +236,8 @@
                   @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
                 <span class="info-value id-value">PRESIDENTA</span>
               
-                
+                 @elseif($dato->cedula='15122535')
+                <span class="info-value id-value">GERENTE</span>
                 
                 @else
                 <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>

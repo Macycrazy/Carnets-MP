@@ -57,9 +57,11 @@
         #carnetFrontal {
            font-family: 'Georama', sans-serif;
            
-
-        background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
-
+@if($dato->cedula=='23434318')
+    background-image: url("{{asset('carnets imagenes/CARNET-01.png')}}");     
+@else
+background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}"); 
+@endif
 
             background-size: 100% 100%; /* Asegura que la imagen de fondo cubra el contenedor */
             background-repeat: no-repeat;
@@ -249,8 +251,8 @@ width: 120px;
 
                     @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
                 <span class="info-value id-value">PRESIDENTA</span>
-              
-                
+                @elseif($dato->cedula='15122535')
+                <span class="info-value id-value">GERENTE</span>
                 @else
                 <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
                 @endif
