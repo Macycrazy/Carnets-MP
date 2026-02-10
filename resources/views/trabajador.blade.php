@@ -236,7 +236,7 @@ background-image: url("{{asset('carnets imagenes/'.$dato->departamento.'.jpg')}}
                   @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
                 <span class="info-value id-value">PRESIDENTA</span>
               
-                 @elseif($dato->cedula='15122535')
+                 @elseif($dato->cedula=='15122535')
                 <span class="info-value id-value">GERENTE</span>
                 
                 @else

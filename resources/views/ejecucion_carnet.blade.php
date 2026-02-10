@@ -238,7 +238,7 @@ width: 120px;
             @else
                 <img src="{{ asset('imgs/mensajes/contenido/1742237245_ciiplogo.jpg') }}" alt="Foto por defecto" class="profile-picture">
             @endif
-
+           
             <div class="info-row">
                 <span class="info-value name-value">{{ $dato->nombre }} </span>
                  <span class="info-value name-value">{{ $dato->apellido }} </span>
@@ -246,12 +246,13 @@ width: 120px;
             <div class="info-row">
                  @if($dato->departamento =='AUDITORÍA INTERNA' && $dato->cargo =='GERENTE')
                 <span class="info-value id-value">AUDITOR INTERNO</span>
+                @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
+                <span class="info-value id-value">PRESIDENTA</span>
                 @elseif($dato->cargo =='GERENTE')
                 <span class="info-value id-value">{{ $dato->cargo}}</span>
 
-                    @elseif($dato->cargo =='PRESIDENTE' && $dato->departamento =='PRESIDENCIA')
-                <span class="info-value id-value">PRESIDENTA</span>
-                @elseif($dato->cedula='15122535')
+                
+                @elseif($dato->cedula == '15122535')
                 <span class="info-value id-value">GERENTE</span>
                 @else
                 <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
