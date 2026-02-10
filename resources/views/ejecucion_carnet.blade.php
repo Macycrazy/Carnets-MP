@@ -253,9 +253,10 @@ width: 120px;
 
                 
                 @elseif($dato->cedula == '15122535')
-                <span class="info-value id-value">GERENTE</span>
+                <span class="info-value id-value">{{ $dato->cargo}}</span>
                 @else
-                <span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span>
+                <span class="info-value id-value">{{ $dato->cargo}}</span>
+                <!--<span class="info-value id-value">{{ $dato->nacionalidad }}-{{ number_format($dato->cedula, 0, ',', '.') }}</span> -->
                 @endif
             </div>
 

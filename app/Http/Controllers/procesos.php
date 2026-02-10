@@ -501,7 +501,7 @@ $message = new Mensajes();
 
     $valores->card_code=$request->code;
 
-   // $carnet->update(['card_code' => $valores->card_code]);
+    $carnet->update(['card_code' => $valores->card_code]);
 
     $valores->note=strtoupper($request->comment);
 
